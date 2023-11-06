@@ -1,0 +1,149 @@
+<%@ taglib uri="/WEB-INF/dhv-taglib.tld" prefix="dhv" %>
+<%@ taglib uri="/WEB-INF/zeroio-taglib.tld" prefix="zeroio" %>
+
+<%@page import="java.util.Vector"%>
+<%@page import="org.aspcfs.modules.devdoc.base.Flusso"%>
+
+
+<jsp:useBean id="Flusso" class="org.aspcfs.modules.devdoc.base.Flusso" scope="request"/>
+<jsp:useBean id="User" class="org.aspcfs.modules.login.beans.UserBean" scope="session"/>
+
+
+
+ <%! public static String fixData(String timestring)
+  {
+	  String toRet = "";
+	  if (timestring == null || timestring.equals("null"))
+		  return toRet;
+	  String anno = timestring.substring(0,4);
+	  String mese = timestring.substring(5,7);
+	  String giorno = timestring.substring(8,10);
+	  String ora = timestring.substring(11,13);
+	  String minuto = timestring.substring(14,16);
+	  String secondi = timestring.substring(17,19);
+	  toRet =giorno+"/"+mese+"/"+anno+" "+ora+":"+minuto;
+	  return toRet;
+	  
+  }%>
+  <%! public static String fixStringa(String nome)
+  {
+	  String toRet = nome;
+	  if (nome == null || nome.equals("null"))
+		  return toRet;
+	  toRet = nome.replaceAll("'", "");
+	  toRet = toRet.replaceAll(" ", "_");
+	  toRet = toRet.replaceAll("\\?","");
+	
+	  return toRet;
+	  
+  }
+  
+  public static String zeroPad(int id)
+  {
+	  String toRet = String.valueOf(id);
+	  while (toRet.length()<3)
+	  	toRet = "0"+toRet;
+	  return toRet;
+  
+  }
+  %>
+
+
+
+<%@ include file="../initPage.jsp" %>
+
+
+  
+
+<table cellpadding="4" cellspacing="0" border="0" width="100%" class="details">
+  <tr>
+    <th colspan="2">
+      <strong>Informazioni Richiesta</strong>
+    </th>
+  </tr>
+  
+ 	 <tr class="containerBody">
+			<td nowrap class="formLabel">
+      			Richiesta
+			</td>
+			<td>
+         		<%= zeroPad(Flusso.getIdFlusso()) %>&nbsp;
+			</td>
+		</tr>  
+		
+
+	
+	 <tr class="containerBody">
+			<td nowrap class="formLabel">
+      			Descrizione
+			</td>
+			<td>
+         		<%= Flusso.getDescrizione() %>&nbsp;
+			</td>
+		</tr>  
+		
+			 <tr class="containerBody">
+			<td nowrap class="formLabel">
+      			Tags
+			</td>
+			<td>
+         		<%= toHtml(Flusso.getTags()) %>&nbsp;
+			</td>
+		</tr> 
+	
+			 <tr class="containerBody">
+			<td nowrap class="formLabel">
+      			Data ultima modifica
+			</td>
+			<td>
+         		<%= toDateWithTimeasString(Flusso.getData()) %>&nbsp;
+			</td>
+		</tr> 
+		<% if (Flusso.getDataConsegna()!=null){ %>
+			 <tr class="containerBody">
+			<td nowrap class="formLabel">
+      			Data consegna
+			</td>
+			<td>
+         		<%= toDateWithTimeasString(Flusso.getDataConsegna()) %>&nbsp;
+			</td>
+		</tr> 
+		<%} %>
+		
+		</table>
+		
+		<br/><br/>
+		
+		<form method="post" action = "" enctype="multipart/form-data" onSubmit="loadModalWindow()" acceptcharset="UTF-8">
+		
+		<table cellpadding="4" cellspacing="0" border="0" class="details">
+  <tr>
+    <th colspan="2">
+      <strong>Consegna</strong>
+    </th>
+  </tr>
+  
+  <input type="hidden" id="idFlusso" name="idFlusso" value="<%=Flusso.getIdFlusso()%>"/>
+   
+   <%if (Flusso.getDataConsegna()==null) {%>
+ <tr><td>Data consegna</td> <td> <input type="text" readonly id="dataConsegna" name="dataConsegna" size="10" value=""/>
+<a href="#" onClick="cal19.select(document.getElementById('dataConsegna'),'anchor19','dd/MM/yyyy'); return false;" NAME="anchor19" ID="anchor19">
+<img src="images/icons/stock_form-date-field-16.gif" border="0" align="absmiddle"></a> &nbsp;
+</td></tr>
+ <tr><td>Note consegna</td> <td> <textarea id="noteConsegna" name="noteConsegna" cols="120" rows="3"></textarea></td></tr>
+ <tr><td colspan="2"><%@ include file="allegaFileConsegna.jsp" %></td></tr>
+ <% } %>
+ <tr><td colspan="2">
+ <%if (Flusso.getDataConsegna()==null) {%>
+ <input type="button" id="bottoneConsegna" value="CONSEGNA" onClick="checkFormConsegna(this.form,1)"/>
+ <%} else { %>
+  <input type="button" id="bottoneConsegna" value="RIAPRI" onClick="checkFormConsegna(this.form,0)"/>
+ 
+ <%} %>
+ </td></tr>
+ <!-- <input type="button" id="bottoneConsegna" value="CONSEGNA" onClick="checkFormConsegna(this.form)"/> -->
+</table>
+	
+	</form>
+		
+		

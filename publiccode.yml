@@ -1,0 +1,204 @@
+# This repository adheres to the publiccode.yml standard by including this 
+# metadata file that makes public software easily discoverable.
+# More info at https://github.com/italia/publiccode.yml
+
+publiccodeYmlVersion: '0.2'
+name: Gisa Campania - Ambiente
+url: 'https://github.com/regione-campania/Gisa_ambiente'
+releaseDate: '2024-12-31'
+
+platforms:
+  - web
+
+categories:
+  - document-management
+  - data-collection
+  - data-visualization
+  
+developmentStatus: development
+
+softwareType: standalone/web
+
+dependsOn:
+  open:
+    - name: Apache Tomcat
+      optional: false
+      version: ''
+      versionMax: ''
+      versionMin: ''
+    - name: PostgreSQL
+      optional: false
+      version: ''
+      versionMax: ''
+      versionMin: ''
+
+description:
+  it:
+    genericName: Gestionale
+    longDescription: |2+
+       
+
+      Il sistema GISA AMBIENTE, release 1, gestisce le visite ispettive fatte
+      dal personale
+
+      tecnico sulle anagrafiche degli impianti AIA e AUA. Vengono gestite le tre
+      tipologie di AIA
+
+      - Ordinaria;
+
+      - Straordinaria;
+
+      - Non ordinaria.
+
+      Al sistema possono accedere tutti i tecnici GISA AMBIENTE (oltre ai
+      Dirigenti Apicali come
+
+      il Direttore Tecnico o Generale), ciascuno per le proprie competenze,
+      utilizzando il proprio
+
+      SPID.
+
+      Il sistema permette all'utente di ricercare un impianto con sede operativa
+      sul territorio
+
+      regionale e di associare ad esso un fascicolo ispettivo. Ovviamente se
+      trattasi di nuovo
+
+      impianto (non già anagrafato) sarà possibile inserirlo con tutti i
+      dettagli relativi a
+
+      - Dati impresa (ragione sociale, partita IVA, sede legale, rappresentante
+      legale, ecc);
+
+      - Dati sede operativa (indirizzo, coordinate, ecc);
+
+      - Dati linea di attività(descrizione attività, ecc);
+
+      - Dati autorizzativi.
+
+      Ad ogni impianto ricercabile è possibile associare un fascicolo ispettivo
+      ovvero una intera
+
+      visita ispettiva AIA composta da più giornate ispettive (giornate di
+      controllo).
+
+      In ogni giornata ispettiva è possibile specificare, tra l'altro le
+      seguenti informazioni
+
+      - Il campo "per conto di" → ovvero la struttura per la quale la giornata
+      ispettiva viene
+
+      eseguita;
+
+      Pag 5/ 59
+
+      - Il nucleo ispettivo → ovvero il gruppo ispettivo che ha seguito la
+      specifica giornata
+
+      di controllo;
+
+      - Le tematiche controllate in quella giornata ispettiva →
+
+      - Altre componenti ambientali
+
+      - Emissioni in acqua
+
+      - Emissioni in aria
+
+      - Gestione degli incidenti e anomalie
+
+      - Materie prime e utilizzo delle risorse
+
+      - Rifiuti
+
+      - Rumore
+
+      - Sistema di gestione Ambientale
+
+      - Suolo e sottosuolo.
+
+      Completato l'inserimento, dal dettaglio è possibile
+
+      - Inserire i dati relativi ad eventuali campioni fisici prelevati (è
+      prevista la redazione
+
+      del Verbale di Campionamento, anche esso firmato con firma grafometrica)
+
+      - Inserire eventuali non conformità.
+
+      Sempre dal dettaglio della giornata ispettiva è possibile generare il
+      Verbale Ispettivo
+
+      precompilato. Una volta generato e firmato con firma grafometrica (sia per
+      il responsabile
+
+      impianto che per il gruppo ispettivo), viene inviato al documentale
+      sicr@web per la
+
+      protocollazione.
+
+      Completato il fascicolo ispettivo è possibile chiuderlo
+
+      - Contestualmente alla chiusura, specificando il numero di protocollo
+      della relazione
+
+      finale associata, questa verrà automaticamente recuperata dal protocollo
+
+      sicr@web, mediante cooperazione applicativa.
+
+      Pag 6/ 59
+
+      In GISA AMBIENTE release 1 è disponibile anche un modulo di integrazione
+      con alcune
+
+      delle cartografie rese disponibili dal sistema di Regione Campania “i.Ter”
+      (risorse rese
+
+      disponibili dalla versione 2.0 in produzione alla data di redazione del
+      presente documento
+
+       è ancora in fase di rilascio la ver.3.0 che ne amplierà e potenzierà le
+      funzionalità e con
+
+      cui ci si integrerà in futuro).
+    shortDescription: |-
+      Ecosistema software per gestione controlli ambientali
+    features:
+      - Gestione unificata ruoli e utenti
+      - Anagrafica impianti
+      - Ricerca anagrafica
+      - Gestione fascicolo ispettivo – Giornata ispettiva
+      - Giornata ispettiva - Gestione Campione
+      - Giornata ispettiva - Preaccettazione
+      - Giornata ispettiva - Non conformità
+      - Giornata ispettiva - Firma grafometrica verbale ispettivo
+      - Gestione richieste sviluppo software
+      - Iter 
+
+legal:
+  license: AGPL-3.0-only
+
+maintenance:
+  contacts:
+    - affiliation: Regione Campania
+      email: cinzia.matonti@regione.campania.it
+      name: Cinzia Matonti
+  contractors:
+    - name: US srl
+      until: '2028-06-01'
+  type: contract
+  
+localisation:
+  availableLanguages:
+    - it
+  localisationReady: false
+it:
+  countryExtensionVersion: '0.2'
+  riuso:
+    codiceIPA: r_campan
+  piattaforme:
+    anpr: false
+    cie: true
+    pagopa: false
+    spid: true
+logo: 'https://raw.githubusercontent.com/regione-campania/Gisa_ambiente/master/GisaLOGO.png'

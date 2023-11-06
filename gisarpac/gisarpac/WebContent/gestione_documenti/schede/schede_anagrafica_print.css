@@ -1,0 +1,90 @@
+@CHARSET "UTF-8";
+
+@page { 
+	margin: 5px 30px 1px 30px;
+		}
+
+body {
+	font-size: 10px;
+	margin:0; 
+	padding:0; 
+	line-height: 1.2em; 
+	word-spacing:1px; 
+	letter-spacing:0.2px; 
+font-family:  Calibri, sans-serif;
+	color:#000000; 
+}
+	
+.boxIdDocumento {
+	position: absolute;
+	left: 100px;
+	top:15px;
+	border: 0.5px solid black;
+	width: 60px;
+	height: 30px;
+	text-align: center;
+	padding-top: 5px;
+	font-size: 8px;
+	font-family:"Times New Roman",Georgia,Serif;
+}
+.boxOrigineDocumento {
+	position: absolute;
+	left: 100px;
+	top:40px;
+	width: 160px;
+	height: 20px;
+	text-align: left;
+	padding-top: 10px;
+	font-size: 9px;
+	font-family:"Times New Roman",Georgia,Serif;
+}
+
+
+/* form details */
+.details {
+	border-top: 1px solid #888888;
+	border-left: 1px solid #888888;
+	text-transform: uppercase;
+}
+
+.details th {
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-left: 2px;
+	padding-right: 2px;
+	background-color: #BDCFFF;
+	border-bottom: 1px solid #888888;
+	border-right: 1px solid #888888;
+	color: #000;
+	text-align: left;
+}
+
+.details td {
+	background-image: url(../images/layout/dot-h.gif);
+	background-position: bottom left;
+	background-repeat: repeat-x;
+	border-right: 1px solid #888888;
+}
+
+.details th a:link,.details th a:visited {
+	color: #FFF;
+}
+
+.formLabel {
+	text-align: right !important;
+	width: 100 !important;
+	background-color: #EDEDED !important;
+	border-right: 1px solid #9C9A9C;
+}
+
+
+.headerStampa {
+  }
+
+.headerStampa td {
+  height: 80px;
+  }
+  
+  .titolo {
+	font-size: 18px;
+}

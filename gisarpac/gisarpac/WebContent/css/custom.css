@@ -1,0 +1,14 @@
+.pulsanteStampa {
+	float:right; 
+	display:block; 
+	padding-left:20px;
+	padding-bottom: 7px;
+	background: url("../images/icons/stock_print-16.gif") no-repeat ;
+}
+.pulsanteModifica {
+	float:right; 
+	display:block; 
+	padding-left:20px;
+	padding-bottom: 7px;
+	background: url("../images/icons/stock_data-edit-table-16.gif") no-repeat ;
+}

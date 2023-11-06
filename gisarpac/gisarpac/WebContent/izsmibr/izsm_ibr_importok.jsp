@@ -1,0 +1,1 @@
+<font color="red">Attenzione! Il file caricato contiene record che non rispettano il Tracciato Record.</font>

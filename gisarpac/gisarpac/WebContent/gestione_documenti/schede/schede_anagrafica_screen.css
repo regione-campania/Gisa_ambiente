@@ -1,0 +1,21 @@
+@CHARSET "UTF-8";
+	
+.boxIdDocumento {
+	display:none;
+}
+.boxOrigineDocumento {
+		display:none;
+}
+
+
+.headerStampa {
+  display:none;
+  }
+
+.headerStampa td {
+  height: 80px;
+  }
+  
+  .titolo {
+	font-size: 18px;
+}

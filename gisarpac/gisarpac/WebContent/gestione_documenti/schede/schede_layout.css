@@ -1,0 +1,104 @@
+@CHARSET "UTF-8";
+
+@page { 
+	margin: 5px 30px 1px 30px;
+		}
+
+body {
+	font-size: 10px;
+	margin:0; 
+	padding:0; 
+	line-height: 1.2em; 
+	word-spacing:1px; 
+	letter-spacing:0.2px; 
+font-family:  Calibri, sans-serif;
+	color:#000000; 
+}
+	
+table{
+font-family: Calibri, sans-serif;
+	color:#000000; 
+}
+table, td{
+	font-family: Calibri, sans-serif;
+	color:#000000; 
+}
+
+.grey {
+	 background-color:#EBEBEB;
+	 border: 1px solid black;
+	 	font-size:14px;
+	 
+}
+.blue {
+	 background-color:#e6f3ff;
+	  border: 1px solid black;
+	  text-transform:uppercase;
+	  	font-size:14px;
+	  
+	}
+.layout {
+	 border: 1px solid black;
+	 text-transform:uppercase;
+	 font-size:14px;
+	 
+	}
+.layout_mini {
+	 border: 1px solid black;
+	 text-transform:uppercase;
+	 font-size:8px !important;
+	 
+	}
+.titolo {
+	font-size: 18px;
+}
+.titolo2 {
+	font-size: 14px;
+}
+.piccolo {
+	font-size: 8px;
+}
+
+.boxIdDocumento {
+	position: absolute;
+	left: 100px;
+	top:15px;
+	border: 0.5px solid black;
+	width: 60px;
+	height: 30px;
+	text-align: center;
+	padding-top: 5px;
+	font-size: 8px;
+	font-family:"Times New Roman",Georgia,Serif;
+}
+.boxOrigineDocumento {
+	position: absolute;
+	left: 100px;
+	top:40px;
+	width: 160px;
+	height: 20px;
+	text-align: left;
+	padding-top: 10px;
+	font-size: 9px;
+	font-family:"Times New Roman",Georgia,Serif;
+}
+
+.nodott_margin_low {
+	margin-top: 10px;
+	margin-right: 4px;
+	float: left;
+	font-size: 14px;
+}
+
+.dott_margin_low {
+	width: 380px;
+	margin-top: 10px;
+	margin-left: 0px;
+	border-bottom: 1px solid #949494;
+	float: left;
+	/*font-size: 12px;*/
+	font-weight: lighter;
+}
+.clear1 {
+	clear: both;
+}

@@ -1,0 +1,103 @@
+
+
+.tableguru {
+  border: 1px solid #ccc !important;
+  border-collapse: collapse !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  table-layout: fixed !important;
+}
+
+.tableguru caption {
+  font-size: 1.5em !important;
+  margin: .5em 0 .75em !important;
+}
+
+.tableguru tr {
+  background-color: #f8f8f8 !important;
+  border: 1px solid #ddd !important;
+  padding: .35em !important;
+}
+
+.tableguru th,
+.tableguru td {
+  padding: .625em !important;
+  text-align: center !important;
+}
+
+.tableguru th {
+  font-size: .85em !important;
+  letter-spacing: .1em !important;
+  text-transform: uppercase !important;
+}
+
+@media screen and (max-width: 600px) {
+  .tableguru {
+    border: 0 !important;
+  }
+
+  .tableguru caption {
+    font-size: 1.3em !important;
+  }
+  
+  .tableguru thead {
+    border: none !important;
+    clip: rect(0 0 0 0) !important;
+    height: 1px !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    position: absolute !important;
+    width: 1px !important;
+  }
+  
+  .tableguru tr {
+    border-bottom: 3px solid #ddd !important;
+    display: block !important;
+    margin-bottom: .625em !important;
+  }
+  
+  .tableguru td {
+    border-bottom: 1px solid #ddd !important;
+    display: block !important;
+    font-size: .8em !important;
+    text-align: right !important;
+  }
+  
+  .tableguru td::before {
+    /*
+    * aria-label has no advantage, it won't be read inside a table
+    content: attr(aria-label) !important;
+    */
+    content: attr(data-label) !important;
+    float: left !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+  }
+  
+  .tableguru td:last-child {
+    border-bottom: 0 !important;
+  }
+}
+
+.buttonguru {
+  background-color: #238353 !important;
+  border: none !important;
+  color: white !important;
+  padding: 16px 32px !important;
+  text-decoration: none !important;
+  margin: 4px 2px !important;
+  cursor: pointer !important;
+}
+
+.littlebuttonguru {
+  background-color: #238353 !important;
+  border: none !important;
+  color: white !important;
+  padding: 10px 10px !important;
+  text-decoration: none !important;
+  margin: 4px 2px !important;
+  cursor: pointer !important;
+}
+
+input {text-transform:none !important;}

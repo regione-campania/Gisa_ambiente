@@ -1,0 +1,7 @@
+**/*.pdf
+**/*.doc
+**/*.docx
+**/.svn
+**/*.rpm
+
+**/tmp_img

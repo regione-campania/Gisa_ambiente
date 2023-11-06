@@ -1,0 +1,102 @@
+<meta charset="utf-8" />
+<html>
+<link rel="stylesheet" href="css/easy-autocomplete.min.css" />
+<link rel="stylesheet" href="css/style.css" />
+<script src="js/jquery-1.11.2.min.js"></script>
+<script src="js/jquery.easy-autocomplete.min.js"></script>
+
+
+<body bgcolor='#ffffe6'>
+<center>
+<form id='frmAddr' onsubmit="doSubmit()">
+
+<input type="text" id="provincia" placeholder="Provincia" required/><br>
+
+<input type="text" id="comuni" placeholder="Comune" required/><br>
+
+<input type="text" id="napoli"  style="visibility:hidden; " placeholder="Strade del Comune di Napoli" class="rcorners"  autocomplete="off"/>
+
+<input type="text"   id="top"  placeholder="Toponimo" required /><br>
+
+<input type="text" id="via" placeholder="Indirizzo" class="rcorners" required autocomplete="off"/><br><br>
+
+<input type="text" id="civ" placeholder="Civico"  class="rcorners" required autocomplete="off"/><br><br>
+
+<input type="text" id='cap'  placeholder="CAP" class="rcorners" required onkeydown="return false;" autocomplete="off"/><br><br>
+
+<button type="submit" > Prosegui </button> <br>
+</center>
+<input type="hidden" id="provinciaId" />
+<input type="hidden" id="comuneId" />
+<input type="hidden" id="topId" />
+
+</form>
+
+
+</body style="bakcground-color:'#eee';">
+</html>
+
+<script src="js/gestioneIndirizziNapoli.js"></script>
+<script src="js/province.js"></script>
+<script src="js/comuni.js"></script>
+<script src="js/toponimi.js"></script>
+<script src="js/via.js"></script>
+<script src="resources/idToponimi.js"></script>
+
+
+
+<script>
+
+/* "use strict"; */
+
+var toponimo = sessionStorage.getItem("toponimo");
+var via = sessionStorage.getItem("via");
+var civico = sessionStorage.getItem("civico");
+var comune = sessionStorage.getItem("comune");
+var cap = sessionStorage.getItem("cap");
+var prov = sessionStorage.getItem("prov");
+var toponimoId = sessionStorage.getItem("topId");
+var comuneId = sessionStorage.getItem("comuneId");
+var provinciaId = sessionStorage.getItem("provinciaId")
+
+window.onload=function(){
+    document.getElementById('frmAddr').reset();
+    document.getElementById('provincia').focus();
+
+};
+
+
+window.onunload = function (e) {
+     opener.callback(toponimo, toponimoId, via, civico, comune, comuneId, cap, prov,provinciaId,addrAll);
+};
+	
+
+let addrAll = {
+    comune: "",
+    comuneId: "",
+    top: "",
+    topId:"",
+    via: "",
+    civ: "",
+    cap: "",
+    provincia:"",
+    provinciaId:""
+}
+
+function doSubmit() {
+    addrAll.comune=document.getElementById('comuni').value;
+    addrAll.top=document.getElementById('top').value;
+    addrAll.via=document.getElementById('via').value;
+    addrAll.civ=document.getElementById('civ').value;
+    addrAll.cap=document.getElementById('cap').value;
+    addrAll.provincia=document.getElementById('provincia').value;
+    addrAll.comuneId=document.getElementById('comuneId').value;
+    addrAll.topId=document.getElementById('topId').value;
+    addrAll.provinciaId=document.getElementById('provinciaId').value;
+
+    
+    self.close();
+    return false;
+}
+
+</script>

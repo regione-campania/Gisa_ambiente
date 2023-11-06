@@ -1,0 +1,54 @@
+html, body {
+	margin: 0px;
+	padding: 0px;
+	border: none;
+}
+
+#header {
+	float: left;
+	border: 0px;
+	margin: 0px;
+}
+
+#content {
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 1em;
+	color: #000000;
+	padding: 10px;
+}
+
+.content {
+	font-size: .8em;
+	padding-left: 5px;
+}
+
+.ul {
+	font-size: .8em;
+}
+
+img {
+	border: 0;	
+}
+
+pre {
+	font-size: .9em;
+	padding: 5px;
+    border: 1px solid #CCCCCC;
+    background-color: #F4F4F4;
+    width: 850px;
+}
+
+.paginationItem {
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: .9em;
+    font-weight: bold;
+    color: #c4634d;
+}
+
+.paginationItem a {
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 1.0em;
+    font-weight: normal;
+    color: black;
+}
+

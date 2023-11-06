@@ -1,0 +1,21 @@
+#header, #footer, #rightcol, #rightnavcol, #menutabs, #topmenutabs, #toptabs {
+  display: none;
+}
+#menuFileContainer, #menucallContainer, #menuOppContainer, 
+#menuViewpointContainer, #menuContactContainer, #menuFoldersContainer,
+#menuAccountContainer, #menuReportContainer, #menuRevenueContainer,
+#menuTicContainer, #menuTaskContainer, #menuActionContainer,
+#menuRoleContainer, #menuUserContainer, #menuProcessContainer,
+#menuCampaignContainer, #menuGroupContainer, #menuMsgContainer,
+#menuSurveyContainer, #menuFieldContainer, #menuCallContainer,
+#menuContactContainer, #menuEmployeeContainer, #menuNoteContainer,
+#menu1Container, #menu1aContainer, #menu1bContainer, #menu2Container,
+#menuTicketContainer, #menuServiceContractContainer, #menuAssetContainer,
+#menuTicketFormContainer,#menuProductContainer,
+#menuItemContainer, #menuListItemContainer, 
+#menuActivityContainer, #menuFolderContainer,
+#menuRequirementContainer {
+  display: none;
+}
+
+#stampa {display: none;}

@@ -1,0 +1,49 @@
+/* 
+
+Matteo Carella - modalWindow.css
+- css per la grafica della finestra modale (modalWindow.js)
+
+*/
+
+
+/* finestra nascosta */
+.unlocked
+	{
+	display:none;
+	}
+		
+
+/* finestra visibile, attendere prego... lock della pagina */		
+.locked
+	{
+	display:block;
+	visibility:visibile;
+	position:absolute;
+	z-index:999;
+	top:0px;
+	left:0px;
+	height:450%;
+	width:105%;
+	background-color:#ccc;
+	text-align:center;
+	padding-top:20%;
+	filter:alpha(opacity=75);
+	opacity:0.75;
+	text-align:center;
+	}
+				
+/* style del messaggio che viene visualizzato al centro della finestra modale */
+.wait
+	{
+	display:block;
+	position:fixed;
+	border:3px solid #405c81;
+	color:#405c81;
+	font-size:40px;
+	font-weight:bold;
+	font-family:Arial;
+	width:100%;
+	
+	padding:50px;
+	margin:auto;
+	}

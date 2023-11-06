@@ -1,0 +1,25 @@
+BODY { 
+  font-family: Source Sans Pro;
+  font-size: 10pt;
+  background: white;
+  color: #000000;
+  padding-left: 10px;
+  padding-right: 10px;
+ }
+TABLE, TD, TH, LI, P, UL, OL, TEXTAREA, INPUT, SELECT, A, div.tabs th, div.tabs td  {
+  font-size: 10.5pt;
+  color: #000000;
+  font-family: Source Sans Pro;
+  line-height: 1.4;
+} 
+h1 { font-size: 12pt; }
+OPTGROUP {
+  font-family: Source Sans Pro; 
+  font-size: 10pt;
+  color: #000000;
+}
+.pagedListHeader td {
+  font-size: 14pt;
+}
+.searchCount { font-size: 12pt; }
+.search { font-size: 12pt; }

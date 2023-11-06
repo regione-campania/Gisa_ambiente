@@ -1,0 +1,432 @@
+<application>
+
+  <!-- Not used yet -->
+  <config>
+    <mainmenu>
+      <layout>horizontal</layout>
+      <long_css on="" off=""/>
+      <short_css on="" off=""/>
+    </mainmenu>
+    <submenu>
+      <layout>horizontal</layout>
+      <long_css on="rs" off="r"/>
+      <short_css on="rs" off="r"/>
+    </submenu>
+  </config>
+  
+  <!-- Modules that appear in main menu, in order -->
+  
+  <!-- Modulo Home Page -->
+  
+  
+  <!-- Modulo Home Page -->
+  <menu>
+    <action name="MyCFS"/>
+    <action name="Login"/>
+    <action name="MyCFSProfile"/>
+    <action name="MyCFSPassword"/>
+    <action name="MyCFSWebdav"/>
+    <action name="MyCFSSettings"/>
+    <action name="MyCFSInbox"/>	
+	 <action name="Messaggi"/>
+    <action name="MyTasks"/>
+    <action name="MyTasksForward"/>
+    <action name="MyActionLists"/>
+    <action name="MyActionContacts"/>
+    <action name="MyActionPlans"/>
+    <action name="Reassignments"/>
+    <action name="BlackBerry"/>
+    <action name="Tree"/>
+    <action name="BloccoCu"/>
+    <action name="CampioniAssociazioneEsiti"/>
+    <action name="GestioneInvioMolluschi"/>
+    <action name="Utility"/>
+    
+
+    
+    <!-- Aggiunta modulo Ricerca Globale  -->
+    <action name="GlobalSearch"/>
+    <!-- Aggiunta modulo ReportRegione -->
+    <action name="MonitoringReport"/>
+    <!-- Aggiunta modulo Configurazione a caldo -->
+    <action name="HotConfiguration"/>
+    <!-- Aggiunta modulo Messaggio Home Page -->
+    <action name="MessaggioHomePage"/>
+    
+    <!-- Aggiunta modulo Gestione Schede Centralizzate -->
+    <action name="SchedaCentralizzataAction"/>
+       
+    <page title="Home"/>
+    <permission value="myhomepage-view"/>
+    <long_html value="Home"/>
+    <short_html value="Home"/>
+    <link value="MyCFS.do?command=Home"/>
+    <graphic width="83" height="36" on="menu-myhome-on.gif" off="menu-myhome-off.gif" rollover=""/>
+
+    <submenu name="BloccoCu">
+      <permission value="bloccocu-view"/>
+      <long_html value="Blocco Controlli"/>
+      <short_html value="Blocco Controlli"/>
+      <link value="BloccoCu.do?command=ViewBlocco"/>
+    </submenu>
+    
+     <submenu name="Home">
+      <permission value="myhomepage-view"/>
+      <long_html value="Welcome"/>
+      <short_html value="Welcome"/>
+      <link value="MyCFS.do?command=Home"/>
+    </submenu>
+    
+     <submenu name="Gestione Unificata Ruoli e Utenti">
+     <permission value=""/>
+     <long_html value="Gestione Unificata Ruoli e Utenti"/>
+     <short_html value="Gestione Unificata Ruoli e Utenti"/>
+     <link value="Utility.do?command=GURUHome"/>
+     </submenu>
+    
+    
+    <submenu name="MyInbox">
+      <permission value="myhomepage-inbox-view"/>
+      <long_html value="Mailbox"/>
+      <short_html value="Mailbox"/>
+      <link value="MyCFSInbox.do?command=Inbox&amp;return=1"/>
+    </submenu>
+    
+    
+    <submenu name="Cambio Utente">
+      <permission value="myhomepage-cambio_utente-view"/>
+      <long_html value="Cambio Utente"/>
+      <short_html value="Cambio Utente"/>
+      <link value="MyCFS.do?command=CambioUtente"/>
+    </submenu>
+    
+    
+    <!-- Aggiunta del sottomenu' al modulo Home -->
+    <submenu name="Ricerca Giornata Ispettiva">
+      <permission value="global-search-view"/>
+      <long_html value="Ricerca Giornata Ispettiva"/>
+      <short_html value="Ricerca Giornata Ispettiva"/>
+      <link value="GlobalSearch.do?command=SearchFormIspettiva"/>
+    </submenu>
+    
+     <submenu name="Tree">
+      <permission value="tree-view"/>
+      <long_html value="Gestione Strutture di memoria"/>
+      <short_html value="Gestione Strutture di memoria"/>
+      <link value="Tree.do?command=ListTree"/>
+    </submenu>
+    
+   
+    <!-- Aggiunta del sottomenu' al modulo Home -->
+    <submenu name="Configurazione a caldo">
+      <permission value="hot-configuration-view"/>
+      <long_html value="Configurazione a caldo"/>
+      <short_html value="Configurazione a caldo"/>
+      <link value="HotConfiguration.do?command=Dashboard"/>
+    </submenu>
+    
+    <!-- Aggiunta del sottomenu' al modulo Home -->
+    <submenu name="Messaggio Home Page">
+      <permission value="hot-configuration-view"/>
+      <long_html value="Messaggio Home Page"/>
+      <short_html value="Messaggio Home Page"/>
+      <link value="MessaggioHomePage.do?command=Dashboard"/>
+    </submenu>
+    
+    <submenu name="Associazione Matrici Analiti Piani">
+      <permission value="myhomepage-configtree-view"/>
+      <long_html value="Configurazione Piani"/>
+      <short_html value="Configura Piani"/>
+      <link value="MatTree.do?command=ViewAssociazioni"/>
+    </submenu>
+    
+     <submenu name="Gestione Schede Centralizzate">
+      <permission value="schede_centralizzate-view"/>
+      <long_html value="Gestione Schede Centralizzate"/>
+      <short_html value="Gestione Schede Centralizzate"/>
+     <link value="SchedaCentralizzataAction.do?command=DettaglioGestioneScheda"/>
+    </submenu>
+      
+  </menu>
+  
+   
+   <menu>
+    <action name="Opu"/>
+    <action name="OpuStab"/>
+    <action name="OpuStabVigilanza"/>
+    <action name="OpuStabCampioni"/>
+ 	<action name="OpuStabTamponi"/>
+    <action name="OpuStabNonConformita"/>
+    <action name="OpuStabAltreNonConformita"/>
+    <action name="OpuStabSanzioni"/>
+    <action name="OpuStabSequestri"/>
+    <action name="OpuStabFollowup"/>
+    <action name="OpuStabReati"/>
+    <action name="OpuStabDiffida"/>
+    <action name="OpuStabCheckList"/>
+    <action name="OperatoreAction"/>
+    <action name="GestioneDocumenti_Opu"/>
+    <action name="RicercaUnica"/>
+    <action name="MacellazioniOpu"/>
+    <action name="MacellazioniNewOpu"/>
+    <action name="TrasferimentoSedeStabilimento"/>
+    <action name="CambioSedeOperatore"/>
+    <action name="GestioneXML"/>
+    
+             
+    <page title="Anagrafica Impianti"/>
+    <permission value="opu-view"/>
+    <long_html value="Anagrafica Impianti"/>
+    <short_html value="Anagrafica Impianti"/>
+    <link value="OpuStab.do?command=SearchForm"/>
+    <graphic width="83" height="36" on="menu-accounts-on.gif" off="menu-accounts-off.gif" rollover=""/>
+
+    <submenu>
+    	<permission value="gestioneanagrafica-add"/>
+    	<long_html value="INSERISCI OSA"/>
+    	<short_html value="INSERISCI OSA"/>
+    	<link value="GestioneAnagraficaAction.do?command=Choose"/>
+    </submenu>    
+    
+       <submenu name="Ricerca">
+      <permission value="opu-view"/>
+      <long_html value="Ricerca"/>
+      <short_html value="Ricerca"/>
+      <link value="OpuStab.do?command=SearchForm"/>
+    </submenu>
+    
+      <submenu name="Aggiungi impianto">
+     <permission value="opu-add"/>
+      <long_html value="Aggiungi impianto"/>
+      <short_html value="Aggiungi impianto"/>
+      <link value="GestioneAnagraficaAction.do?command=Choose"/>
+      
+    </submenu>
+    
+     <submenu name="Importa anagrafica da GISA CAMPANIA">
+     <permission value="opu-add"/>
+      <long_html value="Importa anagrafica da GISA CAMPANIA"/>
+      <short_html value="Importa anagrafica da GISA CAMPANIA"/>
+      <link value="GestioneAnagraficaRemotaAction.do?command=PrepareSearchAnagraficaRemota"/>
+    </submenu>
+    
+  </menu>
+   
+   
+    <menu>
+    <action name="AltriStabilimenti"/>
+    <action name="GisaNoScia"/>
+ 	<page title="Altri Stabilimenti - No SCIA"/>
+    <permission value="gestione_noscia-view"/>
+    <long_html value="Altri Stabilimenti - No SCIA"/>
+    <short_html value="Altri Stabilimenti - No SCIA"/>
+    <link value="GisaNoScia.do?command=Default"/>
+    <graphic width="83" height="36" on="menu-accounts-on.gif" off="menu-accounts-off.gif" rollover=""/>
+
+  </menu> 
+  
+  
+  
+   <!--PROTOTYPE NO SCIA -->
+  
+ <menu>
+   <action name="MainAnagraficaNoScia"/>	
+	 
+ 
+      
+  <page title="Anagrafica No-Scia"/>
+    <permission value="prototipo_anag_noscia-view"/>
+    <long_html value="Anagrafica No-Scia"/>
+    <short_html value="Anagrafica No-Scia"/>
+    <link value="MainAnagraficaNoScia.do?command=Default"/>
+    <graphic width="83" height="36" on="menu-accounts-on.gif" off="menu-accounts-off.gif" rollover=""/>
+
+
+	 <submenu name="Nuovo Stabilimento">
+      <long_html value="Nuovo Stabilimento"/>
+      <short_html value="Nuovo Stabilimento"/>
+      <link value="MainAnagraficaNoScia.do?command=PaginaNuovaAnagrafica"/>
+    </submenu>
+    
+    
+    <!-- RICERCA CONTESTUALE AL CAVALIERE NO SCIA -->
+   <submenu name="Ricerca/Modifica">
+      <long_html value="Ricerca/Modifica"/>
+      <short_html value="Ricerca/Modifica"/>
+      <link value="MainAnagraficaNoScia.do?command=PaginaRicercaAnagrafica"/>
+    </submenu>  
+    
+    
+    </menu>  
+    
+  
+  
+  <!--  Aggiunta modulo Acque di Rete -->
+  <menu>
+    <action name="AcqueRete"/>
+     <action name="AcqueReteVigilanza"/>
+      <action name="AcqueReteCampioni"/>
+       <action name="AcqueReteTamponi"/>
+<action name="AcqueReteNonConformita"/>
+<action name="AcqueReteAltreNonConformita"/>
+    <action name="AcqueReteDocuments"/>
+    <action name="AcqueReteDocumentsFolders"/>
+       <action name="AcqueReteSanzioni"/>
+       <action name="AcqueReteSequestri"/>
+       <action name="AcqueReteReati"/>
+        <action name="AcqueReteDiffida"/>
+       <action name="AcqueReteFollowup"/>
+
+
+	<action name="AcqueReteProvvedimenti"/>
+	
+	 <action name="GestioneDocumenti_AcqueRete"/>
+	 
+	    <page title="Acque di Rete"/>
+    <permission value="acquedirete-acquedirete-view"/>
+    <long_html value="Acque di Rete"/>
+    <short_html value="Acque di Rete"/>
+    <link value="AcqueRete.do?command=SearchForm"/>
+	<graphic width="83" height="36" on="menu-accounts-on.gif" off="menu-accounts-off.gif" rollover=""/>
+	
+    <submenu name="Ricerca Acque di Rete">
+      <permission value="acquedirete-acquedirete-view"/>
+      <long_html value="Search"/>
+      <short_html value="Search"/>
+      <link value="AcqueRete.do?command=SearchForm"/>
+    </submenu>
+
+   <submenu name="Aggiungi Acqua di Rete">
+      <permission value="acquedirete-acquedirete-add"/>
+      <long_html value="Aggiungi"/>
+      <short_html value="Aggiungi"/>
+      <link value="AcqueRete.do?command=Add"/>
+    </submenu>
+  </menu>
+  
+  
+  <!-- Modulo Bacheca Server Documentale -->
+   <menu>
+    <action name="GestioneBacheca"/>
+    <page title="Bacheca"/>
+    <long_html value="Bacheca"/>
+    <short_html value="Bacheca"/>
+    <link value="GestioneBacheca.do"/>
+    <graphic width="83" height="36" on="menu-accounts-on.gif" off="menu-accounts-off.gif" rollover=""/>
+     <permission value="documentale_bacheca-view"/>
+     <submenu name="Lista">
+      <permission value="documentale_bacheca-view"/>
+      <long_html value="Lista"/>
+      <short_html value="Lista"/>
+      <link value="GestioneBacheca.do"/>
+      </submenu>
+      <submenu name="Aggiungi">
+      <permission value="documentale_bacheca-add"/>
+      <long_html value="Aggiungi"/>
+      <short_html value="Aggiungi"/>
+      <link value="GestioneBacheca.do?command=AddArchivio"/>
+    </submenu>
+    <submenu name="Ricerca">
+      <permission value="documentale_bacheca-view"/>
+      <long_html value="Ricerca"/>
+      <short_html value="Ricerca"/>
+      <link value="GestioneBacheca.do?command=RicercaInArchivio"/>
+    </submenu>
+	<submenu name="Elenco Reperibilita ASL">
+      <permission value="documentale_bacheca_asl-view"/>
+      <long_html value="Elenco Reperibilita ASL"/>
+      <short_html value="Elenco Reperibilita ASL"/>
+      <link value="GestioneBacheca.do?command=ListaReperibilitaAsl&amp;storeId=-1"/>
+    </submenu>
+<submenu name="Bacheca Apicoltura">
+      <permission value="documentale_bacheca_apiari-view"/>
+      <long_html value="Bacheca Apicoltura"/>
+      <short_html value="Bacheca Apicoltura"/>
+      <link value="GestioneBacheca.do?command=ListaApiari&amp;storeId=-1"/>
+    </submenu>
+    
+  </menu>
+  
+ 
+  
+  <!-- Modulo Storico -->
+  <menu>
+ 	<action name="Storico"/>
+ 	<page title="Storico Operazioni"/>
+    <permission value="storico-view"/>
+    <long_html value="Storico Operazioni"/>
+    <short_html value="Storico Operazioni"/>
+    <link value="Storico.do"/>
+    <graphic width="83" height="36" on="menu-products-on.gif" off="menu-products-off.gif" rollover=""/>
+    
+    <submenu name="Cerca">
+      <permission value="storico-view"/>
+      <long_html value="Cerca"/>
+      <short_html value="Cerca"/>
+      <link value="Storico.do"/>
+    </submenu>
+    
+ </menu> 
+
+ 
+  
+  
+  <menu>
+  	    <page title="DPAT"/>
+  		<permission value="dpat-view"/>
+  		<long_html value="DPAT"/>
+    	<short_html value="DPAT"/>
+    	<link value="dpat2019.do"/>
+    	<graphic width="83" height="36" on="menu-myhome-on.gif" off="menu-myhome-off.gif" rollover=""/>
+    	<action name="dpat2019"/>
+    	<action name="DpatSDC"/>
+		<action name="DpatRS"/>
+		<action name="PianiMonitoraggio"/>
+		<action name="GestioneDocumenti_DPAT"/>
+		
+		
+	<submenu name="Configura Attivita Dpat">
+      <permission value="piani-piani-view"/>
+      <long_html value="Configura Piani Dpat"/>
+      <short_html value="Configura Piani Dpat"/>
+      <!-- vecchio flusso dpat  -->
+        <!-- <link value="Dpat.do?command=HomeConfiguraDpat"/> --> 
+      <!-- nuovo flusso dpat -->
+      <link value="dpat2019.do?command=HomeConfiguraDpatNEW"/>
+    </submenu>
+    
+	
+	
+  </menu>
+  
+   <menu>
+  	    <page title="iTer"/>
+  		<permission value="iter-view"/>
+  		<long_html value="iTer"/>
+    	<short_html value="iTer"/>
+      <link value="Iter.do?command=Dashboard"/>
+    	<graphic width="83" height="36" on="menu-myhome-on.gif" off="menu-myhome-off.gif" rollover=""/>
+    	<action name="Iter"/>
+  </menu>
+  
+  <menu>
+  
+      <action name="GestioneFlussoSviluppo"/>
+      <page title="Gestione Richieste"/>
+      <permission value="devdoc-view"/>
+      <long_html value="Gestione Richieste"/>
+      <short_html value="Gestione Richieste"/>
+      <link value="GestioneFlussoSviluppo.do?command=Dashboard"/>	
+      <graphic width="83" height="36" on="menu-accounts-on.gif" off="menu-accounts-off.gif" rollover=""/>
+	
+	 <submenu name="devdoc">
+      <permission value="devdoc-view"/>
+      <long_html value="Flusso Documentale Sviluppo Software"/>
+      <short_html value="Flusso Documentale Sviluppo Software"/>
+      <link value="GestioneFlussoSviluppo.do?command=Dashboard"/>
+      </submenu> 	 
+   
+  </menu>
+
+    
+    </application>
