@@ -9,8 +9,8 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <script src='javascript/modalWindow.js'></script>
-<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
-<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+<script src="javascript/jquery/jquery-1.8.2.js"></script>
+<script src="javascript/jquery/ui/1.9.1/jquery-ui.js"></script>
 <link rel="stylesheet" type="text/css" href="css/modalWindow.css"></link>
 
 <script>
@@ -31,7 +31,8 @@ function checkForm(form){
 							|| document.getElementById("emissioneAtmosferaCaminoSistemaAbbattimento_"+x[i].id).value.trim()==''
 								|| document.getElementById("emissioneAtmosferaCaminoDataSopralluogo2016_"+x[i].id).value.trim()==''
 									|| document.getElementById("emissioneAtmosferaCaminoParametriAnalizzati_"+x[i].id).value.trim()==''
-										|| document.getElementById("emissioneAtmosferaCaminoSuperamentiLimitiNormativi_"+x[i].id).value.trim()=='') {
+										//|| document.getElementById("emissioneAtmosferaCaminoSuperamentiLimitiNormativi_"+x[i].id).value.trim()==''
+										) {
 				almenoUnRecordSelezionatoVuoto = true;
 			}
 			
@@ -134,9 +135,9 @@ function filtraRighe() {
 <th>SISTEMA ABBATTIMENTO</th>
 <th>DATA SOPRALLUOGO</th>
 <th>PARAMETRI ANALIZZATI</th>
-<th>SUPERAMENTI LIMITI NORMATIVI</th>
+<!--  <th>SUPERAMENTI LIMITI NORMATIVI</th>-->
 <th>NOTE</th>
-<th>ESITO CONFORME</th>
+<!-- <th>ESITO CONFORME</th> -->
 </tr>
 
 <tr>
@@ -147,9 +148,9 @@ function filtraRighe() {
 <th><input type="text" id="myInputSistemaAbbattimento" onkeyup="filtraRighe()" placeholder="FILTRA" style="width: 100%"></th>
 <th></th>
 <th></th>
+<!-- <th></th> -->
 <th></th>
-<th></th>
-<th></th>
+<!-- <th></th> -->
 </tr>
 
 <% 
@@ -172,9 +173,9 @@ for (int i = 0; i<ListaEmissioniAtmosferaCamini.size(); i++) {
 
 <td><input type="date" id="emissioneAtmosferaCaminoDataSopralluogo2016_<%= em.getId()%>" name="emissioneAtmosferaCaminoDataSopralluogo2016_<%= em.getId()%>"/></td>
 <td><input type="text" id="emissioneAtmosferaCaminoParametriAnalizzati_<%= em.getId()%>" name="emissioneAtmosferaCaminoParametriAnalizzati_<%= em.getId()%>"/></td>
-<td><input type="text" id="emissioneAtmosferaCaminoSuperamentiLimitiNormativi_<%= em.getId()%>" name="emissioneAtmosferaCaminoSuperamentiLimitiNormativi_<%= em.getId()%>"/></td>
+<!--<td><input type="text" id="emissioneAtmosferaCaminoSuperamentiLimitiNormativi_<%= em.getId()%>" name="emissioneAtmosferaCaminoSuperamentiLimitiNormativi_<%= em.getId()%>"/></td>-->
 <td><input type="text" id="emissioneAtmosferaCaminoNote_<%= em.getId()%>" name="emissioneAtmosferaCaminoNote_<%= em.getId()%>"/></td>
-<td><input type="checkbox" id="emissioneAtmosferaCaminoEsitoConforme_<%= em.getId()%>" name="emissioneAtmosferaCaminoEsitoConforme_<%= em.getId()%>" value="true"/></td>
+<!-- <td><input type="checkbox" id="emissioneAtmosferaCaminoEsitoConforme_<%= em.getId()%>" name="emissioneAtmosferaCaminoEsitoConforme_<%= em.getId()%>" value="true"/></td> -->
 
 </tr>
 <% } %>
@@ -190,9 +191,9 @@ for (int i = 0; i<ListaEmissioniAtmosferaCamini.size(); i++) {
 <td><input type="text" id ="emissioneAtmosferaCaminoSistemaAbbattimento_<%= i%>" name ="emissioneAtmosferaCaminoSistemaAbbattimento_<%= i%>" value=""/></td>
 <td><input type="date" id="emissioneAtmosferaCaminoDataSopralluogo2016_<%= i%>" name="emissioneAtmosferaCaminoDataSopralluogo2016_<%= i%>"/></td>
 <td><input type="text" id="emissioneAtmosferaCaminoParametriAnalizzati_<%= i%>" name="emissioneAtmosferaCaminoParametriAnalizzati_<%= i%>"/></td>
-<td><input type="text" id="emissioneAtmosferaCaminoSuperamentiLimitiNormativi_<%= i%>" name="emissioneAtmosferaCaminoSuperamentiLimitiNormativi_<%= i%>"/></td>
+<!--<td><input type="text" id="emissioneAtmosferaCaminoSuperamentiLimitiNormativi_<%= i%>" name="emissioneAtmosferaCaminoSuperamentiLimitiNormativi_<%= i%>"/></td>-->
 <td><input type="text" id="emissioneAtmosferaCaminoNote_<%= i%>" name="emissioneAtmosferaCaminoNote_<%= i%>"/></td>
-<td><input type="checkbox" id="emissioneAtmosferaCaminoEsitoConforme_<%= i%>" name="emissioneAtmosferaCaminoEsitoConforme_<%= i%>" value="true"/></td>
+<!--<td><input type="checkbox" id="emissioneAtmosferaCaminoEsitoConforme_<%= i%>" name="emissioneAtmosferaCaminoEsitoConforme_<%= i%>" value="true"/></td>-->
 
 </tr>
 <% } %>
@@ -234,4 +235,27 @@ function prettyPrint() {
 prettyPrint();
 var scroll_height = $("#jsonGiornataIspettiva").get(0).scrollHeight;
 $("#jsonGiornataIspettiva").css('height', scroll_height + 'px');
+
+function reloadDati(){
+	<% if ( ((JSONObject) jsonGiornataIspettiva).has("EmissioniAtmosferaCamini")) { %>
+<% JSONArray jsonEmissioniAtmosferaCamini = (JSONArray) jsonGiornataIspettiva.get("EmissioniAtmosferaCamini");
+for (int i = 0; i < jsonEmissioniAtmosferaCamini.length(); i++) {
+JSONObject jsonObject = jsonEmissioniAtmosferaCamini.getJSONObject(i);
+%>
+document.getElementById("<%=jsonObject.get("id")%>").setAttribute("checked","true")
+document.getElementById("emissioneAtmosferaCaminoCodiceCamino_<%=jsonObject.get("id")%>").value='<%=jsonObject.get("codiceCamino")%>'
+document.getElementById("emissioneAtmosferaCaminoFasiLavorativa_<%=jsonObject.get("id")%>").value='<%=jsonObject.get("fasiLavorativa")%>'
+document.getElementById("emissioneAtmosferaCaminoInquinanti_<%=jsonObject.get("id")%>").value='<%=jsonObject.get("inquinanti")%>'
+document.getElementById("emissioneAtmosferaCaminoSistemaAbbattimento_<%=jsonObject.get("id")%>").value='<%=jsonObject.get("sistemaAbbattimento")%>'
+document.getElementById("emissioneAtmosferaCaminoDataSopralluogo2016_<%=jsonObject.get("id")%>").value='<%=jsonObject.get("dataSopralluogo2016")%>'
+document.getElementById("emissioneAtmosferaCaminoParametriAnalizzati_<%=jsonObject.get("id")%>").value='<%=jsonObject.get("parametriAnalizzati")%>'
+document.getElementById("emissioneAtmosferaCaminoNote_<%=jsonObject.get("id")%>").value='<%=jsonObject.get("note")%>'
+if(<%=jsonObject.get("esitoConforme")%>)
+	document.getElementById("emissioneAtmosferaCaminoEsitoConforme_<%=jsonObject.get("id")%>").setAttribute("checked","true")
+
+
+
+<%}}%>
+}
+reloadDati();
 </script>

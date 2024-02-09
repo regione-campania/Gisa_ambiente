@@ -9,8 +9,8 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <script src='javascript/modalWindow.js'></script>
-<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
-<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+<script src="javascript/jquery/jquery-1.8.2.js"></script>
+<script src="javascript/jquery/ui/1.9.1/jquery-ui.js"></script>
 <link rel="stylesheet" type="text/css" href="css/modalWindow.css"></link>
 
 <script>
@@ -163,4 +163,16 @@ function prettyPrint() {
 prettyPrint();
 var scroll_height = $("#jsonGiornataIspettiva").get(0).scrollHeight;
 $("#jsonGiornataIspettiva").css('height', scroll_height + 'px');
+
+function reloadDati(){
+	<% if ( ((JSONObject) jsonGiornataIspettiva).has("Esami")) { %>
+<% JSONArray jsonEsami = (JSONArray) jsonGiornataIspettiva.get("Esami");
+for (int i = 0; i < jsonEsami.length(); i++) {
+JSONObject jsonObject = jsonEsami.getJSONObject(i);
+%>
+document.getElementById("<%=jsonObject.get("id")%>").setAttribute("checked","true")
+<%}}%>
+}
+
+reloadDati();
 </script>

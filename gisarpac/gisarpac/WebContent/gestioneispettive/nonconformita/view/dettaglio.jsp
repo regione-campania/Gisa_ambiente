@@ -9,8 +9,8 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <script src='javascript/modalWindow.js'></script>
-<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
-<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+<script src="javascript/jquery/jquery-1.8.2.js"></script>
+<script src="javascript/jquery/ui/1.9.1/jquery-ui.js"></script>
 <link rel="stylesheet" type="text/css" href="css/modalWindow.css"></link>
 
 <center>
@@ -30,6 +30,18 @@
 	  
   }%>
   
+  <table class="trails" cellspacing="0">
+<tr>
+<td>
+<a href="StabilimentoAIA.do?command=Details&stabId=<%=((JSONObject) (jsonNonConformita.get("DatiGiornataIspettiva"))).get("riferimentoId")%>"><%= ((JSONObject) (jsonNonConformita.get("DatiGiornataIspettiva"))).get("ragioneSociale") %></a> >
+<a href="GestioneFascicoliIspettivi.do?command=View&idFascicoloIspettivo=<%=((JSONObject) (jsonNonConformita.get("DatiGiornataIspettiva"))).get("idFascicoloIspettivo")%>">Fascicolo ispettivo</a> > 
+<a href="GestioneGiornateIspettive.do?command=View&idGiornataIspettiva=<%= ((JSONObject) jsonNonConformita.get("DatiGiornataIspettiva")).get("idGiornataIspettiva")%>">Giornata Ispettiva</a> > 
+Non conformita'
+</td>
+</tr>
+</table>
+<br/> 
+  
 <!-- RIEPILOGO -->
 <table class="details" cellpadding="10" cellspacing="10" width="100%">
 <col width="20%">
@@ -48,16 +60,10 @@
 <tr><td class="formLabel">Note</td><td><%=jsonDati.get("note") %> </td></tr>
 <%} %>
 
-<% if ( ((JSONObject) jsonNonConformita).has("Motivazione")) { %>
-<% JSONObject jsonMotivazione = (JSONObject) jsonNonConformita.get("Motivazione"); %>
-<tr><td class="formLabel">Motivazione</td><td><%=jsonMotivazione.get("nome") %></a></td></tr>
-<%} %>
-
 <% if ( ((JSONObject) jsonNonConformita).has("TipoVerifica")) { %>
-<% JSONObject jsonMotivazione = (JSONObject) jsonNonConformita.get("TipoVerifica"); %>
-<tr><td class="formLabel">Tipo Verifica</td><td><%=jsonMotivazione.get("nome") %></a></td></tr>
+<% JSONObject jsonTipoVerifica = (JSONObject) jsonNonConformita.get("TipoVerifica"); %>
+<tr><td class="formLabel">Tipo Verifica</td><td><%=jsonTipoVerifica.get("nome") %></a></td></tr>
 <%} %>
-
 
 <% if ( ((JSONObject) jsonNonConformita).has("Linea")) { %>
 <% JSONObject jsonLinea = (JSONObject) jsonNonConformita.get("Linea"); %>

@@ -10,7 +10,7 @@
 <%@page import="org.aspcfs.modules.zonecontrollo.base.Organization"%><head>
 <jsp:useBean id="OrgDetails" class="com.darkhorseventures.framework.beans.GenericBean" scope="request"/>
 <jsp:useBean id="StabilimentoDettaglio" class="com.darkhorseventures.framework.beans.GenericBean" scope="request"/>
-<jsp:useBean id="OrgDetailsCU" class="org.aspcf.modules.controlliufficiali.base.Organization" scope="request"/>
+<jsp:useBean id="OrgDetailsCU" class="" scope="request"/>
 
 <jsp:useBean id="TicketDetails" class="com.darkhorseventures.framework.beans.GenericBean" scope="request"/>
 
@@ -443,8 +443,8 @@ if(OrgDetails!=null){
 			}
 			
 			}else if(ct.equals("operatoriprivati")){
-				org.aspcf.modules.controlliufficiali.base.Organization onew ;
-				onew = (org.aspcf.modules.controlliufficiali.base.Organization)OrgDetailsCU;
+				 onew ;
+				onew = ()OrgDetailsCU;
 				id= onew.getOrgId();
 				%>
 				command = "?command=Details";
@@ -516,8 +516,8 @@ if(OrgDetails!=null){
 					<%
 					}}
 				else if(ct.equals("operatoriprivati")){
-					org.aspcf.modules.controlliufficiali.base.Organization onew ;
-					onew = (org.aspcf.modules.controlliufficiali.base.Organization)OrgDetailsCU;
+					 onew ;
+					onew = ()OrgDetailsCU;
 					id= onew.getOrgId();
 					%>
 					command = "?command=Details";
@@ -525,8 +525,8 @@ if(OrgDetails!=null){
 					<%
 					}
 				else if(ct.equals("gestioneanagrafica")){
-					org.aspcf.modules.controlliufficiali.base.Organization onew ;
-					onew = (org.aspcf.modules.controlliufficiali.base.Organization)OrgDetailsCU;
+					 onew ;
+					onew = ()OrgDetailsCU;
 					id= onew.getAltId();
 					%>
 					command = "?command=Details";

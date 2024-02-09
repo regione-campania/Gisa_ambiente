@@ -27,7 +27,7 @@
 
 <% if ( ((JSONObject) jsonGiornataIspettiva).has("Anagrafica")) { %>
 <% JSONObject jsonAnagrafica = (JSONObject) jsonGiornataIspettiva.get("Anagrafica"); %>
-<tr><td class="formLabel">Anagrafica</td><td><%=jsonAnagrafica.get("ragioneSociale") %> (<%=jsonAnagrafica.get("partitaIva") %>) <a href="OpuStab.do?command=Details&stabId=<%=jsonAnagrafica.get("riferimentoId")%>"><b>Torna all'Anagrafica</b></a></td></tr>
+<tr><td class="formLabel">Anagrafica</td><td><%=jsonAnagrafica.get("ragioneSociale") %> (<%=jsonAnagrafica.get("partitaIva") %>) <a href="StabilimentoAIA.do?command=Details&stabId=<%=jsonAnagrafica.get("riferimentoId")%>"><b>Torna all'Anagrafica</b></a></td></tr>
 <%} %>
 
 <% if ( ((JSONObject) jsonGiornataIspettiva).has("Dipartimento")) { %>
@@ -66,7 +66,7 @@ JSONObject jsonPerContoDi1 = (JSONObject) jsonPerContoDi.get(i);%>
 <% if ( ((JSONObject) jsonGiornataIspettiva).has("Linee")) { %>
 <% JSONArray jsonLinee = (JSONArray) jsonGiornataIspettiva.get("Linee"); 
 if (jsonLinee.length()>0) {%>
-<tr><td class="formLabel">Linee sottoposte </td><td>
+<tr><td class="formLabel">Codici IPPC sottoposti </td><td>
 <% for (int i = 0; i<jsonLinee.length(); i++) {
 JSONObject jsonLinea = (JSONObject) jsonLinee.get(i);%>
 <%=jsonLinea.get("nome") %><br/><br/> 
@@ -100,9 +100,8 @@ JSONObject jsonEmissioneAtmosferaCamino = (JSONObject) jsonEmissioniAtmosferaCam
 <i>Sistema abbattimento:</i> <%=jsonEmissioneAtmosferaCamino.get("sistemaAbbattimento") %> - 
 <i>Data sopralluogo 2016:</i> <%=fixData(jsonEmissioneAtmosferaCamino.get("dataSopralluogo2016")) %> - 
 <i>Parametri analizzati:</i> <%=jsonEmissioneAtmosferaCamino.get("parametriAnalizzati") %> - 
-<i>Superamenti limiti normativi:</i> <%=jsonEmissioneAtmosferaCamino.get("superamentiLimitiNormativi") %> - 
 <i>Note:</i> <%=jsonEmissioneAtmosferaCamino.get("note") %> - 
-<i>Esito conforme:</i> <%=jsonEmissioneAtmosferaCamino.has("esitoConforme") && Boolean.TRUE.equals(jsonEmissioneAtmosferaCamino.get("esitoConforme")) ? "SI" : "NO" %>
+<!-- <i>Esito conforme:</i> <%=jsonEmissioneAtmosferaCamino.has("esitoConforme") && Boolean.TRUE.equals(jsonEmissioneAtmosferaCamino.get("esitoConforme")) ? "SI" : "NO" %> -->
 
 <br/><br/>
 <% } %>
@@ -117,7 +116,7 @@ if (jsonGruppoIspettivo.length()>0) {%>
 for (int i = 0; i<jsonGruppoIspettivo.length(); i++) {
 JSONObject jsonComponente = (JSONObject) jsonGruppoIspettivo.get(i);
 %>
-<%=jsonComponente.get("nominativo") %> (<b><%=jsonComponente.get("qualifica") %></b>) <%=jsonComponente.get("struttura") %>  <%=jsonComponente.has("referente") && Boolean.TRUE.equals(jsonComponente.get("referente")) ? "(<b>Referente Ispettivo</b>)" : "" %> <%=jsonComponente.has("responsabile") && Boolean.TRUE.equals(jsonComponente.get("responsabile")) ? "(<b>Incaricato di Funzione</b>)" : "" %><br/><br/>
+<%=jsonComponente.get("nominativo") %> - <%=jsonComponente.get("struttura") %>  <%=jsonComponente.has("referente") && Boolean.TRUE.equals(jsonComponente.get("referente")) ? "(<b>Referente Ispettivo</b>)" : "" %> <%=jsonComponente.has("responsabile") && Boolean.TRUE.equals(jsonComponente.get("responsabile")) ? "(<b>Incaricato di Funzione</b>)" : "" %><br/><br/>
 <% } %>
 </td></tr>
 <%} }%>
@@ -163,4 +162,9 @@ JSONObject jsonTipoVerifica = (JSONObject) jsonTipiVerifica.get(i);
 
 </table>
 <!-- RIEPILOGO -->
+
+
+<%if ( (org.aspcfs.modules.util.imports.ApplicationProperties.getProperty("GESTIONE_CU_VEDI_JSON")!= null && org.aspcfs.modules.util.imports.ApplicationProperties.getProperty("GESTIONE_CU_VEDI_JSON").equalsIgnoreCase("si"))) {%>
+<%@ include file="../../util/random.jsp" %>
+<%} %>
 

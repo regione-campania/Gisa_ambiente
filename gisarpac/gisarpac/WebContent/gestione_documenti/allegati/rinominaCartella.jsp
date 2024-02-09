@@ -11,6 +11,11 @@ function checkFormRinominaCartella(formRinominaCartella) {
 	return false;
 	}
 
+function goToListaAllegati(formRinominaCartella) {
+		formRinominaCartella.action = "GestioneAllegatiUpload.do?command=ListaAllegati";
+		loadModalWindow();
+		formRinominaCartella.submit();
+		}
 </script>
 	
 	
@@ -32,10 +37,7 @@ function checkFormRinominaCartella(formRinominaCartella) {
 			
 		</table>
 	<input type="button" onClick="checkFormRinominaCartella(this.form)" value="Rinomina cartella">
-	<input type="hidden" id="orgId" name="orgId" value="<%=request.getParameter("orgId")%>"/>
-	<input type="hidden" id="stabId" name="stabId" value="<%=request.getParameter("stabId")%>"/>
-	<input type="hidden" id="altId" name="altId" value="<%=request.getParameter("altId")%>"/>
-	<input type="hidden" id="ticketId" name="ticketId" value="<%=request.getParameter("ticketId")%>"/>
+	<textarea readonly style="display:none" name="jsonEntita" id ="jsonEntita"><%= request.getParameter("jsonEntita")%></textarea>
 	<input type="hidden" id="folderId" name="folderId" value="<%=request.getParameter("folderId")%>"/>
 	<input type="hidden" id="parentId" name="parentId" value="<%=request.getParameter("parentId")%>"/>
 	<input type="hidden" id="idCartella" name="idCartella" value="<%=request.getParameter("idCartella")%>"/>
@@ -43,11 +45,7 @@ function checkFormRinominaCartella(formRinominaCartella) {
 	<input type="hidden" id="rinominata" name="rinominata" value="si"/>
 	<input type="hidden" name="op" id="op" value="<%= (String)request.getAttribute("op") %>" />
 	
-	<input type="button"
-		value="Annulla"
-		onClick="window.location.href='GestioneAllegatiUpload.do?command=ListaAllegati&orgId=<%=request.getParameter("orgId")%>&stabId=<%=request.getParameter("stabId")%>&ticketId=<%=request.getParameter("ticketId")%>&folderId=<%=request.getParameter("folderId")%>&parentId=<%=request.getParameter("parentId")%>&op=<%=request.getParameter("op") %>';" />
-	
-	
+	<input type="button" onClick="goToListaAllegati(this.form)" value="Annulla">
 	</form>
 	
 	

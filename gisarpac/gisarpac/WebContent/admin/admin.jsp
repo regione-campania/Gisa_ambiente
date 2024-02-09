@@ -48,19 +48,6 @@
         </td>
     </tr>
     
-    <tr class="containerBody">
-      <td>
-        <ul>
-          <%if("10.1.15.9".equals(request.getLocalAddr())){ %> 
-          <dhv:permission name="admin-users-view"><li><a href="http://151.12.13.135/guc" target="_blank">Gestione Utenti Centralizzata</a></li></dhv:permission>
-<% }else
-	{%>
-             <dhv:permission name="admin-users-view"><li><a href="http://151.12.13.143/guc" target="_blank">Gestione Utenti Centralizzata</a></li></dhv:permission>
-         
-         <%} %>
-        </ul>
-        </td>
-    </tr>
   </table>
   &nbsp;
 </dhv:permission>

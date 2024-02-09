@@ -3,19 +3,10 @@
 
 <jsp:useBean id="listaDocumenti" class="org.aspcfs.modules.gestioneDocumenti.base.DocumentaleDocumentoList" scope="request"/>
 <jsp:useBean id="downloadURL" class="java.lang.String" scope="request"/>
-<jsp:useBean id="OrgDetails" class="org.aspcf.modules.controlliufficiali.base.Organization" scope="request"/>
-<jsp:useBean id="StabilimentoDettaglio" class="org.aspcfs.modules.opu.base.Stabilimento" scope="request"/>
-<jsp:useBean id="Operatore" class="org.aspcfs.modules.opu.base.Operatore" scope="request"/>
-<jsp:useBean id="StabilimentoRichiestaDettaglio" class="org.aspcfs.modules.suap.base.Stabilimento" scope="request"/>
-<jsp:useBean id="OperatoreRichiesta" class="org.aspcfs.modules.suap.base.Operatore" scope="request"/>
-<jsp:useBean id="StabilimentoSintesisDettaglio" class="org.aspcfs.modules.sintesis.base.SintesisStabilimento" scope="request"/>
-<jsp:useBean id="OperatoreSintesis" class="org.aspcfs.modules.sintesis.base.SintesisOperatore" scope="request"/>
 
-<jsp:useBean id="StabilimentoAnagraficaDettaglio" class="org.aspcfs.modules.gestioneanagrafica.base.Stabilimento" scope="request"/>
-<jsp:useBean id="OperatoreAnagrafica" class="org.aspcfs.modules.gestioneanagrafica.base.Impresa" scope="request"/>
+<jsp:useBean id="StabilimentoAIADettaglio" class="org.aspcfs.modules.aia.base.StabilimentoAIA" scope="request"/>
+<jsp:useBean id="ImpresaAIADettaglio" class="org.aspcfs.modules.aia.base.ImpresaAIA" scope="request"/>
 
-<jsp:useBean id="orgId" class="java.lang.String" scope="request"/>
-<jsp:useBean id="ticketId" class="java.lang.String" scope="request"/>
 <jsp:useBean id="op" class="java.lang.String" scope="request"/>
 <%@ taglib uri="/WEB-INF/dhv-taglib.tld" prefix="dhv" %>
 <%@ taglib uri="/WEB-INF/zeroio-taglib.tld" prefix="zeroio" %>
@@ -57,37 +48,13 @@
 
     <br>
 <% 
-String obj = "OrgDetails";
-String param0 = "id=" + ticketId; 
-String param1 = "orgId=" + orgId;  
-String param2 = "stabId=" ;
-String param3 = "altId=" ;
-
+String obj = "";
 String param ="";
-if (op.equals("allerte"))
-	param = param0;
-else if (op.equals("gestioneanagrafica") && StabilimentoDettaglio!=null && StabilimentoDettaglio.getAltId()>0){
-	param = param3+StabilimentoDettaglio.getAltId();
-	obj = "Operatore";
+if (op.equals("aia")){
+	param = "stabId="+StabilimentoAIADettaglio.getIdStabilimento();
+	obj = "StabilimentoAIADettaglio";
 }
-else if (OrgDetails!=null && OrgDetails.getOrgId()>0)
-	param = param1;
-else if (StabilimentoDettaglio!=null && StabilimentoDettaglio.getIdStabilimento()>0){
-	param = param2+StabilimentoDettaglio.getIdStabilimento()+"&opId="+StabilimentoDettaglio.getIdOperatore();
-	obj = "Operatore";
-}
-else if (StabilimentoRichiestaDettaglio!=null && StabilimentoRichiestaDettaglio.getAltId()>0){
-	param = param3+StabilimentoRichiestaDettaglio.getAltId()+"&opId="+StabilimentoRichiestaDettaglio.getIdOperatore();
-	obj = "OperatoreRichiesta";
-}
-else if (StabilimentoSintesisDettaglio!=null && StabilimentoSintesisDettaglio.getAltId()>0){
-	param = param3+StabilimentoSintesisDettaglio.getAltId()+"&opId="+StabilimentoSintesisDettaglio.getIdOperatore();
-	obj = "OperatoreSintesis";
-}
-else if (StabilimentoAnagraficaDettaglio!=null && StabilimentoAnagraficaDettaglio.getAlt_id()>0){
-	param = param3+StabilimentoAnagraficaDettaglio.getAlt_id()+"&opId="+StabilimentoAnagraficaDettaglio.getImpresa().getId();
-	obj = "OperatoreAnagrafica";
-}
+
 %>	
   <dhv:container name="<%=op %>" selected="Documenti PDF" object="<%=obj %>"  param="<%= param %>">
   

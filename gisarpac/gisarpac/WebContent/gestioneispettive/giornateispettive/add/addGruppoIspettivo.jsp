@@ -10,8 +10,8 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <script src='javascript/modalWindow.js'></script>
-<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
-<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+<script src="javascript/jquery/jquery-1.8.2.js"></script>
+<script src="javascript/jquery/ui/1.9.1/jquery-ui.js"></script>
 <link rel="stylesheet" type="text/css" href="css/modalWindow.css"></link>
 
 <script>
@@ -74,10 +74,10 @@ function checkForm(form){
 	    }  
 	}
 	
-	if (!almenoUnReferente){
-		msg +="Indicare un componente come Incaricato di Funzione.\n";
-		esito = false;
-	}
+	//if (!almenoUnReferente){
+	//	msg +="Indicare un componente come Incaricato di Funzione.\n";
+	//	esito = false;
+	//}
 	
 	var almenoUnResponsabile = false;
 	
@@ -90,10 +90,10 @@ function checkForm(form){
 	    }  
 	}
 	
-	if (!almenoUnResponsabile){
-		msg +="Indicare un componente come Responsabile Procedimento.\n";
-		esito = false;
-	}
+	//if (!almenoUnResponsabile){
+	//	msg +="Indicare un componente come Responsabile Procedimento.\n";
+	//	esito = false;
+	//}
 	
 	if (!esito){
 		alert(msg);
@@ -178,12 +178,12 @@ function filtraRighe() {
 
 <br/>
 <table class="details" id ="tableGruppoIspettivo" name="tableGruppoIspettivo" cellpadding="10" cellspacing="10" width="100%" style="border-collapse: collapse">
-<col width="5%"><col width="10%"><col width="20%"><col width="45%"><col width="5%"><col width="5%">
+<col width="5%"><!--<col width="10%">--><col width="20%"><col width="45%"><col width="5%"><col width="5%">
 <tr><th colspan="6"><center><b>GRUPPO ISPETTIVO</b></center></th></tr>
 
 <tr>
 <th></th>
-<th>Qualifica</th>
+<!-- <th>Qualifica</th>-->
 <th>Componente</th>
 <th>Struttura</th>
 <th>Incaricato di Funzione</th>
@@ -193,7 +193,7 @@ function filtraRighe() {
 
 <tr>
 <th></th>
-<th><input type="text" id="myInputQualifica" onkeyup="filtraRighe()" placeholder="FILTRA QUALIFICA" style="width: 100%"></th>
+<!--<th><input type="text" id="myInputQualifica" onkeyup="filtraRighe()" placeholder="FILTRA QUALIFICA" style="width: 100%"></th>-->
 <th><input type="text" id="myInputComponente" onkeyup="filtraRighe()" placeholder="FILTRA COMPONENTE" style="width: 100%"></th>
 <th><input type="text" id="myInputStruttura" onkeyup="filtraRighe()" placeholder="FILTRA STRUTTURA" style="width: 100%"></th>
 <th></th>
@@ -208,12 +208,12 @@ Componente comp = (Componente) ListaComponenti.get(i); %>
 <td>
 <input type="checkbox" id ="<%= comp.getId()%>" name="componenteId" value="<%= comp.getId()%>" onClick="gestisciResponsabile(this)"/>
 <input type="hidden" readonly id ="componenteNome_<%= comp.getId()%>" name ="componenteNome_<%= comp.getId()%>" value="<%= comp.getNominativo() %>"/>
-<input type="hidden" readonly id ="componenteQualifica_<%= comp.getId()%>" name ="componenteQualifica_<%= comp.getId()%>" value="<%= comp.getNomeQualifica() %>"/>
+<!--<input type="hidden" readonly id ="componenteQualifica_<%= comp.getId()%>" name ="componenteQualifica_<%= comp.getId()%>" value="<%= comp.getNomeQualifica() %>"/>-->
 <input type="hidden" readonly id ="componenteStruttura_<%= comp.getId()%>" name ="componenteStruttura_<%= comp.getId()%>" value="<%= comp.getNomeStruttura() %>"/>
 <input type="hidden" readonly id ="componenteStrutturaId_<%= comp.getId()%>" name ="componenteStrutturaId_<%= comp.getId()%>" value="<%= comp.getIdStruttura() %>"/>
 
 </td>
-<td><%= comp.getNomeQualifica() %></td>
+<!--<td><%= comp.getNomeQualifica() %></td>-->
 <td><%= comp.getNominativo() %></td>
 <td><%= comp.getNomeStruttura() %></td>
 <td><input type="checkbox" disabled id ="componenteReferente_<%= comp.getId()%>" name="componenteReferente_<%= comp.getId()%>" value="true" onClick="svuotaAltri(this)"/></td>
@@ -257,4 +257,30 @@ function prettyPrint() {
 prettyPrint();
 var scroll_height = $("#jsonGiornataIspettiva").get(0).scrollHeight;
 $("#jsonGiornataIspettiva").css('height', scroll_height + 'px');
+
+
+function reloadDati(){
+	<% if ( ((JSONObject) jsonGiornataIspettiva).has("GruppoIspettivo")) { %>
+<% JSONArray jsonGruppoIspettivo = (JSONArray) jsonGiornataIspettiva.get("GruppoIspettivo");
+for (int i = 0; i < jsonGruppoIspettivo.length(); i++) {
+JSONObject jsonObject = jsonGruppoIspettivo.getJSONObject(i);
+%>
+document.getElementById("<%=jsonObject.get("id")%>").setAttribute("checked","true")
+
+if(<%=jsonObject.get("referente")%>)
+	document.getElementById("componenteReferente_<%=jsonObject.get("id")%>").setAttribute("checked","true")
+	document.getElementById("componenteReferente_<%=jsonObject.get("id")%>").removeAttribute("disabled")
+
+
+if(<%=jsonObject.get("responsabile")%>)
+		document.getElementById("componenteResponsabile_<%=jsonObject.get("id")%>").setAttribute("checked","true")
+		document.getElementById("componenteResponsabile_<%=jsonObject.get("id")%>").removeAttribute("disabled")
+
+
+
+
+
+<%}}%>
+}
+reloadDati();
 </script>

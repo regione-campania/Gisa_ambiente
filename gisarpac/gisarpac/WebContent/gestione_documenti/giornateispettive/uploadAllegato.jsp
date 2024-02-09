@@ -80,7 +80,7 @@
           <input type="text" disabled id="text_loading" name="text_loading" hidden="hidden" value="Caricamento in corso..."  style="border: none"/>
       </td>
     </tr>
-     <input type="hidden" name="idGiornataIspettiva" id ="idGiornataIspettiva" value="<%= (String)request.getAttribute("idGiornataIspettiva") %>" />
+     <textarea readonly style="display:none" name="jsonEntita" id ="jsonEntita"><%= (String)request.getAttribute("jsonEntita")%></textarea>
       <% String tipo = request.getParameter("tipo");
      if (tipo==null)
      tipo = (String) request.getAttribute("tipo");%>

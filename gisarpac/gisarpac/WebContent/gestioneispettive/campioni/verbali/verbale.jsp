@@ -19,7 +19,10 @@ if (tipoVerbale.equals("C4"))
 	url = "moduli/campionamento.jsp"; 
 else if (tipoVerbale.equals("AcqueSott"))
 	url = "moduli/acquesotterranee.jsp";
-
+else if (tipoVerbale.equals("CampionamentoSuolo"))
+	url = "moduli/campionamentosuolo.jsp";
+else if (tipoVerbale.equals("MancatoCampionamentoSuolo"))
+	url = "moduli/mancatocampionamentosuolo.jsp";
 %>
 
 <%=url %>

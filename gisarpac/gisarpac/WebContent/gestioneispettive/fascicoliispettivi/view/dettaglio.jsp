@@ -17,8 +17,8 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <script src='javascript/modalWindow.js'></script>
-<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
-<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+<script src="javascript/jquery/jquery-1.8.2.js"></script>
+<script src="javascript/jquery/ui/1.9.1/jquery-ui.js"></script>
 <link rel="stylesheet" type="text/css" href="css/modalWindow.css"></link>
 
  
@@ -64,7 +64,20 @@ if (jsonFascicoloIspettivo.has("Stato"))
 String[] datiProtocollo = PopolaCombo.getDatiProtocolloFascicolo(idFascicoloIspettivo);
 int annoProtocollo = Integer.parseInt(datiProtocollo[0]);
 int numeroProtocollo = Integer.parseInt(datiProtocollo[1]);
+
+String codRapportoChiusura = PopolaCombo.getDatiRapportoChiusuraFascicolo(idFascicoloIspettivo);
 %> 
+
+<table class="trails" cellspacing="0">
+<tr>
+<td>
+<a href="StabilimentoAIA.do?command=Details&stabId=<%=((JSONObject) jsonFascicoloIspettivo.get("Anagrafica")).get("riferimentoId")%>"><%= ((JSONObject) jsonFascicoloIspettivo.get("Anagrafica")).get("ragioneSociale") %></a> >
+<a href="GestioneFascicoliIspettivi.do?command=Lista&riferimentoId=<%=((JSONObject) jsonFascicoloIspettivo.get("Anagrafica")).get("riferimentoId")%>&riferimentoIdNomeTab=aia_stabilimento">Fascicoli ispettivi</a> > 
+Fascicolo ispettivo
+</td>
+</tr>
+</table>
+<br/> 
 
 
 <% if (jsonGiornateIspettive.length()==0) {%>
@@ -85,6 +98,12 @@ if (statoFascicolo.equalsIgnoreCase("aperto")) {%>
 <input type="button" value="Download relazione allegata al fascicolo ispettivo" onClick="openPopup('GestioneInvioSicra.do?command=DownloadProtocollo&annoProtocollo=<%=annoProtocollo %>&numeroProtocollo=<%=numeroProtocollo %>', 'Protocollo_<%=idFascicoloIspettivo %>')"/>
 <input type="button" value="Vedi informazioni protocollo relazione allegata al fascicolo ispettivo" onClick="openPopup('GestioneInvioSicra.do?command=InviaLeggiProtocollo&annoProtocollo=<%=annoProtocollo %>&numeroProtocollo=<%=numeroProtocollo %>', 'Protocollo_<%=idFascicoloIspettivo %>')"/>
 </td></tr>
+<% if (codRapportoChiusura != null && !codRapportoChiusura.equals("")){ %>
+<tr><th>Rapporto chiusura</th></tr>
+<tr><td align="center">
+<input type="button" value="Download rapporto chiusura" onClick="openPopup('GestioneAllegatiFascicoliIspettivi.do?command=DownloadPDF&codDocumento=<%=codRapportoChiusura %>', 'RapportoChiusura_<%=idFascicoloIspettivo %>')"/>
+</td></tr>
+<%} %>
 </table>
 <br/><br/>
 <% } %>
@@ -97,7 +116,7 @@ if (statoFascicolo.equalsIgnoreCase("aperto")) {%>
 
 <% if ( ((JSONObject) jsonFascicoloIspettivo).has("Anagrafica")) { %>
 <% JSONObject jsonAnagrafica = (JSONObject) jsonFascicoloIspettivo.get("Anagrafica"); %>
-<tr><td class="formLabel">Anagrafica</td><td><%=jsonAnagrafica.get("ragioneSociale") %> (<%=jsonAnagrafica.get("partitaIva") %>) <a href="OpuStab.do?command=Details&stabId=<%=jsonAnagrafica.get("riferimentoId")%>"><b>Torna all'anagrafica</b></a></td></tr>
+<tr><td class="formLabel">Anagrafica</td><td><%=jsonAnagrafica.get("ragioneSociale") %> (<%=jsonAnagrafica.get("partitaIva") %>) <a href="StabilimentoAIA.do?command=Details&stabId=<%=jsonAnagrafica.get("riferimentoId")%>"><b>Torna all'anagrafica</b></a></td></tr>
 <%} %>
 
 

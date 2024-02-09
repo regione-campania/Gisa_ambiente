@@ -8,15 +8,17 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <script src='javascript/modalWindow.js'></script>
-<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
-<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+<script src="javascript/jquery/jquery-1.8.2.js"></script>
+<script src="javascript/jquery/ui/1.9.1/jquery-ui.js"></script>
 <link rel="stylesheet" type="text/css" href="css/modalWindow.css"></link>
 
 <script>
 
 
 function backForm(form){
-	form.action="GestioneGiornateIspettive.do?command=AddTecnica";
+		form.action="GestioneGiornateIspettive.do?command=AddTecnica";
+
+
 	loadModalWindow();
 	form.submit();
 }
@@ -46,8 +48,12 @@ if (jsonDati.length()>0) {%>
 <tr><td class="formLabel">Data fine </td><td><input type="date" id="dataFine" name="dataFine" /></td></tr>
 <script>document.getElementById("dataFine").max = new Date().toISOString().split("T")[0];</script>
 <tr><td class="formLabel">Ora fine </td><td><input type="time" id="oraFine" name="oraFine" /></td></tr>
-<tr><td class="formLabel">Note </td><td><textarea id="note" name="note" cols="50" rows="5"></textarea></td></tr>
+<tr><td class="formLabel">Note </td><td><textarea id="note" name="note" cols="50" rows="5" placeholder="NOTE"></textarea></td></tr>
 
+
+
+
+<input type="hidden" id="tecnica" name="tecnica" value=<%=request.getAttribute("tecnica")%>>
 </table>
 
 <!-- BOTTONI -->
@@ -130,5 +136,16 @@ function prettyPrint() {
 prettyPrint();
 var scroll_height = $("#jsonGiornataIspettiva").get(0).scrollHeight;
 $("#jsonGiornataIspettiva").css('height', scroll_height + 'px');
+
+function reloadDati(){
+<% if ( ((JSONObject) jsonGiornataIspettiva).has("Dati")) { %>
+<% JSONObject jsonDati1 = (JSONObject) jsonGiornataIspettiva.get("Dati"); %>
+document.getElementById("dataInizio").value='<%=jsonDati1.get("dataInizio")%>'
+	document.getElementById("oraInizio").value='<%=jsonDati1.get("oraInizio")%>'
+	document.getElementById("dataFine").value='<%=jsonDati1.get("dataFine")%>'
+	document.getElementById("oraFine").value='<%=jsonDati1.get("oraFine")%>'
+	document.getElementById("note").value='<%=jsonDati1.get("note")%>'<%}%>
+}
+reloadDati();
 </script>
 

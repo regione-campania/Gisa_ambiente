@@ -10,8 +10,8 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <script src='javascript/modalWindow.js'></script>
-<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
-<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+<script src="javascript/jquery/jquery-1.8.2.js"></script>
+<script src="javascript/jquery/ui/1.9.1/jquery-ui.js"></script>
 <link rel="stylesheet" type="text/css" href="css/modalWindow.css"></link>
 
 <center>
@@ -35,7 +35,7 @@
 <col width="20%">
 
 <tr><th colspan="2"><center><b>Anagrafica</b></center></th></tr>  
-<tr><td class="formLabel">Ragione sociale</td><td><%=Anagrafica.getRagioneSociale() %>  <a href="OpuStab.do?command=Details&stabId=<%=Anagrafica.getRiferimentoId()%>"><b>Torna all'anagrafica</b></a></td></tr>
+<tr><td class="formLabel">Ragione sociale</td><td><%=Anagrafica.getRagioneSociale() %>  <a href="StabilimentoAIA.do?command=Details&stabId=<%=Anagrafica.getRiferimentoId()%>"><b>Torna all'anagrafica</b></a></td></tr>
 </table>
  
 <br/>

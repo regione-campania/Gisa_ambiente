@@ -45,7 +45,7 @@
 
     
     <!-- Aggiunta modulo Ricerca Globale  -->
-    <action name="GlobalSearch"/>
+    <action name="RicercaGlobale"/>
     <!-- Aggiunta modulo ReportRegione -->
     <action name="MonitoringReport"/>
     <!-- Aggiunta modulo Configurazione a caldo -->
@@ -106,17 +106,9 @@
       <permission value="global-search-view"/>
       <long_html value="Ricerca Giornata Ispettiva"/>
       <short_html value="Ricerca Giornata Ispettiva"/>
-      <link value="GlobalSearch.do?command=SearchFormIspettiva"/>
+      <link value="RicercaGlobale.do?command=SearchFormIspettiva"/>
     </submenu>
-    
-     <submenu name="Tree">
-      <permission value="tree-view"/>
-      <long_html value="Gestione Strutture di memoria"/>
-      <short_html value="Gestione Strutture di memoria"/>
-      <link value="Tree.do?command=ListTree"/>
-    </submenu>
-    
-   
+     
     <!-- Aggiunta del sottomenu' al modulo Home -->
     <submenu name="Configurazione a caldo">
       <permission value="hot-configuration-view"/>
@@ -150,68 +142,6 @@
   </menu>
   
    
-   <menu>
-    <action name="Opu"/>
-    <action name="OpuStab"/>
-    <action name="OpuStabVigilanza"/>
-    <action name="OpuStabCampioni"/>
- 	<action name="OpuStabTamponi"/>
-    <action name="OpuStabNonConformita"/>
-    <action name="OpuStabAltreNonConformita"/>
-    <action name="OpuStabSanzioni"/>
-    <action name="OpuStabSequestri"/>
-    <action name="OpuStabFollowup"/>
-    <action name="OpuStabReati"/>
-    <action name="OpuStabDiffida"/>
-    <action name="OpuStabCheckList"/>
-    <action name="OperatoreAction"/>
-    <action name="GestioneDocumenti_Opu"/>
-    <action name="RicercaUnica"/>
-    <action name="MacellazioniOpu"/>
-    <action name="MacellazioniNewOpu"/>
-    <action name="TrasferimentoSedeStabilimento"/>
-    <action name="CambioSedeOperatore"/>
-    <action name="GestioneXML"/>
-    
-             
-    <page title="Anagrafica Impianti"/>
-    <permission value="opu-view"/>
-    <long_html value="Anagrafica Impianti"/>
-    <short_html value="Anagrafica Impianti"/>
-    <link value="OpuStab.do?command=SearchForm"/>
-    <graphic width="83" height="36" on="menu-accounts-on.gif" off="menu-accounts-off.gif" rollover=""/>
-
-    <submenu>
-    	<permission value="gestioneanagrafica-add"/>
-    	<long_html value="INSERISCI OSA"/>
-    	<short_html value="INSERISCI OSA"/>
-    	<link value="GestioneAnagraficaAction.do?command=Choose"/>
-    </submenu>    
-    
-       <submenu name="Ricerca">
-      <permission value="opu-view"/>
-      <long_html value="Ricerca"/>
-      <short_html value="Ricerca"/>
-      <link value="OpuStab.do?command=SearchForm"/>
-    </submenu>
-    
-      <submenu name="Aggiungi impianto">
-     <permission value="opu-add"/>
-      <long_html value="Aggiungi impianto"/>
-      <short_html value="Aggiungi impianto"/>
-      <link value="GestioneAnagraficaAction.do?command=Choose"/>
-      
-    </submenu>
-    
-     <submenu name="Importa anagrafica da GISA CAMPANIA">
-     <permission value="opu-add"/>
-      <long_html value="Importa anagrafica da GISA CAMPANIA"/>
-      <short_html value="Importa anagrafica da GISA CAMPANIA"/>
-      <link value="GestioneAnagraficaRemotaAction.do?command=PrepareSearchAnagraficaRemota"/>
-    </submenu>
-    
-  </menu>
-   
    
     <menu>
     <action name="AltriStabilimenti"/>
@@ -225,7 +155,47 @@
 
   </menu> 
   
+     <menu>
+    <action name="StabilimentoAUA"/>
+ 	<page title="Impianti AUA"/>
+    <permission value="impianti-aua-view"/>
+    <long_html value="Impianti AUA"/>
+    <short_html value="Impianti AUA"/>
+    <link value="StabilimentoAUA.do?command=SearchForm"/>
+    <graphic width="83" height="36" on="menu-accounts-on.gif" off="menu-accounts-off.gif" rollover=""/>
+
+  </menu> 
   
+   <menu>
+       <action name="RicercaUnica"/>
+   
+    <action name="StabilimentoAIA"/>
+ 	<page title="Impianti AIA"/>
+    <permission value=""/>
+    <long_html value="Impianti AIA"/>
+    <short_html value="Impianti AIA"/>
+    <link value="StabilimentoAIA.do?command=SearchForm"/>
+    <graphic width="83" height="36" on="menu-accounts-on.gif" off="menu-accounts-off.gif" rollover=""/>
+
+
+ <submenu name="Ricerca">
+      <permission value=""/>
+      <long_html value="Ricerca"/>
+      <short_html value="Ricerca"/>
+      <link value="StabilimentoAIA.do?command=SearchForm"/>
+    </submenu>
+
+
+	<submenu name="Aggiungi impianto">
+     <permission value=""/>
+      <long_html value="Aggiungi impianto"/>
+      <short_html value="Aggiungi impianto"/>
+      <link value="StabilimentoAIA.do?command=Add"/>
+      
+    </submenu>
+
+
+  </menu> 
   
    <!--PROTOTYPE NO SCIA -->
   
@@ -426,6 +396,37 @@
       <link value="GestioneFlussoSviluppo.do?command=Dashboard"/>
       </submenu> 	 
    
+  </menu>
+  
+  <menu>
+  	<action name="Terreni"/>
+      <page title="Terra dei Fuochi"/>
+ 	  <permission value="terra-dei-fuochi-view"/>
+      <long_html value="Terra dei Fuochi"/>
+      <short_html value="Terra dei Fuochi"/>
+      <link value="Terreni.do?command=toSearchArea"/>	
+      <graphic width="83" height="36" on="menu-accounts-on.gif" off="menu-accounts-off.gif" rollover=""/>
+      
+      <submenu>
+   		<permission value="terra-dei-fuochi-add"/>
+	  	<long_html value="Aggiungi Area"/>
+	    <short_html value="Aggiungi Area"/>
+	    <link value="Terreni.do?command=AddArea"/>
+      </submenu>
+      <submenu>
+   		<permission value="terra-dei-fuochi-view"/>
+	  	<long_html value="Ricerca Area"/>
+	    <short_html value="Ricerca Area"/>
+	    <link value="Terreni.do?command=toSearchArea"/>
+      </submenu>
+      <submenu>
+   		<permission value="terra-dei-fuochi-view"/>
+	  	<long_html value="Subparticelle non campionate"/>
+	    <short_html value="Subparticelle non campionate"/>
+	    <link value="Terreni.do?command=EstrazioneSubparticelleNonCampionate"/>
+      </submenu>
+      
+  
   </menu>
 
     

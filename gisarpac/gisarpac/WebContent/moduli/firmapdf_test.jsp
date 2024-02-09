@@ -1,0 +1,558 @@
+<%@ page import="org.aspcfs.modules.util.imports.ApplicationProperties" %>
+<%@ page import="java.net.InetAddress" %>
+
+
+<%
+//Leggo l'url a cui sono connesso attualmente
+String HEADER_URI = request.getRequestURI();
+String HEADER_URL = request.getRequestURL().toString();
+String HEADER_DOMINIO = HEADER_URL.replaceAll(HEADER_URI, "").replaceAll("https://", "").replaceAll("http://", "");
+if (HEADER_DOMINIO.indexOf(":")>0)
+	HEADER_DOMINIO = HEADER_DOMINIO.substring(0, HEADER_DOMINIO.indexOf(":"));
+System.out.println("### HEADER_DOMINIO: " +HEADER_DOMINIO);
+
+//Istanzio le url che usero' per connettermi
+String DOCUMENTALE_CONNESSIONE_HOST = "";
+
+//ATTENZIONE. PER FUNZIONARE SUL FILEHOST DEVE ESSERCI ESATTAMENTE 131.1.255.97 colarpac.gisacampania.it srvGISAW srvDOCUMENTALEW srvDOCUMENTALE 
+
+String DOCUMENTALE_HOST = "";
+String DOCUMENTALE_IP = "";
+String DOCUMENTALE_PORTA = "";
+
+DOCUMENTALE_HOST = java.net.InetAddress.getByName(java.net.InetAddress.getByName("srvDOCUMENTALEW").getHostAddress()).getHostName();
+DOCUMENTALE_IP = InetAddress.getByName("srvDOCUMENTALEW").getHostAddress();
+DOCUMENTALE_PORTA = ApplicationProperties.getProperty("APP_PORTA_DOCUMENTALE");
+
+if (DOCUMENTALE_PORTA!=null && DOCUMENTALE_PORTA.equals(":80"))
+	DOCUMENTALE_PORTA = "";
+
+System.out.println("### DOCUMENTALE_IP+DOCUMENTALE_PORTA: " +DOCUMENTALE_IP+DOCUMENTALE_PORTA);
+System.out.println("### DOCUMENTALE_HOST+DOCUMENTALE_PORTA: " +DOCUMENTALE_HOST+DOCUMENTALE_PORTA);
+
+if (!HEADER_DOMINIO.contains("colarpac")){ //SE MI SONO CONNESSO TRAMITE colarpac.gisacampania.it
+	DOCUMENTALE_CONNESSIONE_HOST = HEADER_DOMINIO+DOCUMENTALE_PORTA;
+} else { //SE MI SONO CONNESSO TRAMITE IP
+	DOCUMENTALE_CONNESSIONE_HOST = DOCUMENTALE_HOST+DOCUMENTALE_PORTA;
+}
+
+System.out.println("### DOCUMENTALE_CONNESSIONE_HOST: " +DOCUMENTALE_CONNESSIONE_HOST);
+
+int idGiornataIspettiva = -1;
+int idCampione = -1;
+
+try {idGiornataIspettiva = Integer.parseInt(request.getParameter("idGiornataIspettiva"));} catch (Exception e) {}
+try {idCampione = Integer.parseInt(request.getParameter("idCampione"));} catch (Exception e) {}
+
+%>
+
+
+<!DOCTYPE HTML>
+<head>
+  <script crossorigin type="text/javascript" src="https://localhost:7777/files/fcsign.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <title>Firma Certa Web Test</title>
+</head>
+<body>
+
+<script type="text/javascript">
+
+//var upload = 'http://www.gisacampania.it/firma/web/upload.php';
+var upload = "http://<%= DOCUMENTALE_CONNESSIONE_HOST%>/serverDocumentale/jsp/upload_come_php.jsp";
+var uploadEseguito = false;
+//var upload = 'http://172.16.0.45/serverDocumentale/UploadFileWrapper';
+//ip 172.16.3.189:8089
+fcHttpServerOfflineCallback = serverOfLine;
+
+
+
+function serverOfLine() 
+{
+  alert('Local server offline');
+}
+
+function genericEnd(response)
+{
+   if (!response.success)
+	  alert(" genericEnd - error : " + response.errorMessage + " (" +response.errorCode+")")
+ }
+
+function addLink(e, text, url)
+{
+  var a = document.createElement('a');
+  var linkText = document.createTextNode(text);
+  a.appendChild(linkText);
+  a.title = text;
+  a.href = url;
+  a.target= "_blank";
+  document.getElementById(e).appendChild(a);
+  var br = document.createElement('br');
+  document.getElementById(e).appendChild(br);
+}
+
+function signEnd(response)
+{
+	
+   document.getElementById('img').style.visibility = 'hidden';
+   if (!response.success)
+	  alert(response.errorMessage || "Has not been produced any file")
+   else
+   {
+	 
+	  if (document.getElementById('checkmemory').checked)
+      {
+	    document.getElementById('pdf').setAttribute('src','https://localhost:7777/files/memory/signeddocument.pdf');
+        //document.getElementById('uploadButtons').style.display = 'inline';
+	  }	
+	  else	  
+	  {
+	   // document.getElementById('pdf').setAttribute('src','RT_Signed.pdf');
+	  }		  
+
+		if (response.signedDocument) 
+		{
+			document.getElementById('uploadSignedDocument').style.visibility = 'visible';
+			addLink("fcdoclink","Signed document", response.signedDocument);
+		}
+
+    }
+   
+   if (response.success == true && response.errorMessage == '' && (typeof response.signedDocument === 'undefined')){
+			uploadAjax();
+		
+		//uploadSicra();
+	}
+}
+
+function signStart()
+{
+    var sel = document.getElementById('readers');
+	var tablets = document.getElementById('tablets');
+	//var fileUrl = 'https://localhost:7777/files/valorizzato.pdf';
+	var fileUrl = 'https://localhost:7777/files/' + getReturnName();
+	//alert('verifica file'+fileUrl);
+	var uploadUrl = upload;
+	
+	if (document.getElementById('checkmemory').checked || document.getElementById('checksave').checked)
+	{
+	   uploadUrl = '';
+	}
+
+	//document.getElementById('uploadSignedDocument').style.visibility = 'visible';
+    document.getElementById('img').style.visibility = 'visible';
+	fcsign.callback = signEnd;
+
+    fcsign.extraParams = 'UrlTSA=https://timestamp.firmacerta.it;UsernameTSA=demo;PasswordTSA=l4C4s0n010';
+    if (sel.selectedIndex>=0) {
+	    fcsign.extraParams = fcsign.extraParams + ';ReaderName='+sel.options[sel.selectedIndex].text;
+		if (sel.options[sel.selectedIndex].value == 'r')
+		  fcsign.extraParams = fcsign.extraParams + ';UsernameRS='+document.getElementById('utente').value+';PasswordRS='+document.getElementById('password').value
+		else
+		  fcsign.extraParams = fcsign.extraParams + ';Pin='+document.getElementById('pin').value;
+	}
+	
+	if (tablets.selectedIndex>=0) {
+		tablet = JSON.parse(tablets.options[tablets.selectedIndex].getAttribute("tablet"));
+		if (tablet.isTabletPC) {
+			fcsign.extraParams = fcsign.extraParams + ';AdvancedSignature.FromTabletPC=1;AdvancedSignature.TabletPCModel='+tablet.modelAsString;
+		} else {
+			fcsign.extraParams = fcsign.extraParams + ';AdvancedSignature.FromTabletPC=0;AdvancedSignature.TabletModel='+tablet.modelAsString;
+		}
+	}
+
+	//fcsign.templateUrl = 'https://localhost:7777/files/7301.fct';
+	//fcsign.sign(fileUrl,'7301.pdf',uploadUrl,'7301_Signed.pdf');
+	
+	//alert("uploadUrl->" + uploadUrl + " \nfilesigned->" + 'RT_Signed.pdf');
+
+	var d = Date.now();
+	var date = new Date(d);
+	
+	var SS = date.getSeconds().toString(); //secondi
+	var	MM = date.getMinutes().toString(); //minuti
+	var HH = date.getHours().toString(); //ore
+	
+	var gg = date.getDate(); //giorni
+	if(gg > 0 && gg < 10){
+		gg = "0" + gg.toString();
+	}
+	else{
+		gg = gg.toString();
+	}
+	var mm = date.getMonth() + 1; //mesi
+	if(mm > 0 && mm < 10){
+		mm = "0" + mm.toString();
+	}
+	else{
+		mm = mm.toString();
+	}
+	var aa = date.getFullYear().toString(); //anni
+	
+	var ts = aa + mm + gg +"_"+ HH + MM + SS; //timestamp aammgg_HHMMSS
+	
+	var filename = 'RT_Signed' + ts + '.pdf';
+	var percorso = "/tmp/upload/" + filename;
+	var b = getReturnName();
+	if(b.includes("A6") == true){
+		fcsign.templateUrl = 'http://131.1.255.97/gisarpac/moduli/ispettivaA6.fct';
+	}else if(b.includes("C4") == true){
+		fcsign.templateUrl = 'http://131.1.255.97/gisarpac/moduli/ispettivaA6.fct';
+	}else if(b.includes("AcqueSott") == true){
+		fcsign.templateUrl = 'http://131.1.255.97/gisarpac/moduli/campioneAcqueSott.fct';
+	}
+	fcsign.sign(fileUrl,'RT.pdf', uploadUrl,filename);
+	
+	//document.getElementById('uploadButtons').style.visibility = 'visible';
+	document.getElementById('path').value = percorso;
+	document.getElementById('pathFile').value = percorso;
+	document.getElementById('nomeAllegato').value = filename;
+
+}
+
+function readersEnd(response)
+{
+   document.getElementById('img').style.visibility = 'hidden';
+   if (!response.success)
+	  alert(response.errorMessage || "Has not been produced any result")
+   else
+   {
+      document.getElementById('readers').options.length = 0;
+	  for (var i=0; i<response.readers.length;i++){
+       opt = new Option(response.readers[i].name, response.readers[i].remote ? 'r' : response.readers[i].smartCard ? 's' : 'n');
+       document.getElementById('readers').options[i] = opt;
+      }
+      readerChange(document.getElementById('readers'));
+   }
+}
+function getReaders()
+{
+    document.getElementById('img').style.visibility = 'visible';
+	fcsign.callback = readersEnd;
+	fcsign.readers(false, true);
+}
+
+function tabletsEnd(response)
+{
+   document.getElementById('img').style.visibility = 'hidden';
+   if (!response.success)
+	  alert(response.errorMessage || "Has not been produced any result")
+   else
+   {
+      document.getElementById('tablets').options.length = 0;
+	  for (var i=0; i<response.tablets.length;i++){
+       opt = new Option(response.tablets[i].name);
+	   opt.setAttribute("tablet", JSON.stringify(response.tablets[i]));
+       document.getElementById('tablets').options[i] = opt;
+      }
+   }
+}
+
+function getTablets()
+{
+    document.getElementById('img').style.visibility = 'visible';
+	fcsign.callback = tabletsEnd;
+	fcsign.getSupportedTablets(document.getElementById('tabletconnected').checked);
+}
+
+function readerChange(selectObj)
+{
+   var idx = selectObj.selectedIndex;
+   if (idx>=0) {
+	   if (selectObj.options[idx].value == 'r') {
+		 document.getElementById('localReader').style.display = 'none';
+		 document.getElementById('remoteReader').style.display = 'inline';
+	   } else if (selectObj.options[idx].value == 's') {
+		 document.getElementById('localReader').style.display = 'inline';
+		 document.getElementById('remoteReader').style.display = 'none';
+	   } else if (selectObj.options[idx].value == 'n') {
+		 document.getElementById('localReader').style.display = 'none';
+		 document.getElementById('remoteReader').style.display = 'none';
+	   }
+   }
+}
+
+function installCertificate()
+{
+    document.getElementById('img').style.visibility = 'visible';
+	fcsign.callback = installCertificateEnd;
+	fcsign.installManagedCertificate('https://localhost:7777/files/Firma GrafoCerta (FEA).fck');
+}
+
+function installCertificateEnd(response)
+{
+   document.getElementById('img').style.visibility = 'hidden';
+   if (response.success)
+	  getReaders();
+   else
+	  alert(response.errorMessage || "Has not been produced any result");
+}
+
+function showDocument()
+{
+	fcsign.callback = null;
+	fcsign.showDocumentToTheSigner(srcPdf,'',false)
+}
+
+function loadDocument()
+{
+	fcsign.callback = function (response) {
+							if (!response.success)
+								alert(response.errorMessage)
+							else
+							{
+								document.getElementById('fcdoclink').innerHTML = '';
+								//document.getElementById('uploadButtons').style.display = 'none';
+								addLink("fcdoclink","Original document", response.document);
+							}
+					  };	
+	fcsign.loadDocumentInMemory(srcPdf);
+}
+
+function clearMemory()
+{
+	fcsign.callback = function (response) {
+							if (response.success)
+							{
+								document.getElementById('fcdoclink').innerHTML = '';
+								//document.getElementById('uploadButtons').style.display = 'none';
+							}
+
+					  };		
+	fcsign.clearMemory();
+}
+
+function selectSignaturePosition()
+{
+	fcsign.callback = function (data) {
+							if (data.success)
+								alert('position='+JSON.stringify(data.position));
+					  }
+	fcsign.selectSignaturePosition(srcPdf,'')
+}
+
+function displayManagerEnd(response)
+{
+	if (response.success) {
+		if (response.hasOwnProperty('isPlaying')) {
+			alert('isPlaying='+response.isPlaying)
+		}
+	}
+}
+
+function showImageOnTablet()
+{
+   fcsign.callback = displayManagerEnd;	
+   fcsign.displayManager('show', 'https://localhost:7777/files/file.jpg', true);
+
+}
+
+function displayManagerActionChange(selectObj)
+{
+   var idx = selectObj.selectedIndex;
+   if (idx>=0) {
+	  fcsign.callback = displayManagerEnd;	
+	  fcsign.displayManager(selectObj.options[idx].value)
+   }
+
+}
+
+function uploadSignedDocument()
+{
+	fcsign.callback = genericEnd;	
+	fcsign.uploadSignedDocumentFromMemory(upload, 'RT_Signed.pdf', document.getElementById('checkzip').checked ? 1:0);
+}
+
+
+
+
+	
+	
+function getPath(event){
+	srcPdf = URL.createObjectURL(event.target.files[0]);
+	srcName = document.getElementById('file').files[0].name;
+	
+	if(srcName == document.getElementById('check').value){
+		
+		console.log(srcName);
+		console.log('ok');
+		document.getElementById('pdf').src = srcPdf ;
+		document.getElementById('signButtons').style.visibility = 'visible';
+		document.getElementById('pdf').style.visibility = 'visible';
+	}
+	else{
+		alert("SELEZIONARE QUESTO FILE: " + document.getElementById('check').value);
+		document.getElementById('signButtons').style.visibility = 'hidden';
+		document.getElementById('pdf').style.visibility = 'hidden';
+	}
+};
+
+function getReturnName(){
+	var a = document.getElementById('check').value;
+	
+	if (a.includes("RECUPERATO_") == true)
+	{
+		return a.slice(11);
+	}
+	else
+	{
+		return a;
+	}
+	
+};
+
+
+
+function uploadAjax()
+{
+	//creazione formdata + conversione in stringa (chiave=valore & chiave=valore...)
+	var parametri = new URLSearchParams(new FormData(form1)).toString();
+			
+    var xmlHttp = new XMLHttpRequest();
+	//apertura della connessione con parametro "true" (necessario per POST)
+	xmlHttp.open("post", "https://<%= DOCUMENTALE_CONNESSIONE_HOST+"/"+ApplicationProperties.getProperty("APP_DOCUMENTALE_ALLEGATI_CARICATI")+"Wrapper" %>",true);
+	//header necessario per il POST alla servlet
+	xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		//attesa della risposta
+        xmlHttp.onreadystatechange = function()
+        {
+			//elaborazione della risposta
+            if(xmlHttp.readyState == 4 && xmlHttp.status == 200 && !uploadEseguito)
+            {
+				var obj = JSON.parse(xmlHttp.response);
+                alert("Upload avvenuto con successo, codDocumento: " + obj.codDocumento);
+                uploadEseguito = true;
+               	uploadSicra();
+            }
+        }
+	//invio dei parametri
+    xmlHttp.send(parametri);
+	
+}
+
+function uploadSicra()
+{
+	//creazione formdata + conversione in stringa (chiave=valore & chiave=valore...)
+	var parametri = new URLSearchParams(new FormData(formSicra)).toString();
+	
+	var xmlHttp = new XMLHttpRequest();
+	//apertura della connessione con parametro "true" (necessario per POST)
+	xmlHttp.open("post", "/gisarpac/GestioneInvioSicra.do?command=InviaInserisciProtocolloEAnagrafiche",true);
+	//header necessario per il POST alla servlet
+	xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		//attesa della risposta
+        xmlHttp.onreadystatechange = function()
+        {
+			//elaborazione della risposta
+            if(xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            {
+                alert("Upload verso Sicra avvenuto con successo");
+				window.opener.opener.location.reload();
+				window.opener.close();
+				window.close();
+            }
+        }
+	//invio dei parametri
+    xmlHttp.send(parametri);
+}
+
+</script>
+<br>
+<div  class="container-sm">
+	<h2 align="center"><strong>FIRMA <%= request.getParameter("fileName") %></strong></h2>
+</div>
+<input hidden type="text" id="check" name="check" value="<%= request.getParameter("fileName")%>"/>
+<br>
+<div class="container-sm">
+	<select id='readers' onchange="readerChange(this)" hidden></select>
+	<div id="localReader" style="display: none">
+		Pin
+		<input id='pin' type="password"/>
+	</div>
+	<div id="remoteReader" style="display: none">
+		Utente
+		<input id='user' type="text"/>
+		Password
+		<input id='password' type="password"/>
+	</div>
+	<input type="button" value="Tablets list" onclick="getTablets()" hidden />
+	<br>
+	<br>
+	<div align="center">
+	Dispositivo: 
+	<select class="form-select" id='tablets'></select>
+	</div>
+	<input type="checkbox" id="tabletconnected" checked="true" hidden />
+	<input type="button" value="Show document" onclick="showDocument()" hidden />
+	<input type="button" value="Select signature position" onclick="selectSignaturePosition()" hidden />
+	<input type="button" value="Show image on tablet" onclick="showImageOnTablet()" hidden />
+
+	<select id='displayManagerAction' onchange="displayManagerActionChange(this)" hidden>
+		<option value="pause">Pause</option>
+		<option value="resume">Resume</option>
+		<option value="reset">Reset</option>
+		<option value="status">Status</option>
+	</select>
+	<br>
+	<br>
+</div>
+<div align="center" class="container-sm">
+   <br>
+   <!-- ALL IN ONE -->
+	<br>
+	<div id="signButtons" style="visibility: visible">
+	<input type="button" value="Sign" class="btn btn-success" onclick="installCertificate();getReaders();getTablets('true');signStart();this.style.display = 'none';"/>
+	<br>
+	</div>
+	<div style="visibility: hidden">
+    <input type="checkbox" id="checksave">Save pdf in local storage</input>
+    <input type="checkbox" id="checkmemory">Sign document in memory</input>
+	<br>
+	</div>
+	<img id='img' src="loader.gif" width="16" height="16" style="visibility: hidden"/>
+	<div id="fcdoclink"></div>
+	<div id="uploadButtons" style="visibility: hidden">
+		<input id="uploadSignedDocument" class="btn btn-success" type="button" value="Conferma e invia a documentale" onclick="uploadAjax()" />
+	</div> 
+</div>
+<br><br>
+<div style="visibility:hidden" id = "divform">
+<form id="form1" action="" method="post" name="form1" enctype ="multipart/form-data">
+	<table>
+		<tr><td>Applicativo di provenienza</td> <td><input type="text" readonly name="provenienza" id="provenienza" class="formVal" value="gisa_nt" /></td></tr>
+		<tr><td>Id Utente</td> <td><input type="text" readonly name="idUtente" id="idUtente" class="formVal" value="<%=request.getParameter("idUtente")%>" /></td></tr>
+		<tr><td>Ip Utente</td> <td><input type="text" readonly name="ipUtente" id="ipUtente" class="formVal" value="0.0.0.0" /></td></tr>
+		<tr><td>Tipo certificato</td> <td><input type="text" readonly name="tipoCertificato" id="tipoCertificato" class="formVal" value="<%=request.getParameter("tipoCertificato")%>" /></td></tr>
+		<tr><td>Oggetto</td> <td><input type="text" name="oggetto" id="oggetto" class="formVal" value="<%=request.getParameter("tipoCertificato")%>" /></td></tr>
+		<tr><td>stabId</td> <td><input type="text" readonly name="stabId" id="stabId" class="formVal" value="<%=request.getParameter("stabId")%>" /></td></tr>
+		<tr><td>ticketId</td> <td><input type="text" readonly name="ticketId" id="ticketId" class="formVal" value="<%= idGiornataIspettiva > 0 ? idGiornataIspettiva : idCampione > 0 ? idCampione : -1%>" /></td></tr>
+		<tr><td>Path</td> <td><input type="text" name="path" id="path" class="formVal" value="" /></td></tr>
+		<tr><td>addCors</td> <td><input type="text" name="addCors" id="addCors" class="formVal" value="si" /></td></tr>
+	</table>
+</form>
+
+<form id="formSicra" action="" method="post" name="formSicra" enctype ="multipart/form-data">
+	<table>
+		<tr><td>tipoVerbale</td> <td><input type="text" name="tipoVerbale" id="tipoVerbale" value="<%=request.getParameter("tipoVerbale")%>" /></td></tr>
+		<tr><td>oggetto</td> <td><input type="text" name="oggetto" id="oggetto" value="<%=request.getParameter("oggetto")%>" /></td></tr>
+		<tr><td>nomeAllegato</td> <td><input type="text" name="nomeAllegato" id="nomeAllegato" value="" /></td></tr>
+		<tr><td>tipoFile</td> <td><input type="text" name="tipoFile" id="tipoFile" value="PDF" /></td></tr>
+		<tr><td>pathFile</td> <td><input type="text" name="pathFile" id="pathFile" size="100" value="" /></td></tr>
+		<tr><td>idControlloUfficiale</td> <td><input type="text" name="idControlloUfficiale" id="idControlloUfficiale" value="<%=idGiornataIspettiva%>" />
+		<tr><td>idCampione</td> <td><input type="text" name="idCampione" id="idCampione" value="<%=idCampione%>" />
+		</td></tr> 
+	</table>
+</form>
+
+</div>
+
+</body>
+<script>
+getTablets();
+
+//document.getElementById("file").value = "C:\Users\admin\Downloads\TEST_G22-000182.pdf"; 
+</script>
+
+
+
+</html>
+

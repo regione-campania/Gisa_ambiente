@@ -27,8 +27,8 @@
 <script>
 alert('<%=Messaggio%>');
 
-<% if (riferimentoIdNomeTab.equalsIgnoreCase("opu_stabilimento")){%>
-window.opener.location.href="OpuStab.do?command=Details&stabId=<%=riferimentoId%>";
+<% if (riferimentoIdNomeTab.equalsIgnoreCase("aia_stabilimento")){%>
+window.opener.location.href="StabilimentoAIA.do?command=Details&stabId=<%=riferimentoId%>";
 <% } %>
 
 window.close();

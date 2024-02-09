@@ -3,7 +3,7 @@
         
 <%@ include file="../../initPage.jsp"%>
 <jsp:useBean id="messaggioPost" class="java.lang.String" scope="request"/>
-<jsp:useBean id="idGiornataIspettiva" class="java.lang.String" scope="request"/>
+<jsp:useBean id="jsonEntita" class="java.lang.String" scope="request"/>
 <jsp:useBean id="label" class="java.lang.String" scope="request"/>
 <jsp:useBean id="codDocumento" class="java.lang.String" scope="request"/>
 <jsp:useBean id="titolo" class="java.lang.String" scope="request"/>
@@ -12,6 +12,7 @@
 <%@ taglib uri="/WEB-INF/zeroio-taglib.tld" prefix="zeroio" %>
 <%@ page import="java.util.*,org.aspcfs.modules.opu.base.*, org.aspcfs.modules.base.*" %>
 <jsp:useBean id="User" class="org.aspcfs.modules.login.beans.UserBean" scope="session"/>
+<%@page import="org.json.JSONObject"%>
 
   <%! public static String fixStringa(String nome)
   {
@@ -29,7 +30,7 @@
 <script>
 function ritornaAllegato (){
 window.opener.loadModalWindow();
-window.opener.location.href="GestioneGiornateIspettive.do?command=View&idGiornataIspettiva=<%=idGiornataIspettiva%>";
+window.opener.location.href="GestioneGiornateIspettive.do?command=View&idGiornataIspettiva=<%=(new JSONObject(jsonEntita)).get("idGiornataIspettiva")%>";
 window.close();
 }
 </script>

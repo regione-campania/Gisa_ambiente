@@ -1,0 +1,98 @@
+########################### AMBIENTE ############################
+#### ambiente : ufficiale - demo - sviluppo - cloud          ####
+ambiente=demo
+
+############################ SISTEMA ############################
+loginSospeso = no
+## livelloLOG Dal livello piu alto al piu basso: SEVERE WARNING INFO CONFIG FINE FINER FINEST
+livelloLOG = INFO
+ONLY_HTTPS = false
+
+################ COOPERAZIONE SERVER DOCUMENTALE ################
+## DATI GISA ##
+APP_NAME_GISA=gisa_nt
+APP_PORTA_GISA=:8080
+TABELLA_LISTA_TIPI_DOCUMENTI=tipi_documenti
+MAX_SIZE_ALLEGATI=3145728
+## DATI CONNESSIONE A SERVER DOCUMENTALE ##
+APP_DOCUMENTALE_URL=http://srvDOCUMENTALEL:8080/serverDocumentale/
+# STANDARD
+APP_DOCUMENTALE_CODIFICA=newCodificaServlet
+APP_DOCUMENTALE_DOWNLOAD_SERVICE=DownloadService
+APP_DOCUMENTALE_DOWNLOAD_SERVICE_TIPO=DownloadServiceByTipo
+APP_DOCUMENTALE_LISTA_DOCUMENTI=ListaDocs
+APP_DOCUMENTALE_NO_CODIFICA=noCodificaServlet
+APP_DOCUMENTALE_SOSTITUISCI_CALLER=NO
+# DPAT
+APP_DOCUMENTALE_CODIFICA_DPAT=newCodificaServlet
+APP_DOCUMENTALE_DOWNLOAD_SERVICE_DPAT=DownloadService
+APP_DOCUMENTALE_LISTA_DOCUMENTI_DPAT=ListaDocs
+# ALLEGATI
+APP_DOCUMENTALE_ALLEGATI_CARICATI=UploadFile
+APP_DOCUMENTALE_LISTA_ALLEGATI=ListaAlls
+APP_DOCUMENTALE_GESTIONE_ALLEGATI=GestioneAllegati
+APP_DOCUMENTALE_ALLEGATI_CONTROLLO=CheckFile
+#BACHECA
+APP_DOCUMENTALE_BACHECA_CARICA=UploadBacheca
+APP_DOCUMENTALE_GESTIONE_BACHECA=GestioneBacheca
+APP_DOCUMENTALE_LISTA_BACHECA=ListaBacheca
+APP_DOCUMENTALE_LISTA_BACHECA_FILTRI=ListaBachecaFiltri
+# SOLA LETTURA (Parametro booleano)
+DOCUMENTALE_DISPONIBILE=true
+DOCUMENTALE_DISPONIBILE_MESSAGGIO=SERVER DOCUMENTALE NON DISPONIBILE PER QUESTA OPERAZIONE. RIPROVARE TRA QUALCHE MINUTO.
+# MODULI SVILUPPO
+APP_DOCUMENTALE_MODULI_CARICA=UploadFileModuli
+APP_DOCUMENTALE_LISTA_ALLEGATI_MODULI=ListaAllsModuli
+# TEST
+APP_DOCUMENTALE_TEST=ServletTestDocumentale
+
+############################ STORICO ############################
+abilitaStoricoOperazioniUtente=si
+abilitaUpdateAccess=si
+cleancache_time_interval_1=0 0/5 6-20 ? * 2,3,4,5,6
+cleancache_time_interval_2=0 0/20 0,1,2,3,4,5,21,22,23 ? * *
+cleancache_time_interval_3=0 0/10 6-20 ? * 1,7
+
+############################## PEC ##############################
+mail.smtp.starttls.enable = true
+mail.smtp.auth = true
+mail.smtp.host = sendm.cert.legalmail.it
+mail.smtp.port = 465
+mail.smtp.ssl.enable = true
+username = M3023707
+password = US9560031.1a
+
+###################### GESTIONE RICHIESTE #######################
+DEST_EMAIL_FLUSSO_SVILUPPO=gisa_arpac@usmail.it
+
+####################### PREACCETTAZIONE #########################
+PREACCETTAZIONE_PORT=:8080
+PREACCETTAZIONE_HOST=srvPREACCETTAZIONEL
+abilitazione_chiamata_microservices=true
+
+######################## GESTIONE LOCK ##########################
+threshold = 30
+messageAlert =Attenzione!!! Sistema in fase di riavvio, riprovare tra poco
+ 
+######################## SEGNALAZIONI ###########################
+MAIL_SEGNALAZIONI = gisa_arpac@usmail.it
+
+###################### FASCICOLI ISPETTIVI ######################
+GESTIONE_CU_VEDI_JSON = no
+
+##################### COOPERAZIONE SICRAWEB #####################
+END_POINT_SICRA = https://sicrawebapi.arpacampania.it/client/services/ProtocolloSoap?CID=gisa_test
+FIRMA_UPLOAD_PAGINA = https://gisaambiente-coll.regione.campania.it/gisarpac/moduli/uploadAllegatiFirma.jsp 
+FIRMA_UPLOAD_CARTELLA = /data/FirmaAllegati/
+TEMPLATE_CARTELLA = https://gisaambiente-coll.regione.campania.it/gisarpac/moduli
+FIRMA_DEST_EMAIL = gisa_arpac@usmail.it
+FIRMA_OGGETTO_EMAIL = [COLLAUDO] AMBIENTE: NUOVO DOCUMENTO FIRMATO
+ 
+########################## ACCESSO UTENTI #######################
+login_spid= si
+login_credenziali= no
+modulo_guru= si
+URL_SPID = https://gisagel-coll.regione.campania.it/js/GisaSpid.js 
+
+###################### COOPERAZIONE GOOGLE ######################
+ENABLEDGOOGLESERVICE=si

@@ -34,7 +34,6 @@ function verificaEsistenzaCodiceNazionale(field)
 	var cuninserito = field.value
 	if(cuninserito.trim()){
 		loadModalWindowCustom('Verifica Esistenza cun. Attendere');
-		SuapDwr.verificaEsistenzaCodiceNazionale(parseInt('0'),cuninserito.trim(),{callback: verificaEsistenzaCodiceNazionaleCallBack,async: false});
 	} else {
 		esitoCunInserito = true;
 	}
@@ -68,6 +67,7 @@ function recuperaAsl(idComuneField, campoAsl){
 
 		request.done(function(result) {
 			document.getElementById(campoAsl).value = result.description;
+
 		});
 		request.fail(function(jqXHR, textStatus) {
 			console.log('Error');

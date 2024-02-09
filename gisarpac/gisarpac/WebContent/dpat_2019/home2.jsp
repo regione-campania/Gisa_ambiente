@@ -1,5 +1,4 @@
 <%@page import="java.sql.Timestamp"%>
-<%@page import="org.aspcfs.modules.vigilanza.blocchicu.ApplicationProperties"%>
 <%@page import="java.util.Date"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"
@@ -120,7 +119,7 @@ function downloadModello(nomeClient,tipoAllegato,headerDoc,idDocumento)
 	<%
 	Calendar calCorrente = GregorianCalendar.getInstance();
 	Date dataCorrente = new Date(System.currentTimeMillis());
-	int tolleranzaGiorni = Integer.parseInt(ApplicationProperties.getProperty("TOLLERANZA_MODIFICA_CU"));
+	int tolleranzaGiorni = 0;
 	dataCorrente.setDate(dataCorrente.getDate()- tolleranzaGiorni);
 	calCorrente.setTime(new Timestamp(dataCorrente.getTime()));
 	%>

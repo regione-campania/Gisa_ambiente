@@ -18,7 +18,7 @@
 <jsp:useBean id="pag" class="java.lang.String" scope="request"/>
 <jsp:useBean id="pagTot" class="java.lang.String" scope="request"/>
 <jsp:useBean id="pagine" class="java.lang.String" scope="request"/>
-<jsp:useBean id="OrgDetails" class="org.aspcf.modules.controlliufficiali.base.Organization" scope="request"/>
+
 <jsp:useBean id="StabilimentoDettaglio" class="org.aspcfs.modules.opu.base.Stabilimento" scope="request"/>
 <jsp:useBean id="Operatore" class="org.aspcfs.modules.opu.base.Operatore" scope="request"/>
 <jsp:useBean id="StabilimentoRichiestaDettaglio" class="org.aspcfs.modules.suap.base.Stabilimento" scope="request"/>

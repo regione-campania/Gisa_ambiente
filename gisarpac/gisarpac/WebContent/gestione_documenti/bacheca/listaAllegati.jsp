@@ -15,10 +15,9 @@
 <jsp:useBean id="pag" class="java.lang.String" scope="request"/>
 <jsp:useBean id="pagTot" class="java.lang.String" scope="request"/>
 <jsp:useBean id="pagine" class="java.lang.String" scope="request"/>
-<jsp:useBean id="OrgDetails" class="org.aspcf.modules.controlliufficiali.base.Organization" scope="request"/>
 <%@ taglib uri="/WEB-INF/dhv-taglib.tld" prefix="dhv" %>
 <%@ taglib uri="/WEB-INF/zeroio-taglib.tld" prefix="zeroio" %>
-<%@ page import="java.util.*,org.aspcfs.modules.opu.base.*, org.aspcfs.modules.base.*, org.aspcfs.modules.registrazioniAnimali.base.*" %>
+<%@ page import="java.util.*,org.aspcfs.modules.opu.base.*, org.aspcfs.modules.base.*" %>
 <jsp:useBean id="User" class="org.aspcfs.modules.login.beans.UserBean" scope="session"/>
 
 <script type="text/javascript">

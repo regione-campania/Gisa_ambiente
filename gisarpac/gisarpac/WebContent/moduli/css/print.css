@@ -1,0 +1,103 @@
+@page { 
+	margin: 5px 30px 30px 30px;
+	 @bottom-center {
+    content: counter(page) " su " counter(pages);
+		}
+}
+td.td1, th.th1 {
+	  page-break-inside: avoid;
+	  word-wrap:break-word;
+	  }
+table.tab { 
+            -fs-table-paginate: paginate;
+            border-spacing: 0;
+            table-layout:fixed; width:100%;
+            word-wrap:break-word;            
+        }
+
+.html {
+  font-family: "Times New Roman";
+}
+
+.boxIdDocumento {
+	position: absolute;
+	left: 340px;
+	top:40px;
+	border: 0.5px solid black;
+	width: 60px;
+	height: 30px;
+	text-align: center;
+	padding-top: 5px;
+	font-size: 8px;
+	font-family:"Times New Roman",Georgia,Serif;
+}
+.boxOrigineDocumento {
+	position: absolute;
+	left: 410px;
+	top:40px;
+	width: 160px;
+	height: 20px;
+	text-align: left;
+	padding-top: 10px;
+	font-size: 9px;
+	font-family:"Times New Roman",Georgia,Serif;
+}
+
+th.testa, td.testa {
+  padding: 25px;
+}
+
+table.innertable{
+	width: 100%;
+	border-collapse: collapse;
+	border: 1px solid black;
+	margin-left: auto;
+	margin-right: auto;
+}
+th.innerth{
+	border: 1px solid black;
+	background-color: #e0e0e0;
+	text-align: center;
+}
+th.innerth-small{
+	border: 1px solid black;
+ 	font-size: 10px;
+  	background-color: #e0e0e0;
+  	text-align: center;
+}
+td.innertd{
+	height: 50px;
+	border: 1px solid black;
+	text-align: center;
+}
+td.innertd-left{
+	height: 50px;
+	border: 1px solid black;
+	text-align: left;
+}
+td.innertd-right{
+	height: 50px;
+	border: 1px solid black;
+	text-align: right;
+}
+
+input { 
+    text-align: center; 
+}
+
+input[type=button].bottone{
+  background-color: #01845a;
+  border-radius: 10px;
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+h3.firma{
+	margin-inline:10% 10%;
+	display:inline;
+}
+

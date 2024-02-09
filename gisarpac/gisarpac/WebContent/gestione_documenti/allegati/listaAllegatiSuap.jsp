@@ -17,7 +17,7 @@
 <jsp:useBean id="pag" class="java.lang.String" scope="request"/>
 <jsp:useBean id="pagTot" class="java.lang.String" scope="request"/>
 <jsp:useBean id="pagine" class="java.lang.String" scope="request"/>
-<jsp:useBean id="OrgDetails" class="org.aspcf.modules.controlliufficiali.base.Organization" scope="request"/>
+
 <jsp:useBean id="StabilimentoDettaglio" class="org.aspcfs.modules.opu.base.Stabilimento" scope="request"/>
 <%@ taglib uri="/WEB-INF/dhv-taglib.tld" prefix="dhv" %>
 <%@ taglib uri="/WEB-INF/zeroio-taglib.tld" prefix="zeroio" %>

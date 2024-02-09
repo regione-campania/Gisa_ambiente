@@ -22,7 +22,7 @@
 
 <% if ( ((JSONObject) jsonFascicoloIspettivo).has("Anagrafica")) { %>
 <% JSONObject jsonAnagrafica = (JSONObject) jsonFascicoloIspettivo.get("Anagrafica"); %>
-<tr><td class="formLabel">Anagrafica</td><td><%=jsonAnagrafica.get("ragioneSociale") %> (<%=jsonAnagrafica.get("partitaIva") %>) <a href="OpuStab.do?command=Details&stabId=<%=jsonAnagrafica.get("riferimentoId")%>"><b>Torna all'anagrafica</b></a></td></tr>
+<tr><td class="formLabel">Anagrafica</td><td><%=jsonAnagrafica.get("ragioneSociale") %> (<%=jsonAnagrafica.get("partitaIva") %>) <a href="StabilimentoAIA.do?command=Details&stabId=<%=jsonAnagrafica.get("riferimentoId")%>"><b>Torna all'anagrafica</b></a></td></tr>
 <%} %>
 
 
@@ -36,4 +36,9 @@ if (jsonDati.length()>0) {%>
 
 </table>
 <!-- RIEPILOGO -->
+
+<%if ( (org.aspcfs.modules.util.imports.ApplicationProperties.getProperty("GESTIONE_CU_VEDI_JSON")!= null && org.aspcfs.modules.util.imports.ApplicationProperties.getProperty("GESTIONE_CU_VEDI_JSON").equalsIgnoreCase("si"))) {%>
+<%@ include file="../../util/random.jsp" %>
+<%} %>
+
 

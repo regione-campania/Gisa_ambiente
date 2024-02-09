@@ -12,8 +12,8 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <script src='javascript/modalWindow.js'></script>
-<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
-<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+<script src="javascript/jquery/jquery-1.8.2.js"></script>
+<script src="javascript/jquery/ui/1.9.1/jquery-ui.js"></script>
 <link rel="stylesheet" type="text/css" href="css/modalWindow.css"></link>
 
 <center>
@@ -33,11 +33,23 @@
 	  
   }%>
   
+<table class="trails" cellspacing="0">
+<tr>
+<td>
+<a href="StabilimentoAIA.do?command=Details&stabId=<%=((JSONObject) (jsonCampione.get("DatiGiornataIspettiva"))).get("riferimentoId")%>"><%= ((JSONObject) (jsonCampione.get("DatiGiornataIspettiva"))).get("ragioneSociale") %></a> >
+<a href="GestioneFascicoliIspettivi.do?command=View&idFascicoloIspettivo=<%=((JSONObject) (jsonCampione.get("DatiGiornataIspettiva"))).get("idFascicoloIspettivo")%>">Fascicolo ispettivo</a> > 
+<a href="GestioneGiornateIspettive.do?command=View&idGiornataIspettiva=<%= ((JSONObject) jsonCampione.get("DatiGiornataIspettiva")).get("idGiornataIspettiva")%>">Giornata Ispettiva</a> > 
+Campione
+</td>
+</tr>
+</table>
+<br/> 
+  
   <jsp:include page="gestionePreaccettazione.jsp">
     <jsp:param name="preaccCampioneId" value="<%=((JSONObject) (jsonCampione.get("CampiServizio"))).get("idCampione")%>" />
     <jsp:param name="preaccEnteId" value="1" />
     <jsp:param name="preaccLaboratorioId" value="<%=((JSONObject) (jsonCampione.get("Laboratorio"))).get("id")%>" />
-    <jsp:param name="preaccAnagraficaId" value="<%=((JSONObject) (jsonCampione.get("DatiGiornataIspettiva"))).get("riferimentoId")+"stabIdopu_stabilimento"+"%" +"999"%>" />
+    <jsp:param name="preaccAnagraficaId" value="<%=((JSONObject) (jsonCampione.get("DatiGiornataIspettiva"))).get("riferimentoId")+"stabIdaia_stabilimento"+"%" +"999"%>" />
     <jsp:param name="preaccUserId" value="<%=User.getUserId() %>" />
 </jsp:include>
   

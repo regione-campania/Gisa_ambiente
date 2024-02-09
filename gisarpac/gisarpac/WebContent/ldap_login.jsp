@@ -34,6 +34,8 @@ if (protocol !== 'https:') {
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="/WEB-INF/dhv-taglib.tld" prefix="dhv" %>
 <%@ page import="org.aspcfs.modules.system.base.ApplicationVersion" %>
+<%@page import="org.aspcfs.modules.util.imports.ApplicationProperties"%>
+
 <jsp:useBean id="LoginBean" class="org.aspcfs.modules.login.beans.LoginBean" scope="request"/>
 <jsp:useBean id="applicationPrefs" class="org.aspcfs.controller.ApplicationPrefs" scope="application"/>
 <jsp:useBean id="APP_VERSION" class="java.lang.String" scope="application"/>
@@ -45,7 +47,7 @@ if (protocol !== 'https:') {
 <script type="text/javascript" src="dwr/util.js"></script>
 <script type="text/javascript" src="javascript/jquery-1.6.1.js"></script>
 
-<script src="https://gel.gisacampania.it/js/GisaSpid.js"></script>
+<script src="<%=ApplicationProperties.getProperty("URL_SPID")%>"></script>
 
 
  <script>

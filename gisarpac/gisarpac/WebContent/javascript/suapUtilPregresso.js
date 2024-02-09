@@ -214,10 +214,7 @@ function svuotaDatiStabilimento()
   {
 	 $("#tipo_impresa option[value='']").hide();
   	var  tipoImpresa =document.getElementById("tipo_impresa").value;
-  	if (tipoImpresa!="")
-  		SuapDwr.onChangeTipoImpresa(tipoImpresa,onChangeTipoImpresaCallBack);
-  	}
-
+  
 function onChangeTipoImpresaCallBack(tipoImpresa)
   	{
   		if (document.getElementById("tipo_impresa").value=='4')
@@ -341,7 +338,6 @@ function mostraAttivitaProduttive(idTable,livello,idSelezionato, cerca,tipoInser
 	  var idTipoAttivita = -1 ;
 	  if (document.getElementById("tipoAttivita")!=null)
 		  idTipoAttivita = document.getElementById("tipoAttivita").value;
-  	SuapDwr.mostraAttivitaProduttive(livello,idSelezionato,tipoInserimento,idTipoAttivita,{async:false,callback:mostraAttivitaProduttiveCallBack});
   }
   
   function mostraAttivitaProduttiveCallBack(attivita)
@@ -482,7 +478,6 @@ function mostraListaDocumentiAttivitaProduttive(stabIdIn)
 	  var array = document.getElementsByName('idLineaProduttiva');
 	  for (i=0; i <array.length; i++)
 		  idLinee[i]=array[i].value ;
-	  SuapDwr.mostraDocumentazioneAttivitaProduttive(idLinee,mostraListaDocumentiAttivitaProduttiveCallBack);
   	//SuapDwr.mostraAttivitaProduttive(1,mostraListaDocumentiAttivitaProduttiveCallBack);
   }
 

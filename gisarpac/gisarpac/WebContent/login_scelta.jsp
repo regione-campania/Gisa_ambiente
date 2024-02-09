@@ -56,13 +56,13 @@ function settaUserId(userId){
              	
              	<% } %>
              
-       <input type="hidden" id="userIdScelta" name="userIdScelta" value=""/>
-       <input type="hidden" id="cfSpid" name="cfSpid" value="<%=cfSpid%>"/>
+       <input type="text" id="userIdScelta" name="userIdScelta" value=""/>
+       <input type="text" id="cfSpid" name="cfSpid" value="<%=cfSpid%>"/>
        
           </form>
           
           <br/>
-         <script src="https://gel.gisacampania.it/js/GisaSpid.js"></script>
+<script src="<%=org.aspcfs.modules.util.imports.ApplicationProperties.getProperty("URL_SPID")%>"></script>
 		<center>
 		<a href="#" onclick="GisaSpid.logoutSpid('/gisarpac');"><b>LOGOUT DA SPID/CIE</b></a>
 		</center>

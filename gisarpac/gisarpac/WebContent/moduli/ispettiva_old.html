@@ -1,0 +1,413 @@
+<script>
+function fixCaratteriSpeciali(test){
+    
+    test=replaceAll(test,"à", "a'");
+    test=replaceAll(test,"è", "e'");
+    test=replaceAll(test,"ì", "i'");
+    test=replaceAll(test,"ò", "o'");
+    test=replaceAll(test,"ù", "u'");
+    
+    test=replaceAll(test,"á", "a'");
+    test=replaceAll(test,"é", "e'");
+    test=replaceAll(test,"í", "i'");
+    test=replaceAll(test,"ó", "o'");
+    test=replaceAll(test,"ú", "u'");
+    
+    test=replaceAll(test,"À", "A'");
+    test=replaceAll(test,"È", "E'");
+    test=replaceAll(test,"Ì", "I'");
+    test=replaceAll(test,"Ò", "O'");
+    test=replaceAll(test,"Ù", "U'");
+    
+    test=replaceAll(test,"Á", "A'");
+    test=replaceAll(test,"É", "E'");
+    test=replaceAll(test,"í", "I'");
+    test=replaceAll(test,"Ó", "O'");
+    test=replaceAll(test,"Ú", "U'");
+       
+    test=replaceAll(test,"°", "gr.");
+    
+    test=replaceAll(test,"<", "-");
+    test=replaceAll(test,">", "-");
+
+    return test;
+}
+
+function popolaCampi(){
+    var inputs, index;
+
+inputs = document.getElementsByTagName('input');
+for (index = 0; index < inputs.length; ++index) {
+    if (inputs[index].type=='text')
+        inputs[index].setAttribute("value", fixCaratteriSpeciali(inputs[index].value));
+    else if (inputs[index].type=='time'){
+        inputs[index].setAttribute("value", fixCaratteriSpeciali(inputs[index].value));
+    }
+    else if (inputs[index].type=='date'){
+        if (inputs[index].value!=null && inputs[index].value!='') {
+            inputs[index].setAttribute("value", inputs[index].value.substring(8,10)+"/"+inputs[index].value.substring(5,7)+"/"+inputs[index].value.substring(0,4));
+        }
+    }
+    else if ((inputs[index].type=='radio' || inputs[index].type=='checkbox') && inputs[index].checked){
+        inputs[index].setAttribute("type", "text");
+        inputs[index].setAttribute("value", "[X]");
+    }
+    else if ((inputs[index].type=='radio' || inputs[index].type=='checkbox') && !inputs[index].checked){
+        inputs[index].setAttribute("type", "text");
+        inputs[index].setAttribute("value", "[ ]");
+    }
+}
+}
+
+function replaceAll(str, find, replace) {
+      return str.replace(new RegExp(find, 'g'), replace);
+}
+
+function catturaHtml(form){
+    popolaCampi();
+    h=document.getElementById('codicehtml').innerHTML;
+	document.getElementById("html").value = h;
+	submitAjax();
+}
+
+function inviaform() {
+    window.open('','popup','width=600,height=600');
+    document.getElementById('formFN').submit();
+}
+
+function submitAjax()
+{
+	//creazione formdata + conversione in stringa (chiave=valore & chiave=valore...)
+	var parametri = new URLSearchParams(new FormData(form1)).toString();
+
+    var xmlHttp = new XMLHttpRequest();
+	//apertura della connessione con parametro "true" (necessario per POST)
+	xmlHttp.open("post", "https://131.1.255.97/serverDocumentale/newCodificaServlet",true);
+	//header necessario per il POST alla servlet
+	xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		//attesa della risposta
+        xmlHttp.onreadystatechange = function()
+        {	
+			//elaborazione della risposta
+            if(xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            {
+				var obj = JSON.parse(xmlHttp.response);
+				window.open("https://131.1.255.97/serverDocumentale/DownloadService?codDocumento=" + obj.codDocumento, "_blank");
+				document.getElementById("fileName").value = obj.titolo;
+				inviaform();
+            }
+        }
+	//invio dei parametri
+    xmlHttp.send(parametri);	
+}
+
+
+</script>
+<div id="codicehtml">
+
+
+<html>
+<title>VERBALE VERIFICA ISPETTIVA</title>
+<head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+</head>
+
+
+
+<body>
+<br>
+<div align = "center" class="container-sm">
+	<form action="" method="POST" target="_blank">
+		<table class= "table table-bordered">
+			<tr>
+				<td rowspan = "2"><img src="http://131.1.255.97/gisarpac/moduli/img/arpac_ico.jpg" class="float-start" alt="..." width="100" height="125"></td>
+				<td align="center"><h3>Verbale di Verifica Ispettiva</h3></td>
+				<td align="right">Doc. n: <input type = "text" value = "1" id = "ndoc" size="1"></td>
+			</tr>
+			<tr>
+				<td align="center">Procedura di riferimento: PT 7.5 A6</td>
+				<td align="right">Data<input type = "date" id = "ddoc"> </td>
+			</tr>
+		</table>
+		<br>
+		<h6><strong>VERBALE DI VERIFICA ISPETTIVA N:</strong>
+		<input type = "text" value = "1" id = "nver" size="1"></h6>
+		N: <input type = "text" value = "1" id = "ngio" size="1"> giornata di Verifica Ispettiva
+		<br><br>
+		<div align = "left">
+		Il giorno <input type="date" id="dver"> alle ore <input type="time" id="hver">, il Gruppo Ispettivo	prosegue la visita presso lo stabilimento
+		<input type="text" id="stab">
+		<br><br>
+			<table>
+				<tr>
+					<th>Per ARPAC presenti:</th>
+				</tr>
+				<tr>
+					<td>.<input type="text" placeholder="Nome e Cognome" id="arp1"></td>
+					<td><input type="text" placeholder="Qualifica" id="qua1"><a href="#1" data-bs-toggle="tooltip">(1)</a></td>
+				</tr>
+				<tr>
+					<td>.<input type="text" placeholder="Nome e Cognome" id="arp2"></td>
+					<td><input type="text" placeholder="Qualifica" id="qua2"></td>
+				</tr>
+				<tr>
+					<td>.<input type="text" placeholder="Nome e Cognome" id="arp3"></td>
+					<td><input type="text" placeholder="Qualifica" id="qua3"></td>
+				</tr>
+				<tr>
+					<td>.<input type="text" placeholder="Nome e Cognome" id="arp4"></td>
+					<td><input type="text" placeholder="Qualifica" id="qua4">&nbsp,</td>
+				</tr>
+				<tr>
+					<th>Per la Societa' sono presenti:</th>
+				</tr>
+				<tr>
+					<td>.<input type="text" placeholder="Nome e Cognome" id="soc1"></td>
+					<td><input type="text" placeholder="Qualifica" id="qso1" value="Gestore dello stabilimento" readonly> <a href="#2" data-bs-toggle="tooltip">(2)</a></td>
+				</tr>
+				<tr>
+					<td>.<input type="text" placeholder="Nome e Cognome" id="soc2"></td>
+					<td><input type="text" placeholder="Qualifica" id="qso2" value="Responabile IPPC" readonly></td>
+				</tr>
+				<tr>
+					<td>.<input type="text" placeholder="Nome e Cognome" id="soc3"></td>
+					<td><input type="text" placeholder="Qualifica" id="qso3"></td>
+				</tr>
+				<tr>
+					<td>.<input type="text" placeholder="Nome e Cognome" id="soc4"></td>
+					<td><input type="text" placeholder="Qualifica" id="qso4"></td>
+				</tr>
+			</table>
+			<br>
+			Nel corso della giornata odierna sono state svolte le seguenti verifiche dell'allegato tecnico:
+			<br><br>
+			<div class="container-sm" align="center" style="overflow-x:auto;">
+			<table class="table-bordered">
+				<tr bgcolor="#e0e0e0" align="center">
+					<th>Tipo verifica</th>
+					<th>&nbsp Matrice</th>
+					<th>&nbsp Conclusa/Non Conclusa</th>
+					<th>&nbsp Note</th>
+				</tr>
+				<tr align="center">
+					<td><input type="text" id="tve1"></td>
+					<td><input type="text" id="mat1"></td>
+					<td><input type="text" id="sta1"></td>
+					<td><input type="text" id="not1"></td>
+				</tr>
+				<tr align="center">
+					<td><input type="text" id="tve2"></td>
+					<td><input type="text" id="mat2"></td>
+					<td><input type="text" id="sta2"></td>
+					<td><input type="text" id="not2"></td>
+				</tr>
+				<tr align="center">
+					<td><input type="text" id="tve3"></td>
+					<td><input type="text" id="mat3"></td>
+					<td><input type="text" id="sta3"></td>
+					<td><input type="text" id="not3"></td>
+				</tr>
+				<tr align="center">
+					<td><input type="text" id="tve4"></td>
+					<td><input type="text" id="mat4"></td>
+					<td><input type="text" id="sta4"></td>
+					<td><input type="text" id="not4"></td>
+				</tr>
+				<tr align="center">
+					<td><input type="text" id="tve5"></td>
+					<td><input type="text" id="mat5"></td>
+					<td><input type="text" id="sta5"></td>
+					<td><input type="text" id="not5"></td>
+				</tr>
+				<tr align="center">
+					<td><input type="text" id="tve6"></td>
+					<td><input type="text" id="mat6"></td>
+					<td><input type="text" id="sta6"></td>
+					<td><input type="text" id="not6"></td>
+				</tr>
+			</table>
+			</div>
+			<br><br>
+			<p id="1" class="lead fs-6"><strong>1.</strong> Indicare se 'Tecnico esperto di controlli di emissioni in atmosfera', 'Tecnico esperto di controlli idrici', 'Tecnico esperto di rifiuti', 'Tecnico esperto di inquinamento acustico', 'Specialista esterno esperto di ...', 'Collaboratore', '...'.</p>
+			<p id="2" class="lead fs-6"><strong>2.</strong> Indicare se presente.</p>
+			
+			<br>
+			Sono state effettuate le seguenti misure e i seguenti prelievi:
+			<br><br>
+			<div class="container-sm" align="center" style="overflow-x:auto;">
+			<table class="table-bordered">
+				<tr bgcolor="#e0e0e0" align="center">
+					<th>Matrice</th>
+					<th>&nbsp Misura/Prelievo</th>
+					<th>&nbsp Verbale campionamento <br> del ...</th>
+					<th>&nbsp Note</th>
+				</tr>
+				<tr align="center">
+					<td><input type="text" id="mat7"></td>
+					<td><input type="text" id="mip7"></td>
+					<td><input type="date" id="dat7"></td>
+					<td><input type="text" id="not7"></td>
+				</tr>
+				<tr align="center">
+					<td><input type="text" id="mat8"></td>
+					<td><input type="text" id="mip8"></td>
+					<td><input type="date" id="dat8"></td>
+					<td><input type="text" id="not8"></td>
+				</tr>
+				<tr align="center">
+					<td><input type="text" id="mat9"></td>
+					<td><input type="text" id="mip9"></td>
+					<td><input type="date" id="dat9"></td>
+					<td><input type="text" id="not9"></td>
+				</tr>
+				<tr align="center">
+					<td><input type="text" id="mat10"></td>
+					<td><input type="text" id="mip10"></td>
+					<td><input type="date" id="dat10"></td>
+					<td><input type="text" id="not10"></td>
+				</tr>
+				<tr align="center">
+					<td><input type="text" id="mat11"></td>
+					<td><input type="text" id="mip11"></td>
+					<td><input type="date" id="dat11"></td>
+					<td><input type="text" id="not11"></td>
+				</tr>
+				<tr align="center">
+					<td><input type="text" id="mat12"></td>
+					<td><input type="text" id="mip12"></td>
+					<td><input type="date" id="dat12"></td>
+					<td><input type="text" id="not12"></td>
+				</tr>
+			</table>
+			</div>
+			<br><br>
+			
+			<br>
+			Il Gruppo Ispettivo ha acquisito la seguente documentazione:
+			<br><br>
+			<div class="container-sm" align="center" style="overflow-x:auto;">
+			<table class="table-bordered">
+				<tr bgcolor="#e0e0e0" align="center">
+					<th>Documento</th>
+					<th>&nbsp Riferimento</th>
+					<th>&nbsp Formato</th>
+					<th>&nbsp Note</th>
+				</tr>
+				<tr align="center">
+					<td><input type="text" id="doc1"></td>
+					<td><input type="text" id="rif1"></td>
+					<td><input type="text" id="for1"></td>
+					<td><input type="text" id="not13"></td>
+				</tr>
+				<tr align="center">
+					<td><input type="text" id="doc2"></td>
+					<td><input type="text" id="rif2"></td>
+					<td><input type="text" id="for2"></td>
+					<td><input type="text" id="not14"></td>
+				</tr>
+				<tr align="center">
+					<td><input type="text" id="doc3"></td>
+					<td><input type="text" id="rif3"></td>
+					<td><input type="text" id="for3"></td>
+					<td><input type="text" id="not15"></td>
+				</tr>
+				<tr align="center">
+					<td><input type="text" id="doc4"></td>
+					<td><input type="text" id="rif4"></td>
+					<td><input type="text" id="for4"></td>
+					<td><input type="text" id="not16"></td>
+				</tr>
+				<tr align="center">
+					<td><input type="text" id="doc5"></td>
+					<td><input type="text" id="rif5"></td>
+					<td><input type="text" id="for5"></td>
+					<td><input type="text" id="not17"></td>
+				</tr>
+				<tr align="center">
+					<td><input type="text" id="doc6"></td>
+					<td><input type="text" id="rif6"></td>
+					<td><input type="text" id="for6"></td>
+					<td><input type="text" id="not18"></td>
+				</tr>
+			</table>
+			</div>
+			<br><br>
+			
+			L'odierna attivita' ispettiva e' iniziata alle ore <input type="time" id="oini"> e si e' conclusa alle ore <input type="time" id="ofin"><br>
+			Non essendo state concluse tutte le attivita' di verifica previste dal Piano di controllo, la Verifica Ispettiva e' aggiornata al giorno <input type="date" id="drin"> alle ore <input type="time" id="orin"><br><br>
+			<strong>A tale fine si comunica quanto segue: </strong><br>
+			<input type="text" id="com1"> <br><br>
+			<strong>L'Azienda presenta le seguenti osservazioni: </strong><br>
+			<input type="text" id="com2"> <br><br>
+			<strong>Il programma dell'ispezione proposto durante  la  riunione, in accordo tra il Gruppo Ispettivo e l'Azienda, viene modificato come segue: </strong><br>
+			<input type="text" id="com3"> <br><br>
+			
+			<input type="text" id="lfir">, il <input type="date" id="dfir">
+		</div>
+		<br>
+		<div class="container-sm" align="left">
+		<table>
+			<tr>
+				<th>Per il Gruppo Ispettivo</th>
+				<th>Per l'Azienda</th>
+			</tr>
+			<br>
+			<tr>
+				<td>.<input type="text" id="arp5"><br>(Coordinatore della Verifica Ispettiva) &nbsp &nbsp </td>
+				<td>.<input type="text" id="soc5"><br>(Responabile IPPC)</td>
+			</tr>
+			<tr>
+				<td>.<input type="text" id="arp6"></td>
+				<td>.<input type="text" id="soc6"></td>
+			</tr>
+			<tr>
+				<td>.<input type="text" id="arp7"></td>
+				<td>.<input type="text" id="soc7"></td>
+			</tr>
+			<tr>
+				<td>.<input type="text" id="arp8"></td>
+				<td>.<input type="text" id="soc8"></td>
+			</tr>
+		</table>
+		</div>
+		<div>
+		
+		
+		
+		
+		
+		
+	<br><input type = "button" value = "INVIA" class="btn btn-lg btn-success" onclick="catturaHtml(this.form)">
+	<br><br>
+	<br>
+	</form>
+	<h2 align="right">FIRMA &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp </h2><br><br><br>
+</div>
+
+<div style="display:none">
+<form id="form1" action="" method="post" name="form1"  target="_blank">
+<table>
+<tr><td>Applicativo di provenienza</td> <td><input type="text" readonly name="app_name" id="app_name" class="formVal" value="gisa_nt" /></td></tr>
+<tr><td>Id Utente</td> <td><input type="text" readonly name="idUtente" id="idUtente" class="formVal" value="1" /></td></tr>
+<tr><td>Ip Utente</td> <td><input type="text" readonly name="ipUtente" id="ipUtente" class="formVal" value="0.0.0.0" /></td></tr>
+<tr><td>Tipo certificato</td> <td><input type="text" readonly name="tipoCertificato" id="tipoCertificato" class="formVal" value="TEST" /></td></tr>
+<tr><td>Tipo timbro</td> <td><input type="text" readonly name="tipoTimbro" id="tipoTimbro" class="formVal" value="TEST" /></td></tr>
+<tr><td>Fixa Html</td> <td><input type="text" name="fixaHtml" id="fixaHtml" class="formVal" value="si" /></td></tr>
+<tr><td>Sorgente HTML</td> <td> <input type="text" name="html" class="formVal" id="html" > <br/></td></tr>
+</table>
+
+</form>
+
+</div>
+<div style="display:none">
+<form id="formFN" action="firmapdf_test.jsp" method="post" name="formFN" target="popup">
+<input type="text" name="fileName" id="fileName" value="">
+</form>
+</div>
+
+</body>
+
+</html>
+
+</div>

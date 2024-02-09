@@ -4,42 +4,36 @@
     <%@ include file="../../initPage.jsp"%>
 <jsp:useBean id="listaAllegati" class="org.aspcfs.modules.gestioneDocumenti.base.DocumentaleAllegatoList" scope="request"/>
 <%@page import="org.aspcfs.modules.gestioneDocumenti.base.DocumentaleAllegato"%>
+<%@page import="org.json.JSONObject"%>
+
 <jsp:useBean id="downloadURL" class="java.lang.String" scope="request"/>
 <jsp:useBean id="folderId" class="java.lang.String" scope="request"/>
 <jsp:useBean id="parentId" class="java.lang.String" scope="request"/>
 <jsp:useBean id="grandparentId" class="java.lang.String" scope="request"/>
-<jsp:useBean id="orgId" class="java.lang.String" scope="request"/>
-<jsp:useBean id="stabId" class="java.lang.String" scope="request"/>
-<jsp:useBean id="altId" class="java.lang.String" scope="request"/>
-<jsp:useBean id="ticketId" class="java.lang.String" scope="request"/>
+<jsp:useBean id="jsonEntita" class="java.lang.String" scope="request"/>
 <jsp:useBean id="op" class="java.lang.String" scope="request"/>
 <jsp:useBean id="nomeCartella" class="java.lang.String" scope="request"/>
 <jsp:useBean id="messaggioPost" class="java.lang.String" scope="request"/>
 <jsp:useBean id="pag" class="java.lang.String" scope="request"/>
 <jsp:useBean id="pagTot" class="java.lang.String" scope="request"/>
 <jsp:useBean id="pagine" class="java.lang.String" scope="request"/>
-<jsp:useBean id="OrgDetails" class="org.aspcf.modules.controlliufficiali.base.Organization" scope="request"/>
-<jsp:useBean id="StabilimentoDettaglio" class="org.aspcfs.modules.opu.base.Stabilimento" scope="request"/>
-<jsp:useBean id="Operatore" class="org.aspcfs.modules.opu.base.Operatore" scope="request"/>
-<jsp:useBean id="StabilimentoRichiestaDettaglio" class="org.aspcfs.modules.suap.base.Stabilimento" scope="request"/>
-<jsp:useBean id="OperatoreRichiesta" class="org.aspcfs.modules.suap.base.Operatore" scope="request"/>
-<jsp:useBean id="StabilimentoSintesisDettaglio" class="org.aspcfs.modules.sintesis.base.SintesisStabilimento" scope="request"/>
-<jsp:useBean id="OperatoreSintesis" class="org.aspcfs.modules.sintesis.base.SintesisOperatore" scope="request"/>
 
-<jsp:useBean id="StabilimentoAnagraficaDettaglio" class="org.aspcfs.modules.gestioneanagrafica.base.Stabilimento" scope="request"/>
-<jsp:useBean id="OperatoreAnagrafica" class="org.aspcfs.modules.gestioneanagrafica.base.Impresa" scope="request"/>
+<jsp:useBean id="ImpresaAIADettaglio" class="org.aspcfs.modules.aia.base.ImpresaAIA" scope="request"/>
+<jsp:useBean id="StabilimentoAIADettaglio" class="org.aspcfs.modules.aia.base.StabilimentoAIA" scope="request"/>
+<jsp:useBean id="SubparticellaDettaglio" class="org.aspcfs.modules.terreni.base.Subparticella" scope="request"/>
+
 
 <%@ taglib uri="/WEB-INF/dhv-taglib.tld" prefix="dhv" %>
 <%@ taglib uri="/WEB-INF/zeroio-taglib.tld" prefix="zeroio" %>
-<%@ page import="java.util.*,org.aspcfs.modules.opu.base.*, org.aspcfs.modules.base.*, org.aspcfs.modules.registrazioniAnimali.base.*" %>
+<%@ page import="java.util.*, org.aspcfs.modules.base.*" %>
 <jsp:useBean id="User" class="org.aspcfs.modules.login.beans.UserBean" scope="session"/>
 
 <script type="text/javascript">
-function openNewCartella(orgId, stabId, altId, ticketId, folderId, parentId){
+function openNewCartella(jsonEntita, folderId, parentId){
 	var res;
 	var result;
 	
-		window.open('GestioneAllegatiUpload.do?command=CreaNuovaCartella&folderId='+folderId+'&parentId='+parentId+'&orgId='+orgId+'&stabId='+stabId+'&altId='+altId+'&ticketId='+ticketId+'&new=new','popupSelect',
+		window.open('GestioneAllegatiUpload.do?command=CreaNuovaCartella&folderId='+folderId+'&parentId='+parentId+'&jsonEntita='+jsonEntita+'&new=new','popupSelect',
 		'height=410px,width=410px,toolbar=no,directories=no,status=no,continued from previous linemenubar=no,scrollbars=yes,resizable=yes ,modal=yes');
 	}
 </script>
@@ -65,11 +59,11 @@ function gestioneBoxCreaCartella(){
 </script> 
 
 <script type="text/javascript">
-function deleteCartella(orgId, stabId,altId,  folderId, parentId, idCartella){
+function deleteCartella(jsonEntita, folderId, parentId, idCartella){
 	var res;
 	var result;
 	
-		window.open('GestioneAllegatiUpload.do?command=CreaNuovaCartella&folderId='+folderId+'&parentId='+parentId+'&ticketId='+ticketId+'&orgId='+orgId+'&stabId='+stabId+'&altId='+altId+'&new=new','popupSelect',
+		window.open('GestioneAllegatiUpload.do?command=CreaNuovaCartella&folderId='+folderId+'&parentId='+parentId+'&jsonEntita='+jsonEntita+'&new=new','popupSelect',
 		'height=410px,width=410px,toolbar=no,directories=no,status=no,continued from previous linemenubar=no,scrollbars=yes,resizable=yes ,modal=yes');
 	}
 </script> 
@@ -107,48 +101,30 @@ function deleteCartella(orgId, stabId,altId,  folderId, parentId, idCartella){
 				id="" target="_self">Crea nuova cartella</a--%>
 
 <%
-String param0 = "id=" + ticketId; 
-String param1 = "orgId=" + orgId;
-String param2 = "stabId=" ;
-String param3 = "altId=" ; 
-String obj = "OrgDetails"; 
+String obj = ""; 
  String param ="";
-if (op.equals("allerte"))
-	param = param0;
-else if (op.equals("gestioneanagrafica") && StabilimentoDettaglio!=null && StabilimentoDettaglio.getAltId()>0){
-	param = param3+StabilimentoDettaglio.getAltId();
-	obj = "Operatore";
+
+if (StabilimentoAIADettaglio!=null && StabilimentoAIADettaglio.getIdStabilimento()>0){
+	param = "stabId="+StabilimentoAIADettaglio.getIdStabilimento();
+	obj = "StabilimentoAIADettaglio";
 }
-else if (OrgDetails!=null && OrgDetails.getOrgId()>0)
-	param = param1;
-else if (StabilimentoDettaglio!=null && StabilimentoDettaglio.getIdStabilimento()>0){
-	param = param2+StabilimentoDettaglio.getIdStabilimento()+"&opId="+StabilimentoDettaglio.getIdOperatore()+"&altId="+StabilimentoDettaglio.getAltId();
-	obj = "Operatore";
-}
-else if (StabilimentoRichiestaDettaglio!=null && StabilimentoRichiestaDettaglio.getAltId()>0){
-	param = param3+StabilimentoRichiestaDettaglio.getAltId()+"&opId="+StabilimentoRichiestaDettaglio.getIdOperatore();
-	obj = "OperatoreRichiesta";
-}
-else if (StabilimentoSintesisDettaglio!=null && StabilimentoSintesisDettaglio.getAltId()>0){
-	param = param3+StabilimentoSintesisDettaglio.getAltId()+"&opId="+StabilimentoSintesisDettaglio.getIdOperatore();
-	obj = "OperatoreSintesis";
-}
-else if (StabilimentoAnagraficaDettaglio!=null && StabilimentoAnagraficaDettaglio.getAlt_id()>0){
-	param = param3+StabilimentoAnagraficaDettaglio.getAlt_id()+"&opId="+StabilimentoAnagraficaDettaglio.getImpresa().getId();
-	obj = "OperatoreAnagrafica";
-}
-else if (StabilimentoDettaglio!=null && StabilimentoDettaglio.getAltId()>0){
-	param = param3+StabilimentoDettaglio.getAltId()+"&opId="+StabilimentoDettaglio.getIdOperatore();
-	obj = "Operatore";
+
+else if (SubparticellaDettaglio!=null && SubparticellaDettaglio.getId()>0){
+	param = "id="+SubparticellaDettaglio.getId();
+	obj = "SubparticellaDettaglio";
 } 
 %>	
 
 <dhv:container name="<%=op %>" selected="Allegati" object="<%=obj %>" param="<%= param %>">
 
-<%if (!folderId.equals("-1")) {%>		
-<a href="GestioneAllegatiUpload.do?command=ListaAllegati&orgId=<%=orgId%>&stabId=<%=stabId%>&altId=<%=altId%>&ticketId=<%=ticketId%>&folderId=<%=parentId%>&parentId=<%=grandparentId %>&op=<%=op%>">
-<img src="gestione_documenti/images/parent_folder_icon.png" width="30"/>
-Cartella superiore</a> &nbsp;&nbsp;&nbsp;&nbsp;
+<%if (!folderId.equals("-1")) {%>
+	<form action="GestioneAllegatiUpload.do?command=ListaAllegati" id="formListaCartellaSuperiore" method="post">
+	<textarea readonly style="display:none" name="jsonEntita" id ="jsonEntita"><%= jsonEntita%></textarea>
+    <input type="hidden" name="folderId" id="folderId" value="<%= parentId %>" />
+	<input type="hidden" name="parentId" id="parentId" value="<%= grandparentId %>" /> 
+	<input type="hidden" name="op" id="op" value="<%= op %>" /> 
+	<a href="#" onClick="document.getElementById('formListaCartellaSuperiore').submit();"> <img src="gestione_documenti/images/parent_folder_icon.png" width="30"/> Cartella superiore</a> </a>
+	</form>	
 <% } %>  
 
  <dhv:permission name="documentale_documents-add">
@@ -222,24 +198,48 @@ Carica file</a>
 			<%if (doc.isFolder()) {  //SE E UNA CARTELLA%> 
 					<tr class="row<%=i%2%>">
 			<td>&nbsp;</td> 
+			
 			<td>
 			<img src="gestione_documenti/images/folder_icon.png" width="20"/> 
-			<a href="GestioneAllegatiUpload.do?command=ListaAllegati&orgId=<%=orgId%>&stabId=<%=stabId%>&altId=<%=altId%>&ticketId=<%=ticketId %>&folderId=<%=doc.getIdCartella()%>&parentId=<%=folderId%>&op=<%=op%>"><%= doc.getNomeDocumento() %></a> <b>(<%=doc.getContaFile() %>)</b> </td> 
+			<form action="GestioneAllegatiUpload.do?command=ListaAllegati" id="formListaCartella" method="post">
+			<textarea readonly style="display:none" name="jsonEntita" id ="jsonEntita"><%= jsonEntita%></textarea>
+		    <input type="hidden" name="folderId" id="folderId" value="<%= doc.getIdCartella() %>" />
+			<input type="hidden" name="parentId" id="parentId" value="<%= folderId %>" /> 
+			<input type="hidden" name="op" id="op" value="<%= op %>" /> 
+			<a href="#" onClick="document.getElementById('formListaCartella').submit();"> <%= doc.getNomeDocumento() %> </a> <b>(<%=doc.getContaFile() %>)</b>
+			</form>	
+			</td>
+			 
 			<td>CARTELLA</td>
 			<td><%= fixData(doc.getDataCreazione()) %></td> 
 			<td> <dhv:username id="<%= doc.getUserId() %>" /></td> 
+			
 			<td>
 			<dhv:permission name="documentale_documents-edit">
-			<a href="GestioneAllegatiUpload.do?command=GestisciCartella&orgId=<%=orgId%>&stabId=<%=stabId%>&altId=<%=altId%>&ticketId=<%=ticketId %>&folderId=<%=folderId%>&parentId=<%=parentId%>&operazione=rinomina&idCartella=<%=doc.getIdCartella() %>&nomeCartella=<%=""%>&op=<%=op%>">
-<img src="gestione_documenti/images/rename_folder_icon.png" width="20"/> Rinomina</a>
-</dhv:permission> &nbsp;
-<dhv:permission name="documentale_documents-delete">
-	<a href="GestioneAllegatiUpload.do?command=GestisciCartella&orgId=<%=orgId%>&stabId=<%=stabId%>&altId=<%=altId%>&ticketId=<%=ticketId %>&folderId=<%=folderId%>&parentId=<%=parentId%>&idCartella=<%=doc.getIdCartella() %>&operazione=cancella&op=<%=op%>" onCLick="if (confirm('ATTENZIONE! Stai per cancellare la cartella e tutto il suo contenuto. Sei sicuro di continuare?')){loadModalWindow(); return true;} else {return false;}">
-<img src="gestione_documenti/images/delete_folder_icon.png" width="20"/> Cancella</a>
-</dhv:permission>
-</td> 
+			<form action="GestioneAllegatiUpload.do?command=GestisciCartella" id="formRinominaCartella" method="post">
+			<textarea readonly style="display:none" name="jsonEntita" id ="jsonEntita"><%= jsonEntita%></textarea>
+      		<input type="hidden" name="folderId" id="folderId" value="<%= folderId %>" />
+			<input type="hidden" name="parentId" id="parentId" value="<%= parentId %>" /> 
+			<input type="hidden" name="op" id="op" value="<%= op %>" /> 
+			<input type="hidden" name="operazione" id="operazione" value="rinomina" /> 
+			<input type="hidden" name="idCartella" id="idCartella" value="<%= doc.getIdCartella() %>" /> 
+			<a href="#" onClick="document.getElementById('formRinominaCartella').submit()"><img src="gestione_documenti/images/rename_folder_icon.png" width="20"/> Rinomina</a>
+			</form>
+			</dhv:permission> &nbsp;
+			<dhv:permission name="documentale_documents-delete">
+			<form action="GestioneAllegatiUpload.do?command=GestisciCartella" id="formEliminaCartella" method="post">
+			<textarea readonly style="display:none" name="jsonEntita" id ="jsonEntita"><%= jsonEntita%></textarea>
+      		<input type="hidden" name="folderId" id="folderId" value="<%= folderId %>" />
+			<input type="hidden" name="parentId" id="parentId" value="<%= parentId %>" /> 
+			<input type="hidden" name="op" id="op" value="<%= op %>" /> 
+			<input type="hidden" name="operazione" id="operazione" value="cancella" /> 
+			<input type="hidden" name="idCartella" id="idCartella" value="<%= doc.getIdCartella() %>" /> 
+			<a href="#" onClick="if (confirm('ATTENZIONE! Stai per cancellare la cartella e tutto il suo contenuto. Sei sicuro di continuare?')){loadModalWindow(); document.getElementById('formEliminaCartella').submit();} else { return false; }"><img src="gestione_documenti/images/delete_folder_icon.png" width="20"/> Cancella</a>
+			</form>
+			</dhv:permission>
+			</td> 
 		
-		</tr>
+			</tr>
 			
 			<%} else {%>
 			<tr class="row<%=i%2%>">
@@ -271,10 +271,17 @@ Carica file</a>
 			<td> <dhv:username id="<%= doc.getUserId() %>" /></td> 
 			<td>
 			<dhv:permission name="documentale_documents-delete">
-			<a href="GestioneAllegatiUpload.do?command=GestisciFile&orgId=<%=orgId%>&stabId=<%=stabId%>&altId=<%=altId%>&ticketId=<%=ticketId %>&folderId=<%=folderId%>&parentId=<%=parentId%>&idFile=<%=doc.getIdDocumento() %>&operazione=cancella&op=<%=op%>" onCLick="if(confirm('ATTENZIONE! Stai per cancellare definitivamente questo file. Sei sicuro di continuare?')) { loadModalWindow(); return true;} else {return false;}">
-<img src="gestione_documenti/images/delete_file_icon.png" width="20"/> Cancella</a>
-</dhv:permission>
-</td>
+			<form action="GestioneAllegatiUpload.do?command=GestisciFile" id="formEliminaFile" method="post">
+			<textarea readonly style="display:none" name="jsonEntita" id ="jsonEntita"><%= jsonEntita%></textarea>
+      		<input type="hidden" name="folderId" id="folderId" value="<%= folderId %>" />
+			<input type="hidden" name="parentId" id="parentId" value="<%= parentId %>" /> 
+			<input type="hidden" name="op" id="op" value="<%= op %>" /> 
+			<input type="hidden" name="operazione" id="operazione" value="cancella" /> 
+			<input type="hidden" name="idFile" id="idFile" value="<%= doc.getIdDocumento() %>" /> 
+			<a href="#" onClick="if (confirm('ATTENZIONE! Stai per cancellare definitivamente questo file. Sei sicuro di continuare?')){loadModalWindow(); document.getElementById('formEliminaFile').submit();} else { return false; }"><img src="gestione_documenti/images/delete_file_icon.png" width="20"/> Cancella</a>
+			</form>
+			</dhv:permission>
+			</td>
 			</tr>
 		<%} %>
 			
@@ -302,8 +309,16 @@ Carica file</a>
 	<tr>
 <td>Pagine </td>
 	<td>
+	
 	<%if (pagSel>1){ %>
-	<a href="GestioneAllegatiUpload.do?command=ListaAllegati&orgId=<%=orgId%>&stabId=<%=stabId%>&altId=<%=altId%>&ticketId=<%=ticketId%>&op=<%=op%>&folderId=<%=folderId%>&parentId=<%=parentId%>&pag=<%=pagSel-1%>"><%= "<<" %></a>
+	<form action="GestioneAllegatiUpload.do?command=ListaAllegati" id="formListaIndietro" method="post">
+	<textarea readonly style="display:none" name="jsonEntita" id ="jsonEntita"><%= jsonEntita%></textarea>
+    <input type="hidden" name="folderId" id="folderId" value="<%= folderId %>" />
+	<input type="hidden" name="parentId" id="parentId" value="<%= parentId %>" /> 
+	<input type="hidden" name="op" id="op" value="<%= op %>" /> 
+	<input type="hidden" name="pag" id="pag" value="<%=pagSel-1%>" /> 
+	<a href="#" onClick="document.getElementById('formListIndietro').submit();"> >> </a>
+	</form>	
 	<%} %>
 	</td>
 	
@@ -311,19 +326,38 @@ Carica file</a>
 	
 	<td>
 	<%if (pagSel<pagTotali){ %>
-	<a href="GestioneAllegatiUpload.do?command=ListaAllegati&orgId=<%=orgId%>&stabId=<%=stabId%>&altId=<%=altId%>&ticketId=<%=ticketId%>&op=<%=op%>&folderId=<%=folderId%>&parentId=<%=parentId%>&pag=<%=pagSel+1%>"><%= ">>" %></a>
+	<form action="GestioneAllegatiUpload.do?command=ListaAllegati" id="formListaAvanti" method="post">
+	<textarea readonly style="display:none" name="jsonEntita" id ="jsonEntita"><%= jsonEntita%></textarea>
+    <input type="hidden" name="folderId" id="folderId" value="<%= folderId %>" />
+	<input type="hidden" name="parentId" id="parentId" value="<%= parentId %>" /> 
+	<input type="hidden" name="op" id="op" value="<%= op %>" /> 
+	<input type="hidden" name="pag" id="pag" value="<%=pagSel+1%>" /> 
+	<a href="#" onClick="document.getElementById('formListaAvanti').submit();"> >> </a>
+	</form>	
 	<%} %>
 	</td>
 	
-	<td>(<%=pagTotali%> <a href="GestioneAllegatiUpload.do?command=ListaAllegati&orgId=<%=orgId%>&altId=<%=altId%>&stabId=<%=stabId%>&ticketId=<%=ticketId%>&op=<%=op%>&folderId=<%=folderId%>&parentId=<%=parentId%>&pagine=no"><%= "Tutto" %></a>)</td></tr></table>
+	<td>
+	<form action="GestioneAllegatiUpload.do?command=ListaAllegati" id="formListaTutto" method="post">
+	<textarea readonly style="display:none" name="jsonEntita" id ="jsonEntita"><%= jsonEntita%></textarea>
+    <input type="hidden" name="folderId" id="folderId" value="<%= folderId %>" />
+	<input type="hidden" name="parentId" id="parentId" value="<%= parentId %>" /> 
+	<input type="hidden" name="op" id="op" value="<%= op %>" /> 
+	<input type="hidden" name="pagine" id="pagine" value="no" /> 
+	<a href="#" onClick="document.getElementById('formListaTutto').submit();"> (<%=pagTotali%> Tutto</a>)
+	</form>
+	</td>
+	</tr>
+	</table>
+	
+	
 
 <script type="text/javascript">
 <!-- aggiornamento pagina per modifica indirizzo in request --> 
    if(window.location.href.substr(-9) !== "&def=true") {
 	  loadModalWindow();
-	  window.location.href = 'GestioneAllegatiUpload.do?command=ListaAllegati&orgId=<%=orgId%>&stabId=<%=stabId%>&altId=<%=altId%>&ticketId=<%=ticketId%>&folderId=<%=folderId%>&parentId=<%=parentId%>&op=<%=op%>&messaggioPost=<%=messaggioPost%>&pag=<%=pag%>&pagTot=<%=pagTot%>&pagine=<%=pagine%>&def=true';
-	  
-    }
+	  window.location.href = 'GestioneAllegatiUpload.do?command=ListaAllegati&jsonEntita=<%=jsonEntita%>&folderId=<%=folderId%>&parentId=<%=parentId%>&op=<%=op%>&messaggioPost=<%=messaggioPost%>&pag=<%=pag%>&pagTot=<%=pagTot%>&pagine=<%=pagine%>&def=true';
+	  }
 </script>
 
 

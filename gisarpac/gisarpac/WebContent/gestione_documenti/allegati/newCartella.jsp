@@ -31,10 +31,7 @@ function checkFormCartella(formCartella) {
 		</tr>
 			
 		</table>
-	<input type="hidden" id="orgId" name="orgId" value="<%=orgId%>"/>
-	<input type="hidden" id="stabId" name="stabId" value="<%=stabId%>"/>
-	<input type="hidden" id="altId" name="altId" value="<%=altId%>"/>
-	<input type="hidden" id="ticketId" name="ticketId" value="<%=ticketId%>"/>
+     <textarea readonly style="display:none" name="jsonEntita" id ="jsonEntita"><%= (String)request.getAttribute("jsonEntita")%></textarea>
 	<input type="hidden" id="folderId" name="folderId" value="<%=folderId%>"/>
 	<input type="hidden" id="parentId" name="parentId" value="<%=parentId%>"/>
 	<input type="hidden" name="op" id="op" value="<%= (String)request.getAttribute("op") %>" />

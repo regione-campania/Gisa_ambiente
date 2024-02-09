@@ -358,7 +358,6 @@ function mostraAttivitaProduttive(idTable,livello,idSelezionato, cerca,tipoInser
 	 
 	 tipoImpresa = document.getElementById("tipo_impresa").value;
 	  
-  	  SuapDwr.mostraAttivitaProduttive(livello,idSelezionato,tipoInserimento,idTipoAttivita,tipoImpresa,{async:false,callback:mostraAttivitaProduttiveCallBack});
 		
 	
   }
@@ -395,7 +394,6 @@ if (document.getElementById("numeroRegistrazioneVariazione")!=null)
 	numReg=document.getElementById("numeroRegistrazioneVariazione").value ;
 
 
-SuapDwr.verificaEsistenzaRichiesta(pIva, comuneRichiesta, idTipoRichiesta, viaStab, civicoStab,toponimoStab,numReg,{callback:allarm,async:false});
 
 return richiestaEsistente ;
 	
@@ -648,7 +646,6 @@ function mostraListaDocumentiAttivitaProduttive(stabIdIn)
 		  {
 	  for (i=0; i <array.length; i++)
 		  idLinee[i]=array[i].value ;
-	  SuapDwr.mostraDocumentazioneAttivitaProduttive(idLinee,mostraListaDocumentiAttivitaProduttiveCallBack);
 		  }
   	//SuapDwr.mostraAttivitaProduttive(1,mostraListaDocumentiAttivitaProduttiveCallBack);
   }

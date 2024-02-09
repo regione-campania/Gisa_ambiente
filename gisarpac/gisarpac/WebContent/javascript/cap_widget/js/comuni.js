@@ -8,9 +8,9 @@ var optionsComuni = {
 		
 	  url: function() {
 		    if(flag_id_asl == '204' || flag_id_asl == '205' || flag_id_asl == '206'){
-				fileresourcecomuni = "GetComuneByAsl.do?command=Search&idAsl=" + flag_id_asl;
+				fileresourcecomuni = "GetComuneByAsl.do?command=GetComuni&idAsl=" + flag_id_asl;
 			}else{
-				fileresourcecomuni = "GetComuneByProvincia.do?command=Search&provincia.code=" + $("#provinciaId").val();
+				fileresourcecomuni = "GetComuneByProvincia.do?command=GetComuni&provincia.code=" + $("#provinciaId").val();
 			}
 		  	return fileresourcecomuni;
 	  },

@@ -1081,8 +1081,8 @@ standard deployment descriptor.
   </servlet>
   <servlet>
     <description></description>
-    <servlet-name>StruttureAsl</servlet-name>
-    <servlet-class>org.servlet.ServletStruttureAsl</servlet-class>
+    <servlet-name>InizializzaSistema</servlet-name>
+    <servlet-class>org.servlet.ServletInizializzaSistema</servlet-class>
     <load-on-startup>10</load-on-startup>
   </servlet>
   <servlet>
@@ -1266,10 +1266,10 @@ standard deployment descriptor.
   </servlet>
   <servlet>
     <description></description>
-    <display-name>ServletStruttureAsl</display-name>
-    <servlet-name>ServletStruttureAsl</servlet-name>
+    <display-name>ServletInizializzaSistema</display-name>
+    <servlet-name>ServletInizializzaSistema</servlet-name>
     <servlet-class>
-	org.servlet.ServletStruttureAsl</servlet-class>
+	org.servlet.ServletInizializzaSistema</servlet-class>
   </servlet>
   <servlet>
     <description></description>

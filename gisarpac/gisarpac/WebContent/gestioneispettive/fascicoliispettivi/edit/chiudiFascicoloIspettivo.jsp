@@ -12,7 +12,7 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <script src='javascript/modalWindow.js'></script>
-<script src="javascript/jquery-1.8.2.js"></script>
+<script src="javascript/jquery/jquery-1.8.2.js"></script>
 <script src="javascript/jquery-ui.js"></script>
 <link rel="stylesheet" type="text/css" href="css/modalWindow.css"></link>
 
@@ -41,7 +41,13 @@ function annulla() {
 }
 
 
+function openUploadAllegato(idFascicoloIspettivo){
+	var res;
+	var result;
+	window.open('GestioneAllegatiFascicoliIspettivi.do?command=PrepareUploadAllegato&idFascicoloIspettivo='+idFascicoloIspettivo,null,
+		'height=450px,width=480px,toolbar=no,directories=no,status=no,continued from previous linemenubar=no,scrollbars=no,resizable=no ,modal=yes');
 
+} 
 
 </script>
 
@@ -80,7 +86,8 @@ if (jsonCampiServizio.length()>0) {%>
 <tr><th colspan="2">Dati relazione allegata al Fascicolo Ispettivo (SICRA)</th></tr>
 <tr><td CLASS="formLabel">ANNO PROTOCOLLO</td> <td><input type="text" id="annoProtocolloChiusura" name="annoProtocolloChiusura" value=""/></td></tr>
 <tr><td CLASS="formLabel">NUMERO PROTOCOLLO</td> <td><input type="text" id="numeroProtocolloChiusura" name="numeroProtocolloChiusura" value=""/></td></tr>
-<!-- <tr><td CLASS="formLabel">NOTE</td> <td><input type="text" id="nota" name="nota" value=""/></td></tr> -->
+<tr><th colspan="2">Rapporto di chiusura fascicolo ispettivo</th></tr>
+<tr><td class="formLabel">Rapporto</td><td><div id="divAllegato" name="divAllegato"></div><input type="hidden" id="codAllegato" name="codAllegato" value=""/><a href="javascript:openUploadAllegato(<%=idFascicoloIspettivo %>)" id="allega">Allega</a></td></tr> 
 </table>
 
 <br/>
@@ -127,6 +134,11 @@ function checkForm(form){
 	
 	if (form.annoProtocolloChiusura.value=='' || isNaN(form.annoProtocolloChiusura.value) || form.numeroProtocolloChiusura.value=='' || isNaN(form.numeroProtocolloChiusura.value)){
 		alert('Indicare anno e numero protocollo in formato numerico.');
+		return false;
+	}
+	
+	if (form.codAllegato.value==''){
+		alert('Allegare il rapporto di chiusura.');
 		return false;
 	}
 	 

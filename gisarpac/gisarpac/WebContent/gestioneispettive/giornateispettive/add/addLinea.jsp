@@ -9,8 +9,8 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <script src='javascript/modalWindow.js'></script>
-<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
-<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+<script src="javascript/jquery/jquery-1.8.2.js"></script>
+<script src="javascript/jquery/ui/1.9.1/jquery-ui.js"></script>
 <link rel="stylesheet" type="text/css" href="css/modalWindow.css"></link>
 
 <script>
@@ -24,13 +24,13 @@ function checkForm(form){
 	}
 	
 	if (lineeSelezionate==0){
-		alert("Selezionare una linea sottoposta.")
+		alert("Selezionare un codice IPPC.")
 		return false;
 	}
 	
 	<% if ((int)((JSONObject)((JSONObject) jsonGiornataIspettiva).get("Tecnica")).get("id")==4 || (int)((JSONObject)((JSONObject) jsonGiornataIspettiva).get("Tecnica")).get("id")==5) { %>
 	if (lineeSelezionate>1){
-		alert("Selezionare una sola linea sottoposta.")
+		alert("Selezionare un solo codice IPPC.")
 		return false;
 	}
 	<% } %>
@@ -40,7 +40,9 @@ function checkForm(form){
 }
 
 function backForm(form){
+	
 	form.action="GestioneGiornateIspettive.do?command=AddPerContoDi";
+	
 	loadModalWindow();
 	form.submit();
 }
@@ -89,11 +91,11 @@ function filtraRighe() {
 <table class="details" id="tableLinee" name="tableLinee" cellpadding="10" cellspacing="10" width="100%">
 <col width="5%"/>
 
-<tr><th colspan="2"><center><b>LINEE SOTTOPOSTE</b></center></th></tr>
+<tr><th colspan="2"><center><b>CODICI IPPC SOTTOPOSTI</b></center></th></tr>
 
 <tr>
 <th>Seleziona</th>
-<th><input type="text" id="myInputLinea" onkeyup="filtraRighe()" placeholder="FILTRA LINEA" style="width: 100%"></th>
+<th><input type="text" id="myInputLinea" onkeyup="filtraRighe()" placeholder="FILTRA CODICE IPPC" style="width: 100%"></th>
 </tr>
 
 <%for (int i = 0; i<ListaLinee.size(); i++){
@@ -142,4 +144,15 @@ function prettyPrint() {
 prettyPrint();
 var scroll_height = $("#jsonGiornataIspettiva").get(0).scrollHeight;
 $("#jsonGiornataIspettiva").css('height', scroll_height + 'px');
+
+function reloadDati(){
+	<% if ( ((JSONObject) jsonGiornataIspettiva).has("Linee")) { %>
+<% JSONArray jsonLinee = (JSONArray) jsonGiornataIspettiva.get("Linee");
+for (int i = 0; i < jsonLinee.length(); i++) {
+JSONObject jsonObject = jsonLinee.getJSONObject(i);
+%>
+document.getElementById("lineaId_<%=jsonObject.get("id")%>").setAttribute("checked","true")
+<%}}%>
+}
+reloadDati();
 </script>

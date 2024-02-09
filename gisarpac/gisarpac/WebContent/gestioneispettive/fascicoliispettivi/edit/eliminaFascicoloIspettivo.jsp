@@ -15,7 +15,7 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <script src='javascript/modalWindow.js'></script>
-<script src="javascript/jquery-1.8.2.js"></script>
+<script src="javascript/jquery/jquery-1.8.2.js"></script>
 <script src="javascript/jquery-ui.js"></script>
 <link rel="stylesheet" type="text/css" href="css/modalWindow.css"></link>
 
@@ -28,7 +28,7 @@ alert("<%=Messaggio%>");
 <% if (Messaggio.startsWith("OK")) {%>
 <script>
 loadModalWindow();
-window.location.href="OpuStab.do?command=Details&stabId=<%=((JSONObject) jsonFascicoloIspettivo.get("Anagrafica")).get("riferimentoId")%>";
+window.location.href="StabilimentoAIA.do?command=Details&stabId=<%=((JSONObject) jsonFascicoloIspettivo.get("Anagrafica")).get("riferimentoId")%>";
 </script>
 
 <%} }%>

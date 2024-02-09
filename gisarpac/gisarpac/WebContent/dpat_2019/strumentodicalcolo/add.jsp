@@ -428,27 +428,7 @@ SE LE PERSONE DA INSERIRE NON SI TROVANO NELL'ELENCO, CONTATTARE L'HELP-DESK (80
 <a name= "link" ></a>
 
 
-<p align="left">
-	 <script language="JavaScript" TYPE="text/javascript"
-	SRC="gestione_documenti/generazioneDocumentale.js"></script>
-	
-	  <img src="images/icons/stock_print-16.gif" border="0" align="absmiddle" height="16" width="16"/>
-        <input type="button" title="PDF" style="background-color:#FF4D00; font-weight: bold;" value="PDF Strumento di Calcolo"	
-        onClick="openRichiestaPDF_DPAT('<%=DpatSDC.getIdAsl()%>', '<%=DpatSDC.getAnno()%>', 'Organigramma',<%=DpatSDC.getStrutturaAmbito().getId()%>);"/>
-      
-</p>
-<%
 
-if (DpatSDC.getStrutturaAmbito().getStato()==OiaNodo.STATO_DEFINITIVO)
-{
-
-%>
-<div align="right">
-<input type="button" id="CL" value="Esporta in Excel" style="background-color:#FF4D00; font-weight: bold;" onClick="openMessaggioForm()" style="background-color:#FF4D00; font-weight: bold;"  />
-</div>
-
-<%
-}%>
 
 
 		<dhv:permission name="dpat-view">

@@ -14,8 +14,8 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <script src='javascript/modalWindow.js'></script>
-<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
-<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+<script src="javascript/jquery/jquery-1.8.2.js"></script>
+<script src="javascript/jquery/ui/1.9.1/jquery-ui.js"></script>
 <link rel="stylesheet" type="text/css" href="css/modalWindow.css"></link>
 
 <center>
@@ -35,6 +35,19 @@
 	  
   }%>
   
+<table class="trails" cellspacing="0">
+<tr>
+<td>
+<a href="StabilimentoAIA.do?command=Details&stabId=<%=((JSONObject) jsonGiornataIspettiva.get("Anagrafica")).get("riferimentoId")%>"><%= ((JSONObject) jsonGiornataIspettiva.get("Anagrafica")).get("ragioneSociale") %></a> >
+<a href="GestioneFascicoliIspettivi.do?command=Lista&riferimentoId=<%=((JSONObject) jsonGiornataIspettiva.get("Anagrafica")).get("riferimentoId")%>&riferimentoIdNomeTab=aia_stabilimento">Fascicoli ispettivi</a> > 
+<a href="GestioneFascicoliIspettivi.do?command=View&idFascicoloIspettivo=<%=((JSONObject) jsonGiornataIspettiva.get("FascicoloIspettivo")).get("id")%>">Fascicolo ispettivo</a> > 
+Giornata Ispettiva
+</td>
+</tr>
+</table>
+<br/> 
+  
+  
 <%@ include file="../verbali/elenco.jsp" %>
 
 <!-- RIEPILOGO -->
@@ -50,7 +63,7 @@
 
 <% if ( ((JSONObject) jsonGiornataIspettiva).has("Anagrafica")) { %>
 <% JSONObject jsonAnagrafica = (JSONObject) jsonGiornataIspettiva.get("Anagrafica"); %>
-<tr><td class="formLabel">Anagrafica</td><td><%=jsonAnagrafica.get("ragioneSociale") %> (<%=jsonAnagrafica.get("partitaIva") %>) <a href="OpuStab.do?command=Details&stabId=<%=jsonAnagrafica.get("riferimentoId")%>"><b>Torna all'Anagrafica</b></a></td></tr>
+<tr><td class="formLabel">Anagrafica</td><td><%=jsonAnagrafica.get("ragioneSociale") %> (<%=jsonAnagrafica.get("partitaIva") %>) <a href="StabilimentoAIA.do?command=Details&stabId=<%=jsonAnagrafica.get("riferimentoId")%>"><b>Torna all'Anagrafica</b></a></td></tr>
 <%} %>
 
 <% if ( ((JSONObject) jsonGiornataIspettiva).has("Dipartimento")) { %>
@@ -123,9 +136,9 @@ JSONObject jsonEmissioneAtmosferaCamino = (JSONObject) jsonEmissioniAtmosferaCam
 <i>Sistema abbattimento:</i> <%=jsonEmissioneAtmosferaCamino.get("sistemaAbbattimento") %> - 
 <i>Data sopralluogo 2016:</i> <%=fixData(jsonEmissioneAtmosferaCamino.get("dataSopralluogo2016")) %> - 
 <i>Parametri analizzati:</i> <%=jsonEmissioneAtmosferaCamino.get("parametriAnalizzati") %> - 
-<i>Superamenti limiti normativi:</i> <%=jsonEmissioneAtmosferaCamino.get("superamentiLimitiNormativi") %> - 
+<!-- <i>Superamenti limiti normativi:</i> <%=jsonEmissioneAtmosferaCamino.get("superamentiLimitiNormativi") %> --> - 
 <i>Note:</i> <%=jsonEmissioneAtmosferaCamino.get("note") %> - 
-<i>Esito conforme:</i> <%=jsonEmissioneAtmosferaCamino.has("esitoConforme") && Boolean.TRUE.equals(jsonEmissioneAtmosferaCamino.get("esitoConforme")) ? "SI" : "NO" %>
+<!-- <i>Esito conforme:</i> <%=jsonEmissioneAtmosferaCamino.has("esitoConforme") && Boolean.TRUE.equals(jsonEmissioneAtmosferaCamino.get("esitoConforme")) ? "SI" : "NO" %> -->
 
 <br/><br/>
 <% } %>
@@ -140,7 +153,7 @@ if (jsonGruppoIspettivo.length()>0) {%>
 for (int i = 0; i<jsonGruppoIspettivo.length(); i++) {
 JSONObject jsonComponente = (JSONObject) jsonGruppoIspettivo.get(i);
 %>
-<%=jsonComponente.get("nominativo") %> (<b><%=jsonComponente.get("qualifica") %></b>) <%=jsonComponente.get("struttura") %> <%=Boolean.TRUE.equals(jsonComponente.get("referente")) ? "(<b>Incaricato di Funzione</b>)" : "" %> <%=Boolean.TRUE.equals(jsonComponente.get("responsabile")) ? "(<b>Responsabile Procedimento</b>)" : "" %> <br/><br/>
+<%=jsonComponente.get("nominativo") %> - <%=jsonComponente.get("struttura") %> <%=Boolean.TRUE.equals(jsonComponente.get("referente")) ? "(<b>Incaricato di Funzione</b>)" : "" %> <%=Boolean.TRUE.equals(jsonComponente.get("responsabile")) ? "(<b>Responsabile Procedimento</b>)" : "" %> <br/><br/>
 <% } %>
 </td></tr>
 <%} }%>

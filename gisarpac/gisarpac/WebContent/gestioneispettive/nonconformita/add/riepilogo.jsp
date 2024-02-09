@@ -45,3 +45,6 @@
 </table>
 <!-- RIEPILOGO -->
 
+<%if ( (org.aspcfs.modules.util.imports.ApplicationProperties.getProperty("GESTIONE_CU_VEDI_JSON")!= null && org.aspcfs.modules.util.imports.ApplicationProperties.getProperty("GESTIONE_CU_VEDI_JSON").equalsIgnoreCase("si"))) {%>
+<%@ include file="../../util/random.jsp" %>
+<%} %>

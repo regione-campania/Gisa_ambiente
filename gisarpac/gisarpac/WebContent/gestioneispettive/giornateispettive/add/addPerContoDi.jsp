@@ -3,14 +3,15 @@
 <%@ taglib uri="/WEB-INF/zeroio-taglib.tld" prefix="zeroio" %>
 
 <jsp:useBean id="jsonGiornataIspettiva" class="org.json.JSONObject" scope="request"/>
+
 <jsp:useBean id="ListaPerContoDi" class="java.util.ArrayList" scope="request"/>
 
 <%@ page import="org.aspcfs.modules.gestioneispettive.base.*"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <script src='javascript/modalWindow.js'></script>
-<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
-<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+<script src="javascript/jquery/jquery-1.8.2.js"></script>
+<script src="javascript/jquery/ui/1.9.1/jquery-ui.js"></script>
 <link rel="stylesheet" type="text/css" href="css/modalWindow.css"></link>
 
 <script>
@@ -45,9 +46,12 @@ function checkForm(form){
 }
 
 function backForm(form){
+	
 	form.action="GestioneGiornateIspettive.do?command=AddDati";
+
 	loadModalWindow();
 	form.submit();
+	
 }
 
 
@@ -125,6 +129,12 @@ function filtraRighe() {
 <th><input type="text" id="myInputDipartimento" onkeyup="filtraRighe()" placeholder="FILTRA DIPARTIMENTO" style="width: 100%"></th>
 </tr>
 
+
+<input type="hidden" id="tecnica" nome="tecnica" value=<%=request.getAttribute("tecnica")%>>
+
+
+
+
 <% 
 for (int i = 0; i<ListaPerContoDi.size(); i++) {
 Struttura perContoDi = (Struttura) ListaPerContoDi.get(i); %>
@@ -177,4 +187,16 @@ function prettyPrint() {
 prettyPrint();
 var scroll_height = $("#jsonGiornataIspettiva").get(0).scrollHeight;
 $("#jsonGiornataIspettiva").css('height', scroll_height + 'px');
+
+function reloadDati(){
+	<% if ( ((JSONObject) jsonGiornataIspettiva).has("PerContoDi")) { %>
+<% JSONArray jsonPerContoDi = (JSONArray) jsonGiornataIspettiva.get("PerContoDi");
+for (int i = 0; i < jsonPerContoDi.length(); i++) {
+JSONObject jsonObject = jsonPerContoDi.getJSONObject(i);
+%>
+document.getElementById("<%=jsonObject.get("id")%>").setAttribute("checked","true")
+<%}}%>
+}
+reloadDati();
+
 </script>

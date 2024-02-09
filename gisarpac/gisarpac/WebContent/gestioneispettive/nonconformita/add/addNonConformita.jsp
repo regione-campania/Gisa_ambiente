@@ -10,8 +10,8 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <script src='javascript/modalWindow.js'></script>
-<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
-<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+<script src="javascript/jquery/jquery-1.8.2.js"></script>
+<script src="javascript/jquery/ui/1.9.1/jquery-ui.js"></script>
 <link rel="stylesheet" type="text/css" href="css/modalWindow.css"></link>
 
 <script>
@@ -101,10 +101,8 @@ for (int i = 0; i<jsonLinee.length(); i++) {
 
 </td></tr>
 
-<tr><td class="formLabel">Note</td>
-<td>
-<input type="text" id="note" name="note" style="width:100%"/>
-</td></tr>
+<tr><td class="formLabel">Note </td><td><textarea id="note" name="note" cols="50" rows="5" placeholder="NOTE"></textarea></td></tr>
+
 </table>
 
 

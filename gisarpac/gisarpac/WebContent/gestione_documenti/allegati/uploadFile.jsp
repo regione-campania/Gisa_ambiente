@@ -73,13 +73,10 @@
           <input type="text" disabled id="text_loading" name="text_loading" hidden="hidden" value="Caricamento in corso..."  style="border: none"/>
       </td>
     </tr>
-     <input type="hidden" name="id" id ="id" value="<%= (String)request.getAttribute("orgId") %>" />
-      <input type="hidden" name="stabId" id ="stabId" value="<%= (String)request.getAttribute("stabId") %>" />
-       <input type="hidden" name="altId" id ="altId" value="<%= (String)request.getAttribute("altId") %>" />
-      <input type="hidden" name="ticketId" id ="ticketId" value="<%= (String)request.getAttribute("ticketId") %>" />
-    <input type="hidden" name="folderId" id="folderId" value="<%= (String)request.getAttribute("folderId") %>" />
+     <textarea readonly style="display:none" name="jsonEntita" id ="jsonEntita"><%= (String)request.getAttribute("jsonEntita")%></textarea>
+      <input type="hidden" name="folderId" id="folderId" value="<%= (String)request.getAttribute("folderId") %>" />
 <input type="hidden" name="parentId" id="parentId" value="<%= request.getParameter("parentId") %>" /> 
- <input type="hidden" name="op" id="op" value="<%= (String)request.getAttribute("op") %>" />
+ <input type="hidden" name="op" id="op" value="<%= (String)request.getAttribute("op") %>" /> 
   </table>
    </form>
    <p align="center">
