@@ -40,7 +40,7 @@
 # **1. Descrizione e finalità del software** 
 
 <p align="center">
-<img src="./GisaLOGO.png">
+<img src="./docs/LOGO_AMBIENTE.png">
 </p>
 
 Premessa
@@ -56,7 +56,6 @@ ma con ancora diverse funzionalità in fase di progettazione e realizzazione.
 Il sistema GISA AMBIENTE, release 1, gestisce le visite ispettive fatte dal personale
 tecnico sulle anagrafiche degli impianti AIA e AUA. Vengono gestite le tre tipologie di AIA:
 - Ordinaria;
-- Straordinaria;
 - Non ordinaria.
 Al sistema possono accedere tutti i tecnici GISA AMBIENTE (oltre ai Dirigenti Apicali come
 il Direttore Tecnico o Generale), ciascuno per le proprie competenze, utilizzando il proprio
@@ -64,10 +63,15 @@ SPID.
 Il sistema permette all'utente di ricercare un impianto con sede operativa sul territorio
 regionale e di associare ad esso un fascicolo ispettivo. Ovviamente se trattasi di nuovo
 impianto (non già anagrafato) sarà possibile inserirlo con tutti i dettagli relativi a:
-- Dati impresa (ragione sociale, partita IVA, sede legale, rappresentante legale, ecc);
-- Dati sede operativa (indirizzo, coordinate, ecc);
-- Dati linea di attività(descrizione attività, ecc);
-- Dati autorizzativi.
+
+Dati impresa (ragione sociale, partita IVA, sede legale, rappresentante legale, ecc);
+
+Dati sede operativa (indirizzo, coordinate, ecc);
+
+Dati IPPC;
+
+Dati autorizzativi.
+
 Ad ogni impianto ricercabile è possibile associare un fascicolo ispettivo ovvero una intera
 visita ispettiva AIA composta da più giornate ispettive (giornate di controllo).
 In ogni giornata ispettiva è possibile specificare, tra l'altro le seguenti informazioni:
@@ -523,12 +527,12 @@ Una copia della Licenza è disponibile al seguente indirizzo: <https://www.gnu.o
 
 **NOTE:**
 
-In caso di riuso, in toto o in partedi GISA Sicurezza alimentare e veterinaria, è necessario notificare l’adozione in riuso tramite l’apertura di un ticket (o analogo meccanismo quale una pull request) in questo repository. Inoltre, al contempo per gli aspetti organizzativi utili a potenziare i benefici derivanti dalla pratica del riuso tra PP.AA., come la partecipazione alla **Cabina di regia** per la condivisione di eventuali modifiche/integrazioni o innovazioni, è necessario darne tempestiva comunicazione alle seguenti e-mail:
+In caso di riuso, in toto o in parte di GISA Ambiente, è necessario notificare l’adozione in riuso tramite l’apertura di un ticket (o analogo meccanismo quale una pull request) in questo repository. Inoltre, al contempo per gli aspetti organizzativi utili a potenziare i benefici derivanti dalla pratica del riuso tra PP.AA., come la partecipazione al **Centro di competenza e di supporto al riuso e al ciclo di vita del software GISA Campania** per la condivisione di eventuali modifiche/integrazioni o innovazioni, è necessario darne tempestiva comunicazione alle seguenti e-mail:
+
+[cinzia.matonti@regione.campania.it]()	
 
 [mt.filazzola@arpacampania.it]() 
 
 [r.belluomo@arpacampania.it]() 
 
-[cinzia.matonti@regione.campania.it]()	
-
-Gli enti che aderiscono al riuso di GISA entreranno a far parte della Cabina di Regia per condividere e partecipare all’evoluzione di GISA insieme alle altre PP.AA.
+Gli enti che aderiscono al riuso di GISA entreranno a far parte del "Centro di competenza e di supporto al riuso e al ciclo di vita del software GISA Campania" per condividere e partecipare all’evoluzione di GISA insieme alle altre PP.AA.

@@ -23,14 +23,13 @@ dependsOn:
   open:
     - name: Apache Tomcat
       optional: false
-      version: ''
-      versionMax: ''
-      versionMin: ''
+      version: '9.0.73'
     - name: PostgreSQL
       optional: false
-      version: ''
-      versionMax: ''
-      versionMin: ''
+      version: '15.x'
+    - name: OpenJDK
+      optional: false
+      version: 1.8.0_372
 
 description:
   it:
@@ -90,8 +89,6 @@ description:
 
       eseguita;
 
-      Pag 5/ 59
-
       - Il nucleo ispettivo → ovvero il gruppo ispettivo che ha seguito la
       specifica giornata
 
@@ -146,8 +143,6 @@ description:
 
       sicr@web, mediante cooperazione applicativa.
 
-      Pag 6/ 59
-
       In GISA AMBIENTE release 1 è disponibile anche un modulo di integrazione
       con alcune
 
@@ -180,9 +175,8 @@ legal:
 
 maintenance:
   contacts:
-    - affiliation: Regione Campania
-      email: cinzia.matonti@regione.campania.it
-      name: Cinzia Matonti
+    - email: gisadev@usmail.it
+      name: US srl
   contractors:
     - name: US srl
       until: '2028-06-01'
@@ -192,7 +186,18 @@ localisation:
   availableLanguages:
     - it
   localisationReady: false
-it:
+  it:
+    conforme:
+        misureMinimeSicurezza: true
+  usedBy:
+  - ARPAC
+  - ASL NA1 Centro
+  - ASL NA2 Nord
+  - ASL NA3 Sud
+  - ASL AV
+  - ASL BN
+  - ASL CE
+  - ASL SA
   countryExtensionVersion: '0.2'
   riuso:
     codiceIPA: r_campan
@@ -202,3 +207,9 @@ it:
     pagopa: false
     spid: true
 logo: 'https://raw.githubusercontent.com/regione-campania/Gisa_ambiente/master/GisaLOGO.png'
+legal:
+  authorsFile: |-
+    https://github.com/regione-campania/Gisa_ambiente/blob/main/Copyrights.txt
+  license: AGPL-3.0-only
+  mainCopyrightOwner: Regione Campania
+  repoOwner: Regione Campania
