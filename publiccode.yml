@@ -200,7 +200,7 @@ localisation:
   - ASL SA
   countryExtensionVersion: '0.2'
   riuso:
-    codiceIPA: r_campan
+    codiceIPA: 'r_campan'
   piattaforme:
     anpr: false
     cie: true
