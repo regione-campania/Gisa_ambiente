@@ -3,7 +3,7 @@
 # More info at https://github.com/italia/publiccode.yml
 
 publiccodeYmlVersion: '0.2'
-name: Gisa Campania - Ambiente
+name: GISA Campania - Ambiente
 url: 'https://github.com/regione-campania/Gisa_ambiente'
 releaseDate: '2024-12-31'
 
@@ -169,9 +169,6 @@ description:
       - Giornata ispettiva - Firma grafometrica verbale ispettivo
       - Gestione richieste sviluppo software
       - Iter 
-
-legal:
-  license: AGPL-3.0-only
 
 maintenance:
   contacts:
