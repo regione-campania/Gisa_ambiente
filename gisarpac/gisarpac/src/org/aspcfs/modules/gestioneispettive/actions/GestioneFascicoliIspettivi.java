@@ -66,12 +66,12 @@ public class GestioneFascicoliIspettivi extends CFSModule{
 				
 					if (rs.next())
 					{
-						if (rs.getBoolean("fascicolo") == false){
-							context.getRequest().setAttribute("controlloKO", true);
+						
+						if (rs.getBoolean("ippc") == false){
+							context.getRequest().setAttribute("controlloIppcKO", true);
 
 							return executeCommandLista(context);
 						}
-						
 						
 					}
 
@@ -89,6 +89,11 @@ public class GestioneFascicoliIspettivi extends CFSModule{
 
 				Anagrafica anag = new Anagrafica(db, riferimentoId, riferimentoIdNomeTab);
 
+				
+				
+				
+				
+				
 				JSONObject jsonAnagrafica = new JSONObject();
 				jsonAnagrafica.put("riferimentoId", riferimentoId);
 				jsonAnagrafica.put("riferimentoIdNomeTab", riferimentoIdNomeTab);
@@ -299,10 +304,14 @@ public class GestioneFascicoliIspettivi extends CFSModule{
 			db = this.getConnection(context);
 			idFascicoloIspettivo = Integer.parseInt(context.getRequest().getParameter("idFascicoloIspettivo"));
 			context.getRequest().setAttribute("idFascicoloIspettivo", String.valueOf(idFascicoloIspettivo));
+			JSONArray jsonGiornateIspettive = new JSONArray();
 
 			JSONObject jsonFascicoloIspettivo = FascicoloIspettivo.getJson(db, idFascicoloIspettivo);
 			context.getRequest().setAttribute("jsonFascicoloIspettivo", jsonFascicoloIspettivo);
 		
+			jsonGiornateIspettive = GiornataIspettiva.getJsonLista(db, idFascicoloIspettivo);
+			context.getRequest().setAttribute("jsonGiornateIspettive", jsonGiornateIspettive);
+
 			
 		} catch (Exception e) {
 			context.getRequest().setAttribute("Error", e);
@@ -326,6 +335,7 @@ public class GestioneFascicoliIspettivi extends CFSModule{
 		Connection db = null;
 		String messaggio ="";
 		String dataChiusura="";
+		String oraChiusura="";
 		int idFascicoloIspettivo = -1;
 		int annoProtocollo = -1;
 		int numeroProtocollo = -1;
@@ -336,6 +346,8 @@ public class GestioneFascicoliIspettivi extends CFSModule{
 			
 			idFascicoloIspettivo = Integer.parseInt(context.getRequest().getParameter("idFascicoloIspettivo"));
 			dataChiusura = (String)(context.getRequest().getParameter("dataChiusura"));
+			oraChiusura = (String)(context.getRequest().getParameter("oraChiusura"));
+
 //			String nota = context.getRequest().getParameter("note");
 			
 			annoProtocollo = Integer.parseInt(context.getRequest().getParameter("annoProtocolloChiusura"));
@@ -344,7 +356,7 @@ public class GestioneFascicoliIspettivi extends CFSModule{
 			codAllegato = (String)(context.getRequest().getParameter("codAllegato"));
 			
 			JSONObject jsonFascicoloIspettivo = FascicoloIspettivo.getJson(db, idFascicoloIspettivo);
-			messaggio = FascicoloIspettivo.close(db, idFascicoloIspettivo, dataChiusura, annoProtocollo, numeroProtocollo, codAllegato, getUserId(context));
+			messaggio = FascicoloIspettivo.close(db, idFascicoloIspettivo, dataChiusura,oraChiusura, annoProtocollo, numeroProtocollo, codAllegato, getUserId(context));
 	
 	  
 		}catch (Exception e) {

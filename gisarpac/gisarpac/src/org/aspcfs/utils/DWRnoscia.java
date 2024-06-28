@@ -181,6 +181,43 @@ public String controlloEsistenzaAiaImpresa(String partita_iva){
 		return output;
 		
 }
+
+
+public String controlloEsistenzaAuaCiureg(String ciureg){
+	
+	String output = "";
+	
+	String sql = "select ciureg from aua_stabilimento where ciureg ilike ? and trashed_date is null";
+	Connection db = null;
+	try{
+		db = GestoreConnessioni.getConnection();
+		PreparedStatement pst = db.prepareStatement(sql);
+		pst.setString(1, ciureg);
+		ResultSet rs= pst.executeQuery();
+		
+		System.out.println("query esistenza " + pst);
+		while(rs.next())
+		{
+			output = rs.getString("ciureg");
+		}
+	
+	}catch(LoginRequiredException e)
+	{
+		throw e;
+	}catch(Exception e)
+	{
+		e.printStackTrace();		
+	}
+	finally
+	{
+		GestoreConnessioni.freeConnection(db);
+	}
+	
+	return output;
+	
+}
+
+
 	public String cercaPraticaDaAssociare(String comune_pratica, String stab_id){
 		
 		String output = "";

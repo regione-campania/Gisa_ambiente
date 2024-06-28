@@ -22,7 +22,7 @@ int numeroProtocollo = Integer.parseInt(datiProtocollo[1]);
 
 <div align="right">
 
-<table style="border:1px solid black" cellpadding="10" cellspacing="10">
+<table style="border:1px solid black" cellpadding="10" cellspacing="10" hidden id="verbale">
 <tr><th colspan="2">Modello A6 Verbale Verifica Ispettiva</th></tr>
 <tr>
 <td>

@@ -1,0 +1,79 @@
+<script> var filename="login.html";</script>
+
+<style>
+.header {
+    top: 0px;
+    padding: 3px;
+    text-align: center;
+    margin-bottom: 10px;
+    background-image: linear-gradient(to bottom right, #0574d2, #00040a);
+    color: white;
+    font-size: 6px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);
+}
+</style>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.9">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script src="http://www.gisacampania.it/js/GisaSpid.js?v3"></script>
+
+    <title>Settore Alimentare e Veterinario – Autovalutazione</title>
+    <link rel="icon" href="../static/img/icon.png">
+
+</head>
+<body>
+    <div class="header">
+		<h3>Settore Alimentare e Veterinario – Autovalutazione</h3>		
+    </div> 
+    <div style="padding: 3px">
+
+    <div class="w3-modal-content  w3-animate-zoom " style="max-width:400px; top:50px;">
+           <div class="w3-center">
+		   <video width="100%" autoplay loop> <source src="static/img/logo.mp4" type="video/mp4" /></video>
+        </div>
+		<div class="w3-container" style=" background: linear-gradient(to bottom, #0574d2 -3%, #00040a 94%);">
+            <div style="color: brown;">{{.Errore}}</div>
+        <form class="w3-container" action="/login" method="post" id="loginForm">
+            <div class="w3-section">
+                <!--<input class="w3-input w3-border w3-margin-bottom w3-round" id="user" type="text" placeholder="Username"  name="user" required style="background:#e2e9ff;">
+                <input class="w3-input w3-border w3-round" id="password" type="password" placeholder="Password" name="password" required  style="background:#e2e9ff;">
+                <button class="w3-button w3-section w3-padding w3-border w3-round w3-right w3-text-white" type="submit">Login OSA registrati</button>
+                <input class="w3-input w3-border w3-margin-bottom w3-round" id="cfSpid" type="text" placeholder="cfSpid"  name="cfSpid" style="background:#e2e9ff;">
+                <button class="w3-button w3-section w3-padding w3-border w3-round w3-right w3-text-white" type="submit">Login TEST CF</button>-->
+                <button class="w3-button w3-section w3-padding w3-border w3-round w3-right w3-text-white" onclick="GisaSpid.entraConSpid(event, 'loginForm', null, null, null)">Accesso tramite Spid/CIE (Utenti registrati)</button>
+                <button class="w3-button w3-section w3-padding w3-border w3-round w3-right w3-text-white" onclick="accessoPubblico(event)">Accesso come ospite</button>
+                <button class="w3-button w3-section w3-padding w3-round w3-right w3-text-white" onclick="openWindow(event, 'http://www.gisacampania.it/moduloSpid/ManualeModuloPre-reg_rev10.pdf')">Come registrarsi all’Ecosistema GISA</button>
+                <button class="w3-button w3-section w3-padding w3-round w3-right w3-text-white" onclick="openWindow(event, 'http://www.gisacampania.it/moduloSpid/index.php')">Registrati all'Ecosistema GISA</button>
+                <button class="w3-button w3-section w3-padding w3-round w3-right w3-text-white" onclick="openWindow(event, '/static/Autovalutazione_Pagina Informativa.pdf?v3')">Che cos'è l'Autovalutazione?</button>
+                <button class="w3-button w3-section w3-padding w3-round w3-right w3-text-white" onclick="openWindow(event, 'https://sca.gisacampania.it/informativaPrivacy/')">Informativa privacy</button>
+
+            </div>
+        </form>
+    </div>
+	</div>
+
+</body>
+</html>
+<!-- login.html -->
+<script>
+
+function miaFunzione(data){
+    console.log(data);
+    alert(JSON.stringify(data));
+}
+
+function accessoPubblico(event){
+    event.preventDefault();
+    location.href='/public'
+}
+
+function openWindow(event, url){
+    event.preventDefault();
+    window.open(url);
+}
+
+</script>

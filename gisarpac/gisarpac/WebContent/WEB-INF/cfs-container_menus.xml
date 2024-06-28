@@ -63,6 +63,28 @@
 	
     </container>
     
+    
+    
+    <container name="aua">
+	
+    	<properties>
+     		 <icon>images/icons/stock_account-16.gif</icon>
+<label>${ragioneSociale} - ${numero_registrazione}</label>
+    	</properties>
+    	
+    	 <submenu name="details">
+      <long_html value="Scheda"/>
+      <permission value=""/>
+     <link value="StabilimentoAUA.do?command=Details&amp;stabId=${stabId}"/>
+    </submenu>
+ 
+			<submenu name="Allegati">
+     	 	<long_html value="Allegati"/>
+      		<permission value="documentale_documents-view"/>
+      		<link value="GestioneAllegatiUpload.do?command=ListaAllegati&amp;op=aua&amp;jsonEntita=&#123;'idStabilimentoAUA':'${stabId}'&#125;"/> 
+      		</submenu>
+	
+    </container>
   
 	
 	<container name="suap">

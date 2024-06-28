@@ -87,7 +87,7 @@ function filtra(index) {
 
 <table class="tableguru" width="100%" id="myTable">
 
-<tr><th>Username<br/><input type="text" id="filtro0" onkeyup="filtra(0)" placeholder="FILTRA ..."><th>Alias<br/><input type="text" id="filtro1" onkeyup="filtra(1)" placeholder="FILTRA ..."></th><th>Nome</th><th>Cognome<br/><input type="text" id="filtro2" onkeyup="filtra(2)" placeholder="FILTRA ..."></th><th>Codice fiscale<br/><input type="text" id="filtro3" onkeyup="filtra(3)" placeholder="FILTRA ..."></th><th>DIPARTIMENTO</th><th>Ruolo</th><th></th></tr>
+<tr><th>Username<br/><input type="text" id="filtro0" onkeyup="filtra(0)" placeholder="FILTRA ..."><th>Alias<br/><input type="text" id="filtro1" onkeyup="filtra(1)" placeholder="FILTRA ..."></th><th>Nome</th><th>Cognome<br/><input type="text" id="filtro3" onkeyup="filtra(3)" placeholder="FILTRA ..."></th><th>Codice fiscale<br/><input type="text" id="filtro4" onkeyup="filtra(4)" placeholder="FILTRA ..."></th><th>DIPARTIMENTO</th><th>Ruolo</th><th></th></tr>
 
 <%
 	for (int i = 0; i<listaUtenti.size(); i++){

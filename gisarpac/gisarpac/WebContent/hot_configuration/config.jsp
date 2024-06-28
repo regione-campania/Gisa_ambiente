@@ -10,6 +10,8 @@ Configurazione a caldo
 </tr>
 </table>
 
+<center><a href="HotConfiguration.do?command=DashboardNew">Configurazione a caldo 2.0</a></center><br/><br/>
+
 <form name="configForm" action="HotConfiguration.do?command=Config" method="post">
 
 <% TreeSet<Object> chiavi = new TreeSet<Object>( ApplicationProperties.getApplicationProperties().keySet() ); %>

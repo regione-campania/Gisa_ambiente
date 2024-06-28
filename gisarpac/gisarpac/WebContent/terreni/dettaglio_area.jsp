@@ -73,16 +73,16 @@ Dettaglio Area
 </tr>
 <tr>
 	<td class="formLabel">DATI CATASTALI</td>
-	<td><b>FOGLIO</b> <%= area.getFoglioCatastale() %> - <b>PARTICELLA</b> <%= area.getParticellaCatastale() %></td>
+	<td><b>SEZIONE</b> <%= area.getSezione() != null ? area.getSezione() : "" %> - <b>FOGLIO</b> <%= area.getFoglioCatastale() %> - <b>PARTICELLA</b> <%= area.getParticellaCatastale() %></td> 
 </tr>
 <tr>
 	<td class="formLabel">CLASSE DI RISCHIO</td>
 	<td><%= area.getClasseRischio() %></td>
 </tr>
-<tr>
-	<td class="formLabel">COORDINATE</td>
-	<td> <b>X</b> <%= area.getCoordinateX() %> - <b>Y</b> <%= area.getCoordinateY() %></td>
-</tr>
+<!-- <tr> -->
+<!-- 	<td class="formLabel">COORDINATE</td> -->
+<%-- 	<td> <b>X</b> <%= area.getCoordinateX() %> - <b>Y</b> <%= area.getCoordinateY() %></td> --%>
+<!-- </tr> -->
 <tr>
 	<td class="formLabel">AREA (mq)</td>
 	<td><%= area.getArea() %></td>
@@ -109,10 +109,7 @@ Subparticella sub = (Subparticella) area.getListaSubparticelle().get(i); %>
 	<td class="formLabel">Codice Sito</td>
 	<td> <a href="Terreni.do?command=DetailsSubparticella&id=<%=sub.getId()%>"><%=sub.getCodiceSito() %></a></td>
 </tr>
-<tr>
-	<td class="formLabel">SEZIONE</td>
-	<td><%= sub.getSezione() %></td>
-</tr>
+
 <tr>
 	<td class="formLabel">AGGIUNTA IL</td>
 	<td><%=  fixData(sub.getEntered().toString()) %></td>

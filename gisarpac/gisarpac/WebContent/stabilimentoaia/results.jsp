@@ -237,11 +237,7 @@
           </div>
         </th>  
         
-         <th <% ++columnCount; %>>
-   		  <div align="center">
-          <strong><dhv:label name="">Norma di Riferimento / Tipologia</dhv:label></strong>
-          </div>
-        </th>  
+        
         
       
      
@@ -276,7 +272,14 @@
 	
 		 
     for(i=0; i<StabilimentiList.size(); i++){
+		RicercaAIA thisStabCompare = null;
 		RicercaAIA thisStab = (RicercaAIA)StabilimentiList.get(i);
+		if (i>0){
+		 thisStabCompare = (RicercaAIA)StabilimentiList.get(i-1);
+		}else{
+		 thisStabCompare = null;
+		}
+		if(i==0 || thisStabCompare.getRiferimentoId() != thisStab.getRiferimentoId()){
 %>
 
   <tr  class="row1">
@@ -284,7 +287,7 @@
 	<td  valign="center" align="center" style="width: 15%;">
 	<div >
 <%-- 	<a onclick="intercettaAction('<%=temp.getURlDettaglioanagrafica()+".do?command=Details&"+StabilimentiList.getRiferimentoIdNome()+"="+StabilimentiList.getRiferimentoId() %>')" id="<%= toHtml(StabilimentiList.getRagioneSociale().toUpperCase()) %>" href="#"><%= toHtml(StabilimentiList.getRagioneSociale().toUpperCase()) %></a> --%>
-		<a  id="<%= toHtml(thisStab.getRagioneSociale().toUpperCase()) %>" href="StabilimentoAIA.do?command=Details&idFarmacia=<%=thisStab.getRiferimentoId() %>&opId=<%=thisStab.getRiferimentoId() %>&<%=thisStab.getRiferimentoIdNome()%>=<%=thisStab.getRiferimentoId()%><%=(thisStab.getTipologia()== 1999) ? "&container=archiviati" : "" %>"><%=  toHtml(thisStab.getRagioneSociale().toUpperCase()) %></a>	
+		<a  id="<%= toHtml(thisStab.getRagioneSociale().toUpperCase()) %>" href="StabilimentoAIA.do?command=Details&<%=thisStab.getRiferimentoIdNome()%>=<%=thisStab.getRiferimentoId()%><%=(thisStab.getTipologia()== 1999) ? "&container=archiviati" : "" %>"><%=  toHtml(thisStab.getRagioneSociale().toUpperCase()) %></a>	
 	
 	</div>
 	</td>
@@ -341,7 +344,7 @@
 	
 <td valign="center" align="center" nowrap style="width: 5%;">
     <div  >
-    <%System.out.println("CODICE LINEA: "+thisStab.getN_linea()); %>
+    <%System.out.println("CODICE IPPC: "+thisStab.getN_linea()); %>
    <span style="text-transform:none"><%= thisStab.getN_linea() %></span>
    
    <%= thisStab.getMatricola()!=null && !"".equals(thisStab.getMatricola()) ?  ("<br/>MATRICOLA/<br/>NUMERO IDENTIFICATIVO:<b>"+toHtml2(thisStab.getMatricola()) ) : ""   %>
@@ -352,21 +355,9 @@
         
 
        	
-    <td valign="center" align="center" nowrap style="width: 5%;">
-    <div >
-   <%= toHtml2(thisStab.getNorma()) %>
-   <%
-   if(thisStab.getRiferimentoIdNomeTab().equalsIgnoreCase("suap_ric_scia_stabilimento"))
-   {
-	   %>
-	   <br>(PRATICA IN ITINERE)
-	   <%
-   }
-   %>
-   </div>
-    </td>
+   
     
-        <td valign="left" align="left"  nowrap style="width: 15px;" title="<%=  (thisStab.getAttivita()!=null ) ? ( toHtml2(thisStab.getAttivita()) ) : "" %>">
+        <td valign="left" align="left" id="stab_<%=thisStab.getRiferimentoId()%>" nowrap style="width: 15px;" title="<%=  (thisStab.getAttivita()!=null ) ? ( toHtml2(thisStab.getAttivita()) ) : "" %>">
         <%
         if(thisStab.getAttivita()!=null && thisStab.getAttivita().contains("->")  )
         {
@@ -392,21 +383,63 @@
         		if(thisStab.getAttivita()!=null )
         			out.print(thisStab.getAttivita() +"<br>");
         		else
-        			out.print("LINEA NON SPECIFICATA");
+        			out.print("CODICE IPPC NON SPECIFICATO");
         }
         if(thisStab.getAttivita()!=null )
         {
        %>
         
         <img  style="width:15px" src="images/questionmark.png"></img>
-        <%} %>
-        </td>
-      
-      	<td valign="center" align="center"  nowrap style="width: 15%;"><%= toHtml2(thisStab.getStato())  %> <%= toHtml2(thisStab.getStatoImpresa())  %> </td>
+       </td>
+       <td valign="center" align="center"  nowrap style="width: 15%;"><%= toHtml2(thisStab.getStato())  %> <%= toHtml2(thisStab.getStatoImpresa())  %> </td>
       	
   
 	
   </tr>
+        <%}}else{%>
+       
+       <script>
+       document.getElementById("stab_<%=thisStab.getRiferimentoId()%>").InnerText=<%
+           if(thisStab.getAttivita()!=null && thisStab.getAttivita().contains("->")  )
+           {
+           String[] lineaA = thisStab.getAttivita().split("->");
+           for(int indice=0;indice<lineaA.length;indice++)
+           {
+           	
+           	if(lineaA[indice].length()>50)
+           	{
+           	out.print("\""+lineaA[indice].substring(0,50)+" ..." +"\n\"");
+           	}
+           	else
+           		out.print("\""+lineaA[indice] +"\n\"");
+           }
+           }
+           else
+           {
+           	if(thisStab.getAttivita()!=null && thisStab.getAttivita().length()>50)
+           	{
+           	out.print("\""+thisStab.getAttivita().substring(0,40)+" ..." +"\n\"");
+           	}
+           	else
+           		if(thisStab.getAttivita()!=null )
+           			out.print("\""+thisStab.getAttivita() +"\n\"");
+           		else
+           			out.print("CODICE IPPC NON SPECIFICATO");
+           }
+           %>
+          
+       
+       
+       
+       
+       </script>
+       
+       
+       
+       
+       <%} %>
+      
+      	
        	
    
     <script>

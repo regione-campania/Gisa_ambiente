@@ -115,6 +115,20 @@ function recuperaCodPreaccettazioneCallBack(returnValue)
 		document.getElementById("divAssociaPreaccettazione").style.display="block";
 	}  
 }
+
+function recuperaEsitoPreaccettazione(codPreaccettazione){
+	DwrPreaccettazione.Preaccettazione_Ritorno_Da_Laboratorio(codPreaccettazione, <%=idUtente%>, 1, {callback:recuperaEsitoPreaccettazioneCallBack,async:false});
+}
+function recuperaEsitoPreaccettazioneCallBack(returnValue)
+{
+	var dati = returnValue;
+	if(dati != ""){
+			document.getElementById("divEsitoPreaccettazione").innerHTML = dati;
+		}  else {
+			document.getElementById("divEsitoPreaccettazione").innerHTML = "<input type=\"button\" value=\"VERIFICA E SCARICA ESITO\" onClick=\"loadModalWindow();recuperaEsitoPreaccettazione(document.getElementById('divCodicePreaccettazione').innerHTML); loadModalWindowUnlock();\"/>";
+		}  
+	
+}
 </script>
 
 
@@ -129,6 +143,8 @@ function recuperaCodPreaccettazioneCallBack(returnValue)
 <table class="details" cellpadding="10" cellspacing="10" width="40%">
 <tr><th align="center"><center>Codice Preaccettazione</center></th></tr>
 <tr><td align="center"><div id ="divCodicePreaccettazione" name="divCodicePreaccettazione"></div></td></tr>
+<tr><th align="center"><center>Esito</center></th></tr>
+<tr><td align="center"><output id ="divEsitoPreaccettazione" name="divEsitoPreaccettazione"></output></td></tr>
 </table>
 </center>
 <br/><br/>
@@ -138,5 +154,6 @@ function recuperaCodPreaccettazioneCallBack(returnValue)
 <script>
 window.onload = function() {
 recuperaCodPreaccettazione(document.getElementById("idCampione").value);
+recuperaEsitoPreaccettazione(document.getElementById("divCodicePreaccettazione").innerHTML);
 }
 </script>

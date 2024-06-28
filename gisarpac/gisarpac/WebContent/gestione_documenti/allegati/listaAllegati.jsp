@@ -20,6 +20,8 @@
 
 <jsp:useBean id="ImpresaAIADettaglio" class="org.aspcfs.modules.aia.base.ImpresaAIA" scope="request"/>
 <jsp:useBean id="StabilimentoAIADettaglio" class="org.aspcfs.modules.aia.base.StabilimentoAIA" scope="request"/>
+<jsp:useBean id="ImpresaAUADettaglio" class="org.aspcfs.modules.aua.base.ImpresaAUA" scope="request"/>
+<jsp:useBean id="StabilimentoAUADettaglio" class="org.aspcfs.modules.aua.base.StabilimentoAUA" scope="request"/>
 <jsp:useBean id="SubparticellaDettaglio" class="org.aspcfs.modules.terreni.base.Subparticella" scope="request"/>
 
 
@@ -112,7 +114,10 @@ if (StabilimentoAIADettaglio!=null && StabilimentoAIADettaglio.getIdStabilimento
 else if (SubparticellaDettaglio!=null && SubparticellaDettaglio.getId()>0){
 	param = "id="+SubparticellaDettaglio.getId();
 	obj = "SubparticellaDettaglio";
-} 
+} else if (StabilimentoAUADettaglio!=null && StabilimentoAUADettaglio.getIdStabilimento()>0){
+	param = "stabId="+StabilimentoAUADettaglio.getIdStabilimento();
+	obj = "StabilimentoAUADettaglio";
+}
 %>	
 
 <dhv:container name="<%=op %>" selected="Allegati" object="<%=obj %>" param="<%= param %>">
@@ -212,7 +217,7 @@ Carica file</a>
 			 
 			<td>CARTELLA</td>
 			<td><%= fixData(doc.getDataCreazione()) %></td> 
-			<td> <dhv:username id="<%= doc.getUserId() %>" /></td> 
+			<td> </td> 
 			
 			<td>
 			<dhv:permission name="documentale_documents-edit">
@@ -268,7 +273,7 @@ Carica file</a>
 			</td> 
 			<td><%=(doc.getEstensione()!=null && !doc.getEstensione().equals("null")) ? doc.getEstensione() : "&nbsp;"%></td>
 			<td><%= fixData(doc.getDataCreazione()) %></td> 
-			<td> <dhv:username id="<%= doc.getUserId() %>" /></td> 
+			<td></td> 
 			<td>
 			<dhv:permission name="documentale_documents-delete">
 			<form action="GestioneAllegatiUpload.do?command=GestisciFile" id="formEliminaFile" method="post">

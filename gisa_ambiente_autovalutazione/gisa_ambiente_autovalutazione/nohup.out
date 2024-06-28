@@ -1,0 +1,23 @@
+main connecting to:   host=dbGISAL port=5432 user=postgres dbname=autovalutazione password=postgres sslmode=disable
+[INFO] 2024/03/29 16:02 
+ ========================== 
+ Config file {
+    "isHttps": "false",
+    "port":"8443",
+    "sslCert": "ssl/gisacampania.it.cer",
+    "sslKey": "ssl/gisacampania.it.key",
+    "dbUrl":"dbGISAL",
+    "dbName":"autovalutazione",
+    "dbUsr":"postgres",
+    "dbPwd":"postgres",
+    "dbPort":"5432",
+    "endPointDocumentale":"http://srvDOCUMENTALEL/serverDocumentale/UploadFile",
+    "endPointLogin":"http://srvDOCUMENTALEL/ServiziTrasversali/All/Utenti/Validategiava",
+    "endPointSpid":"https://gel.gisacampania.it/js/GisaSpid.js"
+}
+
+ 
+Iris Version: 12.2.0
+
+Now listening on: http://localhost:8443
+Application started. Press CTRL+C to shut down.

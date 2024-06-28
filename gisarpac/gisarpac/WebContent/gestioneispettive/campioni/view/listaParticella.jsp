@@ -4,6 +4,7 @@
 
 <jsp:useBean id="Anagrafica" class="org.aspcfs.modules.terreni.base.Subparticella" scope="request"/>
 <jsp:useBean id="jsonCampioni" class="org.json.JSONArray" scope="request"/>
+<jsp:useBean id="Messaggio" class="java.lang.String" scope="request"/>
 
 <%@ page import="org.aspcfs.modules.gestioneispettive.base.*"%>
 <%@ page import="org.json.*"%>
@@ -42,6 +43,13 @@ function openPopupLarge(url){
 	  
   }%>
   
+  
+  <% if (Messaggio != null && !Messaggio.equals("") && !Messaggio.equals("null") && !Messaggio.equals("")){ %>
+  <script>
+  alert("<%=Messaggio%>");
+  </script>
+  <%} %>
+  
 <table class="details" cellpadding="10" cellspacing="10" width="100%">
 <col width="20%">
 
@@ -79,7 +87,8 @@ if (jsonCampioni.length()>0) {
 <td><%=fixData(jsonCampione.get("dataInserimento")) %></td>
 </tr>
 <%} } else {%>
-<tr><td colspan="5">Non sono presenti campionamenti.</td></tr>
+<tr><td colspan="5" align="center">Non sono presenti campionamenti.</td></tr>
+<tr><td colspan="5" align="center"><a href="GestioneCampioni.do?command=AddParticella&idSubparticella=<%=Anagrafica.getId() %>">Aggiungi campionamento</a></td></tr>
 <%} %>
 
 </table>

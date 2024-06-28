@@ -9,9 +9,10 @@ import java.util.ArrayList;
 public class TipoAnalisi {
 	
 	private int id = -1;
-	private String livello1 = "";
-	private String livello2 = "";
-	private String livello3 = "";
+	private String prodotto = "";
+	private String metodi = "";
+	private String prova = "";
+	private String um = "";
 
 	public TipoAnalisi() {
 		// TODO Auto-generated constructor stub
@@ -24,9 +25,11 @@ public class TipoAnalisi {
 
 	private void buildRecord(ResultSet rs) throws SQLException{
 		this.id = rs.getInt("id");
-		this.livello1 = rs.getString("livello1");
-		this.livello2 = rs.getString("livello2");
-		this.livello3 = rs.getString("livello3");
+		this.prodotto = rs.getString("prodotto");
+		this.metodi = rs.getString("metodi");
+		this.prova = rs.getString("prova");
+		this.setUm(rs.getString("um"));
+
 	}
 
 
@@ -34,7 +37,7 @@ public class TipoAnalisi {
 		ArrayList<TipoAnalisi> lista = new ArrayList<TipoAnalisi>();
 		try
 		{
-			String select = "select * from public.get_tipi_analisi();"; 
+			String select = "select * from public.get_tipi_analisi_new();"; 
 			PreparedStatement pst = null ;
 			ResultSet rs = null;
 			pst = db.prepareStatement(select);
@@ -61,33 +64,43 @@ public class TipoAnalisi {
 	}
 
 
-	public String getLivello1() {
-		return livello1;
+	public String getProdotto() {
+		return prodotto;
 	}
 
 
-	public void setLivello1(String livello1) {
-		this.livello1 = livello1;
+	public void setProdotto(String livello1) {
+		this.prodotto = livello1;
 	}
 
 
-	public String getLivello2() {
-		return livello2;
+	public String getMetodi() {
+		return metodi;
 	}
 
 
-	public void setLivello2(String livello2) {
-		this.livello2 = livello2;
+	public void setMetodi(String livello2) {
+		this.metodi = livello2;
 	}
 
 
-	public String getLivello3() {
-		return livello3;
+	public String getProva() {
+		return prova;
 	}
 
 
-	public void setLivello3(String livello3) {
-		this.livello3 = livello3;
+	public void setProva(String livello3) {
+		this.prova = livello3;
+	}
+
+
+	public String getUm() {
+		return um;
+	}
+
+
+	public void setUm(String um) {
+		this.um = um;
 	}
 
 	

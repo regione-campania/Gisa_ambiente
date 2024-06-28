@@ -24,7 +24,6 @@ public class Subparticella implements Serializable{
 	private int id;
 	private int idPadre;
 	private String codiceSito;
-	private String sezione;
 	private Timestamp entered;
 	private int enteredBy;
 	
@@ -35,7 +34,7 @@ public class Subparticella implements Serializable{
 	}
 	
 	public Subparticella(Connection db, int id) throws SQLException {
-		PreparedStatement pst = db.prepareStatement("select * from get_dettaglio_particella(?)"); 
+		PreparedStatement pst = db.prepareStatement("select * from get_dettaglio_particella(?)");  
 		pst.setInt(1, id);
 		ResultSet rs = pst.executeQuery();
 		if (rs.next()){
@@ -55,14 +54,12 @@ public class Subparticella implements Serializable{
 	public Subparticella(ActionContext context) {
 		codiceSito = context.getRequest().getParameter("codiceSito");
 		idPadre = Integer.parseInt(context.getRequest().getParameter("idArea"));
-		sezione = context.getRequest().getParameter("sezione");
 	}
 
 	private void buildRecord(ResultSet rs) throws SQLException {
 		id = rs.getInt("id");
 		idPadre = rs.getInt("id_padre");
 		codiceSito = rs.getString("codice_sito");
-		sezione = rs.getString("sezione");
 		entered = rs.getTimestamp("entered");
 		enteredBy = rs.getInt("entered_by");		
 	}
@@ -86,13 +83,6 @@ public class Subparticella implements Serializable{
 	
 	
 
-	public String getSezione() {
-		return sezione;
-	}
-
-	public void setSezione(String sezione) {
-		this.sezione = sezione;
-	}
 
 	public Timestamp getEntered() {
 		return entered;
@@ -144,12 +134,11 @@ public class Subparticella implements Serializable{
 
 	public void insert(Connection db, int userId) throws SQLException {
 		PreparedStatement pst = null;
-		String sql = "select * from insert_subparticella(?, ?, ?, ?);";
+		String sql = "select * from insert_subparticella(?, ?, ?);";
 		pst = db.prepareStatement(sql);
 		int i = 0;
 		pst.setInt(++i, idPadre);
 		pst.setString(++i, codiceSito);
-		pst.setString(++i, sezione);
 		pst.setInt(++i, userId);
 		
 		ResultSet rs = pst.executeQuery();
@@ -161,13 +150,12 @@ public class Subparticella implements Serializable{
 	
 	public void update(Connection db, int userId) throws SQLException {
 		PreparedStatement pst = null;
-		String sql = "select * from update_subparticella(?, ?, ?, ?, ?);";
+		String sql = "select * from update_subparticella(?, ?, ?, ?);";
 		pst = db.prepareStatement(sql);
 		int i = 0;
 		pst.setInt(++i, id);
 		pst.setInt(++i, idPadre);
 		pst.setString(++i, codiceSito);
-		pst.setString(++i, sezione);
 		pst.setInt(++i, userId);
 		
 		ResultSet rs = pst.executeQuery();

@@ -46,7 +46,19 @@ Giornata Ispettiva
 </tr>
 </table>
 <br/> 
-  
+
+<input type="button" hidden id="chiudiGiornata" onclick="" value="Chiudi giornata"/>
+<div id="dialog" style="display: none;">
+  <p>Inserisci la data e l'ora:</p>
+  <label for="dataFine">Data Fine:</label>
+  <input type="date" id="dataFine" required><br>
+  <script>document.getElementById("dataFine").max = new Date().toISOString().split("T")[0];</script>
+  <label for="oraFine">Ora Fine:</label>
+  <input type="time" id="oraFine" required>
+</div>
+
+<br><br/>
+
   
 <%@ include file="../verbali/elenco.jsp" %>
 
@@ -80,10 +92,11 @@ if (jsonDipartimento.length()>0) {%>
 <% if ( ((JSONObject) jsonGiornataIspettiva).has("Dati")) { %>
 <% JSONObject jsonDati = (JSONObject) jsonGiornataIspettiva.get("Dati");
 if (jsonDati.length()>0) {%>
-<tr><td class="formLabel">Data inizio </td><td><%=fixData(jsonDati.get("dataInizio"))%></td></tr>
-<tr><td class="formLabel">Ora inizio </td><td><%=jsonDati.get("oraInizio")%></td></tr>
-<tr><td class="formLabel">Data fine </td><td><%=fixData(jsonDati.get("dataFine") != null ? jsonDati.get("dataFine") : "")%></td></tr>
+<tr><td class="formLabel">Data inizio </td><td id="dataInzio"><%=fixData(jsonDati.get("dataInizio"))%></td></tr>
+<tr><td class="formLabel" >Ora inizio </td><td id="oraInizio"><%=jsonDati.get("oraInizio")%></td></tr>
+<tr><td class="formLabel">Data fine </td><td ><%=fixData(jsonDati.get("dataFine") != null ? jsonDati.get("dataFine") : "")%></td></tr>
 <tr><td class="formLabel">Ora fine </td><td><%=jsonDati.get("oraFine")%></td></tr>
+
 <tr><td class="formLabel">Note </td><td><%=jsonDati.get("note")%></td></tr>
 
 <%} } %>
@@ -102,7 +115,7 @@ JSONObject jsonPerContoDi1 = (JSONObject) jsonPerContoDi.get(i);%>
 <% if ( ((JSONObject) jsonGiornataIspettiva).has("Linee")) { %>
 <% JSONArray jsonLinee = (JSONArray) jsonGiornataIspettiva.get("Linee"); 
 if (jsonLinee.length()>0) {%>
-<tr><td class="formLabel">Linee sottoposte </td><td>
+<tr><td class="formLabel">Codici IPPC sottoposti </td><td>
 <% for (int i = 0; i<jsonLinee.length(); i++) {
 JSONObject jsonLinea = (JSONObject) jsonLinee.get(i);%>
 <%=jsonLinea.get("nome") %><br/><br/>
@@ -153,7 +166,7 @@ if (jsonGruppoIspettivo.length()>0) {%>
 for (int i = 0; i<jsonGruppoIspettivo.length(); i++) {
 JSONObject jsonComponente = (JSONObject) jsonGruppoIspettivo.get(i);
 %>
-<%=jsonComponente.get("nominativo") %> - <%=jsonComponente.get("struttura") %> <%=Boolean.TRUE.equals(jsonComponente.get("referente")) ? "(<b>Incaricato di Funzione</b>)" : "" %> <%=Boolean.TRUE.equals(jsonComponente.get("responsabile")) ? "(<b>Responsabile Procedimento</b>)" : "" %> <br/><br/>
+<%=jsonComponente.get("nominativo") %> - <%=jsonComponente.get("descrizioneAreaSemplice") %> <%=Boolean.TRUE.equals(jsonComponente.get("referente")) ? "(<b>Incaricato di Funzione</b>)" : "" %> <%=Boolean.TRUE.equals(jsonComponente.get("dirigente")) ? "(<b>Dirigente Coordinatore</b>)" : "" %> <br/><br/>
 <% } %>
 </td></tr>
 <%} }%>
@@ -202,8 +215,97 @@ if (jsonCampiServizio.length()>0) {%>
 <tr><td class="formLabel">Stato </td><td><%=jsonCampiServizio.get("stato")%></td></tr>
 <tr><td class="formLabel">Inserita da</td><td><%=jsonCampiServizio.get("utenteInserimento")%></td></tr>
 <tr><td class="formLabel">Inserita il </td><td><%=fixData(jsonCampiServizio.get("dataInserimento"))%></td></tr>
-<%} } %>
 
+<script>
+if("<%=jsonCampiServizio.get("stato")%>" =="Aperto"){
+	$(document).ready(function() {
+		  $("#chiudiGiornata").on("click", function() {
+		    $("#dialog").dialog({
+		      buttons: {
+		        "Conferma": function() {
+		          var dataFine = $("#dataFine").val();
+		          var oraFine = $("#oraFine").val();
+		          
+		          
+		          if (!dataFine || !oraFine) {
+		              alert("Entrambi i campi sono obbligatori.");
+		              return;
+		            }
+		            
+		            var oraInizio =document.getElementById("oraInizio").innerText
+		            var dataInizio =document.getElementById("dataInzio").innerText
+		            function invertiFormatoData(data) {
+		                var parti = data.split("/");
+		                return parti[1] + "/" + parti[0] + "/" + parti[2];
+		            }
+		            function convertiFormatoData(data) {
+		                // Dividi la data in parti usando il separatore '/'
+		                var parti = data.split("/");
+		                // Riorganizza le parti per ottenere il formato desiderato YYYY-MM-DD
+		                var dataYYYYMMDD = parti[2] + "-" + parti[0] + "-" + parti[1];
+		                return dataYYYYMMDD;
+		            }
+						
+						var dateObj1 = new Date(invertiFormatoData(dataInizio));
+						var dateObj2 = new Date(dataFine);
+						
+						console.log(dataInizio)
+
+						console.log(convertiFormatoData(invertiFormatoData(dataInizio)))
+						console.log(dataFine)
+						// Verifica se le date sono valide
+						if (isNaN(dateObj1.getTime()) || isNaN(dateObj2.getTime())) {
+						    console.log("Una delle date non è valida.");
+						} else {
+						    // Confronta le date
+						    if (dateObj1 > dateObj2) {
+						              alert("La data fine non puo' essere inferiore di data inizio.");
+						              return;
+						    	} else if (dateObj1 < dateObj2 && convertiFormatoData(invertiFormatoData(dataInizio)) != dataFine) {
+						    		console.log("deb")
+						    		}else{
+							    		
+						    		
+						}
+						}
+		              if(convertiFormatoData(invertiFormatoData(dataInizio)) == dataFine)
+		            	  {
+		            	  console.log("deb1")
+
+			    			if (oraFine < oraInizio ) {
+					              alert("L'ora fine non può essere minore dell'ora inizio.");
+					              return;
+					            }		
+		            	  }
+		          
+		          
+		          
+		          var conferma = confirm("Confermi i valori inseriti?\nData Fine: " + dataFine + "\nOra Fine: " + oraFine);
+		          if (conferma) {
+		            var url = "GestioneGiornateIspettive.do?command=Close&idGiornataIspettiva=<%=jsonCampiServizio.get("idGiornataIspettiva")%>&dataFine=" + encodeURIComponent(dataFine) + "&oraFine=" + encodeURIComponent(oraFine);
+		            window.location.href = url;
+		          } else {
+		            alert("Operazione annullata.");
+		          }
+		          $(this).dialog("close");
+		        },
+		        "Annulla": function() {
+		          $(this).dialog("close");
+		        }
+		      }
+		    });
+		  });
+		});
+	            
+document.getElementById("chiudiGiornata").removeAttribute("hidden");
+
+}else{
+	document.getElementById("verbale").removeAttribute("hidden");
+
+}
+</script>
+
+<%} } %>
 
 </table>
 <!-- RIEPILOGO -->

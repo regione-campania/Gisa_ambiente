@@ -74,7 +74,7 @@ function listaLineaAttivita(){
    	codiceHtml = codiceHtml + '<table width= 100% id="tabCodPreacc" border = "2" cellpadding="5" cellspacing="5" class="details">' +
 			'<tr>' +
  				//'<th>numero linea</th>' +
-				'<th>attivita</th> ' +
+				'<th>codice ippc</th> ' +
 				'<th align="center" width= 20%>seleziona</th>' +
 			'</tr>';
    	var i;
@@ -193,7 +193,7 @@ $(function() {
        	   
        	   var codiceVuoto = '<table width= 100% id="tabCodPreacc" border = "2" cellpadding="5" cellspacing="5" class="details">' +
 								'<tr>' +
-								'<th>attivita</th> ' +
+								'<th>codice ippc</th> ' +
 								'<th align="center" width= 20%>seleziona</th>' +
 								'</tr>' + '</table><font color="red">* ' + 
 				 				 'Attenzione! prima di consegnare il campione al laboratorio' +
@@ -203,7 +203,7 @@ $(function() {
 				 				 '<input type="button" value="Visualizza lista codici preaccettazione utilizzabili" onclick="apriListaCodici();">' + 
 				 				 '<br><br><font color="red">' + 
 				 				 '* Attenzione! Cliccando sul tasto "Visualizza lista codici preaccettazione utilizzabili" '+
-				 				 'verranno visualizzati i codici prenotati rispetto alla linea di attività dello stabilimento' + 
+				 				 'verranno visualizzati i codici prenotati rispetto al codice ippc dello stabilimento' + 
 				 				 ' ma non ancora associati ad alcun campione. </font>';
        	   if (codiceVuoto == codiceHtml){
        		   alert("ATTENZIONE! Ci sono codici ippc pregressi. Aggiornarle prima di generare un nuovo codice di preaccettazione!");
@@ -239,7 +239,7 @@ $(function() {
        				   alert('OPERAZIONE FALLITA');
        			   $( this ).dialog( "close" );
         	   }else {
-        		   alert('SELEZIONARE UNA LINEA DI ATTIVITA E UN LABORATORIO O ANNULLARE OPERAZIONE');
+        		   alert('SELEZIONARE UN CODICE IPPC E UN LABORATORIO O ANNULLARE OPERAZIONE');
         	   }
 
                return true;
@@ -275,12 +275,12 @@ $(function() {
    		var len = obj.length;
 		
    		codiceHtmlListaLine = codiceHtmlListaLine + 
-   		'Codici prenotati rispetto alla linea di attività dello stabilimento ed al laboratorio ma non ancora associati ad alcun campione. <br>' + 
+   		'Codici prenotati rispetto al codice ippc dello stabilimento ed al laboratorio ma non ancora associati ad alcun campione. <br>' + 
    		'<table width= 100% id="tabCodPreacc" border = "2" cellpadding="5" cellspacing="5" class="details">' +
 		'<tr>' +
 			'<th>codice preaccettazione</th>' +
 			//'<th>numero linea</th>' +
-			'<th>attivita</th> ' +
+			'<th>codice ippc</th> ' +
 			'<th>data preaccettazione</th>' +
 			'<th>ente</th>' +
 			'<th>laboratorio</th>' +
@@ -306,7 +306,7 @@ $(function() {
 		'<tr>' +
 				'<th>codice preaccettazione</th>' +
 				//'<th>numero linea</th>' +
-				'<th>attivita</th> ' +
+				'<th>codice ippc</th> ' +
 				'<th>data preaccettazione</th>' +
 				'<th>ente</th>' +
 				'<th>laboratorio</th>' +

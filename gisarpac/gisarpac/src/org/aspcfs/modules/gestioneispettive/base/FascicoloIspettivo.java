@@ -78,19 +78,21 @@ public class FascicoloIspettivo {
 	}
 
 
-	public static String close(Connection db, int idFascicoloIspettivo, String dataChiusura, int annoProtocollo, int numeroProtocollo, String codAllegato, int userId) throws SQLException {
+	public static String close(Connection db, int idFascicoloIspettivo, String dataChiusura,String oraChiusura, int annoProtocollo, int numeroProtocollo, String codAllegato, int userId) throws SQLException {
 		// TODO Auto-generated method stub
 		String messaggio = null;
-		String select = "select * from public.fascicolo_ispettivo_close(?,?,?, ?, ?, ?)";  
+		String select = "select * from public.fascicolo_ispettivo_close(?,?,?, ?, ?, ?,?)";  
 		PreparedStatement pst = null ;
 		ResultSet rs = null;
 		pst = db.prepareStatement(select);
 		pst.setInt(1, idFascicoloIspettivo);
 		pst.setString(2, dataChiusura);
-		pst.setInt(3, annoProtocollo);
-		pst.setInt(4, numeroProtocollo);
-		pst.setString(5, codAllegato);
-		pst.setInt(6, userId);
+		pst.setString(3, oraChiusura);
+		pst.setInt(4, annoProtocollo);
+		pst.setInt(5, numeroProtocollo);
+		pst.setString(6, codAllegato);
+		pst.setInt(7, userId);
+		System.out.println("[GESTIONE FASCICOLO] [CLOSE] "+pst.toString());
 		rs = pst.executeQuery();
 		if (rs.next()){
 			messaggio = rs.getString(1);

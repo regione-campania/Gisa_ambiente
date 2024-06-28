@@ -102,20 +102,23 @@ function filtraRighe() {
 <br/>
 
 <table class="details" id ="tableTipoAnalisi" name="tableTipoAnalisi" cellpadding="10" cellspacing="10" width="70%" style="border-collapse: collapse">
-<tr><th colspan="4"><center><b>TIPO ANALISI</b></center></th></tr>
+<tr><th colspan="5"><center><b>TIPO ANALISI</b></center></th></tr>
 
 <tr>
-<th>Livello 1</th>
-<th>Livello 2</th>
-<th>Livello 3</th>
+<th>Prodotto</th>
+<th>Metodo</th>
+<th>Prova</th>
+<th>UM</th>
 <th></th>
 </tr>
 
 <tr>
-<th><input type="text" id="myInputLivello1" onkeyup="filtraRighe()" placeholder="FILTRA LIVELLO 1" style="width: 100%"></th>
-<th><input type="text" id="myInputLivello2" onkeyup="filtraRighe()" placeholder="FILTRA LIVELLO 2" style="width: 100%"></th>
-<th><input type="text" id="myInputLivello3" onkeyup="filtraRighe()" placeholder="FILTRA LIVELLO 3" style="width: 100%"></th>
+<th><input type="text" id="myInputLivello1" onkeyup="filtraRighe()" placeholder="FILTRA PRODOTTO" style="width: 100%"></th>
+<th><input type="text" id="myInputLivello2" onkeyup="filtraRighe()" placeholder="FILTRA METODI" style="width: 100%"></th>
+<th><input type="text" id="myInputLivello3" onkeyup="filtraRighe()" placeholder="FILTRA PROVA" style="width: 100%"></th>
 <th></th>
+<th></th>
+
 </tr>
 
 <% 
@@ -124,15 +127,16 @@ TipoAnalisi tipo = (TipoAnalisi) ListaTipiAnalisi.get(i); %>
 
 <tr>
 
-<td><%=tipo.getLivello1() %></td>
-<td><%=tipo.getLivello2() %></td>
-<td><%=tipo.getLivello3() %></td>
+<td><%=tipo.getProdotto() %></td>
+<td><%=tipo.getMetodi() %></td>
+<td><%=tipo.getProva() %></td>
+<td><%=tipo.getUm() %></td>
 
 <td>
 <input type="checkbox" id ="<%= tipo.getId()%>" name="tipoAnalisiId" value="<%= tipo.getId()%>"/>
-<input type="hidden" readonly id ="tipoAnalisiLivello1_<%= tipo.getId()%>" name ="tipoAnalisiLivello1_<%= tipo.getId()%>" value="<%= tipo.getLivello1() %>"/>
-<input type="hidden" readonly id ="tipoAnalisiLivello2_<%= tipo.getId()%>" name ="tipoAnalisiLivello2_<%= tipo.getId()%>" value="<%= tipo.getLivello2() %>"/>
-<input type="hidden" readonly id ="tipoAnalisiLivello3_<%= tipo.getId()%>" name ="tipoAnalisiLivello3_<%= tipo.getId()%>" value="<%= tipo.getLivello3() %>"/>
+<input type="hidden" readonly id ="tipoAnalisiProdotto_<%= tipo.getId()%>" name ="tipoAnalisiProdotto_<%= tipo.getId()%>" value="<%= tipo.getProdotto() %>"/>
+<input type="hidden" readonly id ="tipoAnalisiMetodi_<%= tipo.getId()%>" name ="tipoAnalisiMetodi_<%= tipo.getId()%>" value="<%= tipo.getMetodi() %>"/>
+<input type="hidden" readonly id ="tipoAnalisiProva_<%= tipo.getId()%>" name ="tipoAnalisiProva_<%= tipo.getId()%>" value="<%= tipo.getProva() %>"/>
 </td>
 
 <% } %>

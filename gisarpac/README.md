@@ -103,7 +103,9 @@ NOTA SU FIRMA GRAFOMETRICA
 Il sistema è interamente basato su componenti e librerie open source. 
 Le sole operazioni di firma sono state implementate utilizzando software proprietario (Namirial Firmacerta SDK) che in quanto non disponibile come open source,  non è in riuso. 
 
-
+- Gestione Terra dei fuochi - inserimento aree
+- Particelle 
+- Campionamento
 
 
 ## **1.1 Descrizione della struttura repository**
@@ -120,7 +122,7 @@ Le sole operazioni di firma sono state implementate utilizzando software proprie
  
 ## **1.2 Contesto di utilizzo e casi d’uso**
 
-Il contesto di utilizzo e casi d'uso del software sono descritti dettagliatamente nella [***Guida Utente***](https://ambiente.gisacampania.it/gisarpac/manuale/Manuale_Ambiente.pdf).
+Il contesto di utilizzo e casi d'uso del software sono descritti dettagliatamente nella [***Guida Utente***](https://gisaambiente-coll.regione.campania.it/gisarpac/manuale/Manuale_Ambiente.pdf).
 
 
 
@@ -132,20 +134,13 @@ Il contesto di utilizzo e casi d'uso del software sono descritti dettagliatament
 Le piattaforme abilitanti attualmente implementate in GISA Ambiente sono:
 
 - Autenticazione SPID/CIE
-- PagoPA
 
 
 ## **1.5 Interoperabilità con i sistemi esterni**
 
 1. SPID / CIE – Regione Campania
-1. PagoPA – Regione Campania
-1. Sigla IZSM 
 1. LIMS ARPAC 
-1. BDN Zootecnica
-1. SINVSA
-1. CLASSYFARM: autorizzazione detenzione scorta farmaci e invio checklist biosicurezza e farmacosorveglianza
-1. SINAAF
-1. BDA-N
+1. Piattaforma Sicr@Web
 1. ...
 
 La cooperazione applicativa con i sistemi esterni avviene mediante web services di tipo ***SOAP*** e ***REST***.
@@ -153,8 +148,7 @@ La cooperazione applicativa con i sistemi esterni avviene mediante web services 
 La cooperazione applicativa interna di ***GISA Ambiente*** avviene invece mediante ***microservices*** o ***DBI*** (***DataBase Interface***).
 
 ## **1.6 Link a pagine istituzionali relative al progetto**
-- [www.gisacampania.it](https://www.gisacampania.it)
-
+- [https://gisaambiente-coll.regione.campania.it/gisarpac/](https://gisaambiente-coll.regione.campania.it/gisarpac/)
 
 
 
@@ -503,7 +497,7 @@ Browser certificato : Mozilla Firefox 99.0.1
 
 U.S. s.r.l. 
 ## **6.2 Indirizzo e-mail segnalazioni di sicurezza**
-Ogni segnalazione di eventuali problemi di sicurezza o bug relativo al software presente in questo repository, va segnalato unicamente tramite e-mail agli indirizzi presente nel file security.txt disponibile a questo [link](http://www.gisacampania.it/.well-known/security.txt)
+Ogni segnalazione di eventuali problemi di sicurezza o bug relativo al software presente in questo repository, va segnalato unicamente tramite e-mail agli indirizzi presente nel file security.txt disponibile a questo [link](http://gisa.regione.campania.it/.well-known/security.txt)
 
 NOTA: Le segnalazioni non vanno inviate attraverso l’issue tracker pubblico ma devono essere inviate confidenzialmente agli indirizzi e-mail presenti nel security.txt.
 
@@ -520,8 +514,10 @@ Una copia della Licenza è disponibile al seguente indirizzo: <https://www.gnu.o
 
 In caso di riuso, in toto o in partedi GISA Sicurezza alimentare e veterinaria, è necessario notificare l’adozione in riuso tramite l’apertura di un ticket (o analogo meccanismo quale una pull request) in questo repository. Inoltre, al contempo per gli aspetti organizzativi utili a potenziare i benefici derivanti dalla pratica del riuso tra PP.AA., come la partecipazione alla **Cabina di regia** per la condivisione di eventuali modifiche/integrazioni o innovazioni, è necessario darne tempestiva comunicazione alle seguenti e-mail:
 
-[paolo.sarnelli@regione.campania.it]() 
-
 [cinzia.matonti@regione.campania.it]()	
+
+[mt.filazzola@arpacampania.it]() 
+
+[r.belluomo@arpacampania.it]() 
 
 Gli enti che aderiscono al riuso di GISA entreranno a far parte della Cabina di Regia per condividere e partecipare all’evoluzione di GISA insieme alle altre PP.AA.

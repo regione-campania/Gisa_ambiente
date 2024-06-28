@@ -77,9 +77,9 @@ Componente comp = (Componente) ListaComponenti.get(i); %>
 <input type="checkbox" id ="<%= comp.getId()%>" name="componenteId" value="<%= comp.getId()%>"/>
 <input type="hidden" readonly id ="componenteNome_<%= comp.getId()%>" name ="componenteNome_<%= comp.getId()%>" value="<%= comp.getNominativo() %>"/>
 <input type="hidden" readonly id ="componenteQualifica_<%= comp.getId()%>" name ="componenteQualifica_<%= comp.getId()%>" value="<%= comp.getNomeQualifica() %>"/>
-<input type="hidden" readonly id ="componenteStruttura_<%= comp.getId()%>" name ="componenteStruttura_<%= comp.getId()%>" value="<%= comp.getNomeStruttura() %>"/>
-<input type="hidden" readonly id ="componenteStrutturaId_<%= comp.getId()%>" name ="componenteStrutturaId_<%= comp.getId()%>" value="<%= comp.getIdStruttura() %>"/>
-<%= comp.getNominativo() %> (<b><%= comp.getNomeQualifica() %></b>) <%= comp.getNomeStruttura() %><br/><br/> 
+<input type="hidden" readonly id ="componenteAreaSemplice_<%= comp.getId()%>" name ="componenteAreaSemplice_<%= comp.getId()%>" value="<%= comp.getDescrizioneAreaSemplice() %>"/>
+<input type="hidden" readonly id ="componenteAreaSempliceId_<%= comp.getId()%>" name ="componenteAreaSempliceId_<%= comp.getId()%>" value="<%= comp.getIdAreaSemplice() %>"/>
+<%= comp.getNominativo() %> (<b><%= comp.getNomeQualifica() %></b>) <%= comp.getDescrizioneAreaSemplice() %><br/><br/> 
 <% } %>
 
 </td></tr>

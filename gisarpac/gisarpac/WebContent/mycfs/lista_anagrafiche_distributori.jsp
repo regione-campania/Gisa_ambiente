@@ -30,7 +30,7 @@ Linea produttiva: Distributori</b></center>
 
 <%
 	for (int i = 0; i<anagraficheList.size(); i++) {
-	RicercaAIA anagrafica = (RicercaAIA) anagraficheList.get(i);
+	RicercaAUA anagrafica = (RicercaAUA) anagraficheList.get(i);
 %>
 
 <tr>

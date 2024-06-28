@@ -1,3 +1,267 @@
+CREATE OR REPLACE FUNCTION public.campione_insert_gruppo_ispettivo(
+    _json_daticonnucleo json,
+    _idcampione integer)
+  RETURNS integer AS
+$BODY$	
+DECLARE
+	i json; 
+BEGIN
+	  FOR i IN SELECT * FROM json_array_elements(_json_daticonnucleo) 
+	  LOOP
+		 INSERT INTO campione_gruppo_ispettivo (id_campione, id_componente, enabled, id_struttura, nome_struttura) values (_idcampione, (i->>'id')::integer,true, (i->>'idStruttura')::integer, (i->>'struttura')::text);
+	  END LOOP;
+
+
+    	 return 1;
+END;
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION public.campione_insert_gruppo_ispettivo(json, integer)
+  OWNER TO postgres;
+  
+
+
+-- FUNCTION: public.non_conformita_dettaglio_globale(integer)
+
+-- DROP FUNCTION IF EXISTS public.non_conformita_dettaglio_globale(integer);
+
+CREATE OR REPLACE FUNCTION public.non_conformita_dettaglio_globale(
+	_idnc integer)
+    RETURNS json
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+	
+DECLARE
+	campiservizio json;
+	motivazione json;
+	finale json;
+	utente json;
+	linea json;
+	dati json;
+	daticu json;
+	
+	_id_giornata_ispettiva integer;
+	id_linea_nc integer;
+	codicelinea text;
+
+BEGIN
+	-- chiamo la dbi puntuale per ogni blocco
+	-- STEP 1: recuperiamo i campi della nc
+	motivazione := (select json_object_agg(nome,descrizione) from (select 'nome' as nome, l.description::text as descrizione 
+									from non_conformita nc 
+									join lookup_tipi_verifica l on l.code = nc.id_tipo_verifica 
+									where nc.id = _idnc
+							               union 
+							               select 'id' as nome,  l.code::text as descrizione 
+							               from non_conformita nc 
+							               join lookup_tipi_verifica l on l.code = nc.id_tipo_verifica
+								       where nc.id = _idnc
+							               ) a);		
+
+	_id_giornata_ispettiva := (select n.id_giornata_ispettiva from non_conformita n where n.id = _idnc);
+	id_linea_nc = (select n.id_linea from non_conformita n where n.id = _idnc);
+	--codicelinea := (select l.codice_linea from linee_attivita_giornate_ispettive l where l.id_giornata_ispettiva  = id_controllo and l.trashed_date is null and id_linea_attivita = );
+
+	linea := (select json_object_agg(nome,descrizione) from (
+								select 'nome' as nome, c.descrizione_completa as descrizione 
+								from non_conformita nc
+								left join linee_attivita_giornate_ispettive l on l.id_giornata_ispettiva =nc.id_giornata_ispettiva  
+								left join codici_categoria_ippc c on concat(c.id_categoria,'-',c.id_codici_ippc,'-', c.id_codici_descrizione) = l.codice_linea
+								where l.trashed_date is null and nc.trashed_date is null and nc.id = _idnc
+								union
+								select 'id' as nome, id_linea::text as descrizione 
+								from non_conformita nc
+								where trashed_date is null and nc.id = _idnc) a);
+													             
+
+	utente := (select json_object_agg(nome,descrizione) from (select 'userId' as nome, (enteredby)::text as descrizione from non_conformita  where id = _idnc) a);				             
+
+	dati := (select json_object_agg(nome,descrizione) from (select 'note' as nome, note as descrizione from non_conformita where id = _idnc) a);	
+
+	daticu := (select json_object_agg(nome,descrizione) from (select 'idGiornataIspettiva' as nome, n.id_giornata_ispettiva::text as descrizione from non_conformita n where n.id = _idnc
+							             union select 'riferimentoId' as nome, cu.riferimento_id::text  
+							                     from giornate_ispettive cu 
+							                     join non_conformita c on c.id_giornata_ispettiva = cu.id
+							                     where c.id = _idnc  
+										 union select 'idFascicoloIspettivo' as nome, cu.id_fascicolo_ispettivo::text  
+							                     from giornate_ispettive cu 
+							                     join non_conformita c on c.id_giornata_ispettiva = cu.id
+							                     where c.id = _idnc  
+										 union select 'dipartimento' as nome, l.description::text  
+							                     from giornate_ispettive cu 
+							                     join non_conformita c on c.id_giornata_ispettiva = cu.id
+							                     join lookup_site_id l on l.code = cu.id_dipartimento
+							                     where c.id = _idnc
+							               union select 'ragioneSociale' as nome, r.ragione_sociale as descrizione
+							                     from giornate_ispettive cu 
+							                     join non_conformita c on c.id_giornata_ispettiva = cu.id
+							                     join ricerche_anagrafiche_old_materializzata r on r.riferimento_id = cu.riferimento_id and r.riferimento_id_nome_tab = cu.riferimento_id_nome_tab
+							                     where c.id = _idnc) a);	     
+
+										
+	campiservizio := (select json_object_agg(nome,descrizione) from (select 'utenteInserimento' as nome, concat_ws(' ', co.namefirst, co.namelast)::text as descrizione
+								        from non_conformita c 
+								        join access a on a.user_id = c.enteredby 
+								        join contact co on co.contact_id = a.contact_id
+									where c.id = _idnc 	
+								  union select 'idNonConformita' as nome, id::text as descrizione from non_conformita where id = _idnc
+								  union select 'dataInserimento' as nome, entered::text as descrizione from non_conformita where id = _idnc
+								  union select 'idnon_conformita' as nome, id::text as descrizione from non_conformita where id = _idnc 
+								  ) b);
+
+	finale := (select unaccent(concat('{',
+		(select concat_ws(' ', '"Dati":', dati, ',"DatiGiornataIspettiva":', daticu, 
+		--',"NumeroVerbale":', numeroverbale, 
+		',"Utente":',utente, 
+		',"Linea":', linea,
+		',"CampiServizio":', campiServizio,
+		',"TipoVerifica":', motivazione
+		)),'}'))::json);
+	
+	raise info 'json finale: %', finale;
+
+    	return finale;
+END;
+$BODY$;
+
+ALTER FUNCTION public.non_conformita_dettaglio_globale(integer)
+    OWNER TO postgres;
+
+    -- FUNCTION: public.campione_dettaglio_globale(integer)
+
+-- DROP FUNCTION IF EXISTS public.campione_dettaglio_globale(integer);
+
+CREATE OR REPLACE FUNCTION public.campione_dettaglio_globale(
+	_idcampione integer)
+    RETURNS json
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+	
+DECLARE
+	campiservizio json;
+	laboratorio json;
+	tipoattivita json;
+	numeroverbale json;
+	finale json;
+	utente json;
+	programmacampionamento json;
+	categoriamerceologica json;
+	dati json;
+	datigiornataispettiva json;
+	gruppoispettivo json;
+	analiti json;
+	id_dipartimento integer;
+	
+
+BEGIN
+	-- chiamo la dbi puntuale per ogni blocco
+	-- STEP 1: recuperiamo i campi del campione
+	laboratorio := (select json_object_agg(nome,descrizione) from (select 'nome' as nome, (l.description)::text as descrizione 
+																   from lookup_destinazione_campione l join campioni c on c.id_laboratorio= l.code
+							               							union select 'id' as nome,  (l.code)::text from  lookup_destinazione_campione l 
+																    join campioni c on c.id_laboratorio= l.code 
+																  ) a);
+										   
+	tipoattivita := (select json_object_agg(nome,descrizione) from (select 'nome' as nome, l.tipo as descrizione from campioni c join lookup_tipo_attivita l on l.code = c.id_tipo_attivita where id= _idcampione
+						union
+						select 'id' as nome, l.code::text as id from campioni c join lookup_tipo_attivita l on l.code = c.id_tipo_attivita where id= _idcampione) a);				             
+
+	--numeroverbale := (select json_object_agg(nome,descrizione) from (select 'nome' as nome, num_verbale as descrizione from campioni where id = _idcampione
+	--						               union select 'id' as nome,  1::text) a);				             
+
+	utente := (select json_object_agg(nome,descrizione) from (select 'userId' as nome, (enteredby)::text as descrizione from campioni where id = _idcampione) a);				             
+
+	dati := (select json_object_agg(nome,descrizione) from (select 'note' as nome, 
+	                                                        note as descrizione 
+	                                                        from campioni where id = _idcampione
+							        union select 'dataPrelievo' as nome, (data_prelievo)::text  
+							        from campioni where id = _idcampione
+							        union select 'numeroVerbale' as nome, num_verbale
+							        from campioni where id = _idcampione
+							        ) a);	
+	
+	datigiornataispettiva := (select json_object_agg(nome,descrizione) from (select 'idGiornataIspettiva' as nome, id_giornata_ispettiva::text as descrizione from campioni where id = _idcampione
+							               union select 'dipartimento' as nome, l.description::text  
+							                     from giornate_ispettive cu 
+							                     join campioni c on c.id_giornata_ispettiva = cu.id
+							                     join lookup_site_id l on l.code = cu.id_dipartimento
+							                     where c.id = _idcampione
+							               union select distinct 'ragioneSociale' as nome, r.ragione_sociale as descrizione
+							                     from giornate_ispettive cu 
+							                     join campioni c on c.id_giornata_ispettiva = cu.id
+							                     join ricerche_anagrafiche_old_materializzata r on r.riferimento_id = cu.riferimento_id and r.riferimento_id_nome_tab = cu.riferimento_id_nome_tab
+							                     where c.id = _idcampione
+											union select distinct 'riferimentoId' as nome, r.riferimento_id::text as descrizione
+							                     from giornate_ispettive cu 
+							                     join campioni c on c.id_giornata_ispettiva = cu.id
+							                     join ricerche_anagrafiche_old_materializzata r on r.riferimento_id = cu.riferimento_id and r.riferimento_id_nome_tab = cu.riferimento_id_nome_tab
+							                     where c.id = _idcampione  
+											union select distinct 'idFascicoloIspettivo' as nome, cu.id_fascicolo_ispettivo::text
+							                     from giornate_ispettive cu 
+							                     join campioni c on c.id_giornata_ispettiva = cu.id
+							                     join ricerche_anagrafiche_old_materializzata r on r.riferimento_id = cu.riferimento_id and r.riferimento_id_nome_tab = cu.riferimento_id_nome_tab
+							                     where c.id = _idcampione					 
+							          ) a);	     
+	-- STEP 3: recuperiamo i campi programmacontrollo
+	programmacampionamento := (SELECT array_to_json(array_agg(row_to_json(t))) FROM (select c.categoria_merceologica as nome,
+							     c.programma_campionamento as "nomeProgrammaCampionamento", 
+							     c.id as id, 
+							     c.macrocategoria as "nomeProgrammaCampionamentoMacrocategoria" 
+							     from campione_programma_campionamento cm
+							     join programmi_campionamento_categorie_merceologiche c on c.id = cm.id_programma_campionamento
+							     where id_campione = _idcampione and cm.enabled) t);
+	-- STEP 4: recuperiamo i campi analiti
+	analiti := (SELECT array_to_json(array_agg(row_to_json(t))) FROM (select a.descrizione_analita_livello_uno::text as livello1, 
+										 a.descrizione_analita_livello_due::text as livello2, 
+										 a.descrizione_analita_livello_tre::text as livello3, a.progressivo as id 
+										         from campione_analiti ca
+										         join analiti a on a.progressivo = ca.analiti_id
+										         where id_campione = _idcampione) t);
+
+										         
+	--STEP 5: gruppo ispettivo
+	gruppoispettivo := (SELECT array_to_json(array_agg(row_to_json(t))) FROM (select distinct d.nominativo as nominativo, c.id_componente as id, d.qualifica as qualifica, c.nome_struttura as struttura
+										from campione_gruppo_ispettivo c
+										join public.dpat_get_nominativi(-1, (select date_part('year',data_prelievo)::integer from campioni where id = _idcampione),null,null,null,c.id_struttura,null,-1) d on d.id_anagrafica_nominativo = c.id_componente
+										left join access_ ac on ac.user_id = c.id_componente
+										where c.id_campione = _idcampione) t);
+										
+	campiservizio := (select json_object_agg(nome,descrizione) from (select 'utenteInserimento' as nome, concat_ws(' ', co.namefirst, co.namelast)::text as descrizione
+								        from campioni c 
+								        join access a on a.user_id = c.enteredby 
+								        join contact co on co.contact_id = a.contact_id
+									where c.id = _idcampione 
+								  union select 'dataInserimento' as nome, entered::text as descrizione from campioni where id = _idcampione
+								  union select 'idCampione' as nome, id::text as descrizione from campioni where id = _idcampione 
+								  ) b);
+
+	finale := (select unaccent(concat('{',
+		(select concat_ws(' ', '"Dati":', dati, ',"DatiGiornataIspettiva":', datigiornataispettiva, 
+		--',"NumeroVerbale":', numeroverbale, 
+		',"Utente":',utente, 
+		',"ProgrammaCampionamentoCategoriaMerceologica":', programmacampionamento,
+		',"Laboratorio":', laboratorio,
+		',"TipoAnalisi":', analiti,
+		',"GruppoIspettivo":', gruppoispettivo,
+		',"CampiServizio":', campiServizio,
+		',"TipoAttivita":', tipoattivita)),'}'))::json);
+		
+	
+	raise info 'json finale: %', finale;
+
+    	return finale;
+END;
+$BODY$;
+
+ALTER FUNCTION public.campione_dettaglio_globale(integer)
+    OWNER TO postgres;
+
+
 -- FUNCTION: public.giornata_ispettiva_dettaglio_globale(integer)
 
 -- DROP FUNCTION IF EXISTS public.giornata_ispettiva_dettaglio_globale(integer);
@@ -1214,6 +1478,8 @@ ALTER FUNCTION public.non_conformita_insert(json, integer)
   
   DROP FUNCTION IF EXISTS public.non_conformita_dettaglio_globale(integer);
 
+
+
 CREATE OR REPLACE FUNCTION public.non_conformita_dettaglio_globale(
 	_idnc integer)
     RETURNS json
@@ -1254,11 +1520,11 @@ BEGIN
 	--codicelinea := (select l.codice_linea from linee_attivita_giornate_ispettive l where l.id_giornata_ispettiva  = id_controllo and l.trashed_date is null and id_linea_attivita = );
 
 	linea := (select json_object_agg(nome,descrizione) from (
-								select 'nome' as nome, c.descrizione_completa as descrizione 
+								select 'nome' as nome, c.descrizione_completa as descrizione
 								from non_conformita nc
 								left join linee_attivita_giornate_ispettive l on l.id_giornata_ispettiva =nc.id_giornata_ispettiva  
 								left join codici_categoria_ippc c on concat(c.id_categoria,'-',c.id_codici_ippc,'-', c.id_codici_descrizione) = l.codice_linea
-								where l.trashed_date is null and nc.trashed_date is null and nc.id = _idnc
+								where l.trashed_date is null and nc.trashed_date is null and nc.id = _idnc and l.id_linea_attivita = nc.id_linea
 								union
 								select 'id' as nome, id_linea::text as descrizione 
 								from non_conformita nc
@@ -1270,7 +1536,15 @@ BEGIN
 	dati := (select json_object_agg(nome,descrizione) from (select 'note' as nome, note as descrizione from non_conformita where id = _idnc) a);	
 
 	daticu := (select json_object_agg(nome,descrizione) from (select 'idGiornataIspettiva' as nome, n.id_giornata_ispettiva::text as descrizione from non_conformita n where n.id = _idnc
-							               union select 'dipartimento' as nome, l.description::text  
+							             union select 'riferimentoId' as nome, cu.riferimento_id::text  
+							                     from giornate_ispettive cu 
+							                     join non_conformita c on c.id_giornata_ispettiva = cu.id
+							                     where c.id = _idnc  
+										 union select 'idFascicoloIspettivo' as nome, cu.id_fascicolo_ispettivo::text  
+							                     from giornate_ispettive cu 
+							                     join non_conformita c on c.id_giornata_ispettiva = cu.id
+							                     where c.id = _idnc  
+										 union select 'dipartimento' as nome, l.description::text  
 							                     from giornate_ispettive cu 
 							                     join non_conformita c on c.id_giornata_ispettiva = cu.id
 							                     join lookup_site_id l on l.code = cu.id_dipartimento
@@ -1309,6 +1583,10 @@ $BODY$;
 
 ALTER FUNCTION public.non_conformita_dettaglio_globale(integer)
     OWNER TO postgres;
+
+
+
+
 	
 	-- View: public.codici_categoria_ippc
 

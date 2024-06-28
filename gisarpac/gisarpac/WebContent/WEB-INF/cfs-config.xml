@@ -296,129 +296,31 @@
 	<!-- SERVER DOCUMENTALE BACHECA -->
 	
 	
-	<action name="dpat2019" class="org.aspcfs.modules.dpat2019.action.Dpat">
-		<forward name="DpatHomeOK" resource="/dpat_2019/home2.jsp" layout="nav" />
-		<forward name="DpatHomeRegOK" resource="/dpat_2019/home.jsp"
-			layout="nav" />
-		<forward name="DpatHomeConfiguraOK" resource="/dpat_2019/home_configura_dpat.jsp"
-			layout="nav" />
-
-		<forward name="DpatDetailOK" resource="/dpat_2019/detail.jsp"
-			layout="nav" />
-		<forward name="DpatDetailOK" resource="/dpat_2019/detail.jsp"
-			layout="nav" />
-
-
-		<forward name="ListaStoriaIndicatoriOK" resource="/dpat_2019/storia_indicatori.jsp"
-			layout="style" />
-
-		<forward name="ListaStoriaAttivitaOK" resource="/dpat_2019/storia_attivita.jsp"
-			layout="style" />
-
-		<!-- SERVER DOCUMENTALE -->
-		<forward name="DpatDetailStyleOK" resource="/dpat_2019/detail_stampa.jsp"
-			layout="style" />
-		<!-- SERVER DOCUMENTALE -->
-
-		<forward name="DpatModifyOK" resource="/dpat_2019/modify.jsp"
-			layout="nav" />
-		<forward name="DpatModifyCompetenzeOK" resource="/dpat_2019/modify_all6.jsp"
-			layout="nav" />
-		<forward name="DpatDetailCompetenzeOK" resource="/dpat_2019/dettaglio_all6.jsp"
-			layout="nav" />
-		<forward name="DpatUpdateClosedDpatOK" resource="/dpat_2019/update_closed_dpat.jsp"
-			layout="nav" />
-
-
-		<!-- SERVER DOCUMENTALE -->
-		<forward name="DpatDetailCompetenzeStyleOK" resource="/dpat_2019/dettaglio_all6_stampa.jsp"
-			layout="style" />
-		<!-- SERVER DOCUMENTALE -->
 
 	
-
-		<forward name="DpatAddOK" resource="/dpat_2019/add.jsp" layout="nav" />
-		<forward name="DpatListaOK" resource="/dpat_2019/list.jsp" layout="nav" />
-		<forward name="DpatAddDatiPerStrutturaOK" resource="/dpat_2019/addDatiPerStruttura.jsp"
-			layout="nav" />
-		<forward name="DpatDetailStrutturaOK" resource="/dpat_2019/detailStruttura.jsp"
-			layout="nav" />
-		<forward name="ElencoDpat" resource="/dpat_2019/elencoDpat.jsp"
-			layout="nav" />
-
-		<!-- per gestire il sottomenu "Elenco piani di monitoraggio" -->
-
-		<forward name="ResultsOK" resource="/cu_programmazioni_2019/piani_searchresults.jsp"
-			layout="nav" />
-
-		<forward name="ResultsAttiviOK"
-			resource="/cu_programmazioni_2019/piani_searchresults_attivi.jsp" layout="nav" />
-
-
-
-		<!-- nuova gestione dpat**************************************************** -->
-
-
-		<forward name="risultatoCreazioneTemplateDpatNew" resource="/dpat_2019/paginaRispostaCreazioneTemplate.jsp"
-			layout="json" />
-
-		<forward name="DpatHomeConfiguraNEWDPATOK" resource="/dpat_2019/home_configura_dpat.jsp"
-			layout="nav" /> <!-- copre totalmente la vecchia, le altre splittano il flusso invece -->
-
-		<forward name="ResultsOKNEWDPAT" resource="/cu_programmazioni_2019/piani_searchresults.jsp"
-			layout="nav" />
-
-		<forward name="DisattivaEntryOK" resource="/cu_programmazioni_2019/piani_disattiva.jsp"
-			layout="style" />
-
-
-		<forward name="AggiungiEntryOK" resource="/cu_programmazioni_2019/piani_add.jsp"
-			layout="style" />
-
-		<forward name="DpatModifyCompetenzeNEWOK" resource="/dpat_2019/modify_all6.jsp"
-			layout="nav" />
-
-
-		<forward name="UpdateIndicatoreOK"
-			resource="/cu_programmazioni_2019/piani_update_indicatore.jsp" layout="style" />
-
-		<forward name="UpdateAttivitaOK"
-			resource="/cu_programmazioni_2019/piani_update_attivita.jsp" layout="style" />
-
-
-
-		<forward name="AggiungiEntryOK" resource="/cu_programmazioni_2019/piani_add.jsp"
-			layout="style" />
-
-		<forward name="ListaStoriaIndicatoriOK_NEWDPAT" resource="/dpat_2019/storia_indicatori.jsp"
-			layout="style" />
-
-		<forward name="ListaStoriaAttivitaOK_NEWDPAT" resource="/dpat_2019/storia_attivita.jsp"
-			layout="style" />
-
-
-
-		<!-- ********************************************************* ****** -->
-
-		<forward name="ReplaceOK" resource="/cu_programmazioni_2019/piani_replace.jsp"
-			layout="style" />
-
-		<forward name="AddOK" resource="/cu_programmazioni_2019/piani_add.jsp"
-			layout="style" />
-
-		<forward name="MoveIndicatoreOK" resource="/cu_programmazioni_2019/piani_move_indicatore.jsp"
-			layout="style" />
-
-		<forward name="MoveAttivitaOK" resource="/cu_programmazioni_2019/piani_move.jsp"
-			layout="style" />
-
-		<forward name="ReplaceEnabledOK" resource="/cu_programmazioni_2019/piani_replace_enabled.jsp"
-			layout="style" />
-
-		<forward name="AddEnabledOK" resource="/cu_programmazioni_2019/piani_add_enabled.jsp"
-			layout="style" />
+	<action name="GestioneDPAT" class="org.aspcfs.modules.gestionedpat.actions.GestioneDPAT">
+		<forward name="SelezionaDipartimentoOK" resource="/gestionedpat/seleziona_dipartimento.jsp" layout="nav" />
+		<forward name="ListaAreeComplesseOK" resource="/gestionedpat/lista_aree_complesse.jsp" layout="nav" />
+		<forward name="DettaglioAreaComplessaOK" resource="/gestionedpat/dettaglio_area_complessa.jsp" layout="nav" />
+		
+		<forward name="ModificaAreaSempliceOK" resource="/gestionedpat/modifica_area_semplice.jsp" layout="style" />
+		<forward name="UpdateAreaSempliceOK" resource="/gestionedpat/modifica_area_semplice_ok.jsp" layout="style" />
+		<forward name="AggiungiNominativoAreaSempliceOK" resource="/gestionedpat/aggiungi_nominativo_area_semplice.jsp" layout="style" />
+		<forward name="InserisciNominativoAreaSempliceOK" resource="/gestionedpat/aggiungi_nominativo_area_semplice_ok.jsp" layout="style" />
+		
 	</action>
 	
+	<action name="GestioneDPAT" class="org.aspcfs.modules.gestionedpat.actions.GestioneDPAT">
+		<forward name="SelezionaDipartimentoOK" resource="/gestionedpat/seleziona_dipartimento.jsp" layout="nav" />
+		<forward name="ListaAreeComplesseOK" resource="/gestionedpat/lista_aree_complesse.jsp" layout="nav" />
+		<forward name="DettaglioAreaComplessaOK" resource="/gestionedpat/dettaglio_area_complessa.jsp" layout="nav" />
+		
+		<forward name="ModificaAreaSempliceOK" resource="/gestionedpat/modifica_area_semplice.jsp" layout="style" />
+		<forward name="UpdateAreaSempliceOK" resource="/gestionedpat/modifica_area_semplice_ok.jsp" layout="style" />
+		<forward name="AggiungiNominativoAreaSempliceOK" resource="/gestionedpat/aggiungi_nominativo_area_semplice.jsp" layout="style" />
+		<forward name="InserisciNominativoAreaSempliceOK" resource="/gestionedpat/aggiungi_nominativo_area_semplice_ok.jsp" layout="style" />
+		
+	</action>
 	
 	
 	<action name="GestioneGiornateIspettive" class="org.aspcfs.modules.gestioneispettive.actions.GestioneGiornateIspettive">
@@ -459,6 +361,8 @@
 		<forward name="InsertParticellaOK" resource="/gestioneispettive/campioni/add/insertParticellaOk.jsp" layout="nav" />
 		<forward name="ViewParticellaOK" resource="/gestioneispettive/campioni/view/dettaglioParticella.jsp" layout="nav" />
 		<forward name="ListaParticellaOK" resource="/gestioneispettive/campioni/view/listaParticella.jsp" layout="nav" />
+		<forward name="ModifyParticellaOK" resource="/gestioneispettive/campioni/modify/modifyParticella.jsp" layout="nav" />
+		<forward name="UpdateParticellaOK" resource="/gestioneispettive/campioni/modify/modifyParticellaOk.jsp" layout="nav" />
 		</action>
 	
 	<action name="GestioneNonConformita" class="org.aspcfs.modules.gestioneispettive.actions.GestioneNonConformita">
@@ -768,6 +672,7 @@
 	<action name="Utility" class="org.aspcfs.modules.util.actions.Utility">
 	<forward name="GURUHomeOK" resource="/guru/home.jsp" layout="nav" />
 	<forward name="GURUListOK" resource="/guru/list.jsp" layout="nav" />
+	<forward name="GURUListProcOK" resource="/guru/list_proc.jsp" layout="nav" />
 	<forward name="GURUAddOK" resource="/guru/add.jsp" layout="nav" />
 	<forward name="GURUInsertOK" resource="/guru/insert.jsp" layout="nav" />
 	<forward name="GURUModifyOK" resource="/guru/modify.jsp" layout="nav" />
@@ -867,6 +772,8 @@
 		class="org.aspcfs.modules.hotConfiguration.actions.HotConfiguration">
 		<forward name="ConfigOK" resource="/hot_configuration/config.jsp"
 			layout="nav" />
+		<forward name="ConfigNewOK" resource="/hot_configuration/config_new.jsp"
+			layout="nav" />		
 
 	</action>
 	
@@ -930,10 +837,22 @@
 		<bean name="StabilimentoAUA" class="org.aspcfs.modules.aua.base.StabilimentoAUA"
 			scope="request" />
 		
-		<forward name="SearchOK" resource="/stabilimentoaua/blank.jsp"
+		<forward name="SearchOK" resource="/stabilimentoaua/stabilimento_search.jsp"
 			layout="nav" />
 			
-		
+			<forward name="AddOK" resource="/stabilimentoaua/add.jsp"
+			layout="nav" />
+			
+		<forward name="InsertOK" resource="/StabilimentoAUA.do?command=Details" />
+			
+			<forward name="DetailsOK" resource="/stabilimentoaua/details.jsp"
+			layout="nav" />
+			
+			<forward name="SearchOK" resource="/stabilimentoaua/stabilimento_search.jsp"
+			layout="nav" />
+			
+				<forward name="ListOK" resource="/stabilimentoaua/results.jsp"
+			layout="nav" />
 	</action>
 	
 
@@ -1011,33 +930,7 @@
 			layout="style" />
 	</action>
 	
-		<action name="DpatSDC2019" class="org.aspcfs.modules.dpat2019.action.DpatSDC">
-		<bean name="DpatSDC" class="org.aspcfs.modules.dpat_2019.base.DpatStrumentoCalcolo"
-			scope="request" />
-		<forward name="DpatSDCAddModifyOK" resource="/dpat_2019/strumentodicalcolo/add.jsp"
-			layout="nav" />
-		<forward name="DpatSDCAddNominativoOK" resource="/dpat_2019/strumentodicalcolo/reload.jsp"
-			layout="nav" />
-		<forward name="DpatSDCDetailOK" resource="/dpat_2019/strumentodicalcolo/dettaglio.jsp"
-			layout="nav" />
-			
-		<forward name="DpatStatoAvanzamentoOrganigrammaOK" resource="/dpat_2019/strumentodicalcolo/stato_avanzamento.jsp"
-			layout="stefano" />
-
-		<!-- SERVER DOCUMENTALE -->
-		<forward name="DpatSDCDetailStyleOK" resource="/dpat_2019/strumentodicalcolo/dettaglio_stampa.jsp"
-			layout="style" />
-		<!-- SERVER DOCUMENTALE -->
-
-
-		<forward name="DpatHomeRegOK" resource="/dpat_2019/home.jsp"
-			layout="nav" />
-
-
-	<forward name="messaggioOK" resource="/dpat_2019/strumentodicalcolo/messaggio.jsp" layout="style" />
-	<forward name="messaggioModificaOK" resource="/dpat_2019/strumentodicalcolo/messaggio_edit.jsp" layout="style" />
-			
-	</action>
+		
 	
 	<action name="Roles" class="org.aspcfs.modules.admin.actions.Roles">
 		<bean name="Role" class="org.aspcfs.modules.admin.base.Role"

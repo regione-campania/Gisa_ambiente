@@ -1,9 +1,17 @@
 package org.aspcfs.modules.hotConfiguration.actions;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 import org.aspcfs.modules.actions.CFSModule;
 import org.aspcfs.modules.util.imports.ApplicationProperties;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.darkhorseventures.framework.actions.ActionContext;
 
@@ -28,6 +36,63 @@ public final class HotConfiguration extends CFSModule
 		 
 		 return "ConfigOK";
 		  
+	}
+	
+	public String executeCommandDashboardNew(ActionContext context) throws JSONException {
+
+		if (!hasPermission(context, "accounts-dashboard-view")) {
+			if (!hasPermission(context, "hot-configuration-view")) {
+				return ("PermissionError");
+			}
+		}
+
+		JSONArray jsonProperties = new JSONArray();
+
+		InputStream is = ApplicationProperties.class.getResourceAsStream(ApplicationProperties.getFileProperties());
+
+		BufferedReader reader;
+		try {
+			reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+			String line = "";
+
+			while (line != null) {
+				line = reader.readLine();
+				
+				if (line!= null){
+					line = line.trim();
+				
+					String tipo = "";
+					String chiave = "";
+					String valore = "";
+	
+					if (line.length() > 0) {
+						if (line.startsWith("##")) { // capitolo
+							tipo = "capitolo";
+							chiave = line.replaceAll("#", "").trim();
+						} else if (!line.startsWith("#") && line.contains("=")) { // parametro
+							tipo = "parametro";
+							chiave = line.substring(0, line.indexOf("=")).trim();
+							valore = ApplicationProperties.getProperty(chiave).trim();
+						}
+						
+						if (!"".equals(tipo)){
+							JSONObject json = new JSONObject();
+							json.put("tipo", tipo);
+							json.put("chiave", chiave);
+							json.put("valore", valore);
+							jsonProperties.put(json);
+						}
+					}
+				}
+			}
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	
+		context.getRequest().setAttribute("jsonProperties", jsonProperties);
+		return "ConfigNewOK";
+
 	}
 	
 	public String executeCommandConfig(ActionContext context) {

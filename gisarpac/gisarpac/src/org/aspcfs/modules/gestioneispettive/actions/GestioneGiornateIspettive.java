@@ -4,8 +4,11 @@ import java.sql.Connection;
 import java.text.ParseException;
 import java.util.ArrayList;
 
+import jdk.nashorn.internal.parser.JSONParser;
+
 import org.aspcfs.modules.actions.CFSModule;
 import org.aspcfs.modules.gestioneispettive.base.Anagrafica;
+import org.aspcfs.modules.gestioneispettive.base.Area;
 import org.aspcfs.modules.gestioneispettive.base.Campione;
 import org.aspcfs.modules.gestioneispettive.base.Componente;
 import org.aspcfs.modules.gestioneispettive.base.Dipartimento;
@@ -17,7 +20,6 @@ import org.aspcfs.modules.gestioneispettive.base.Linea;
 import org.aspcfs.modules.gestioneispettive.base.Matrice;
 import org.aspcfs.modules.gestioneispettive.base.Motivo;
 import org.aspcfs.modules.gestioneispettive.base.NonConformita;
-import org.aspcfs.modules.gestioneispettive.base.Struttura;
 import org.aspcfs.modules.gestioneispettive.base.Tecnica;
 import org.aspcfs.modules.gestioneispettive.base.TipoVerifica;
 import org.json.JSONArray;
@@ -322,21 +324,15 @@ public class GestioneGiornateIspettive extends CFSModule{
 		if (!jsonGiornataIspettiva.has("Dati")) {
 			String dataInizio = null;
 			String oraInizio = null;
-			String dataFine = null;
-			String oraFine = null;
 			String note = null;
 			
 			try {dataInizio = context.getRequest().getParameter("dataInizio");} catch (Exception e) {}
 			try {oraInizio = context.getRequest().getParameter("oraInizio");} catch (Exception e) {}
-			try {dataFine = context.getRequest().getParameter("dataFine");} catch (Exception e) {}
-			try {oraFine = context.getRequest().getParameter("oraFine");} catch (Exception e) {}
 			try {note = context.getRequest().getParameter("note");} catch (Exception e) {}
 
 			JSONObject jsonDati = new JSONObject();
 			jsonDati.put("dataInizio", dataInizio);
 			jsonDati.put("oraInizio", oraInizio);
-			jsonDati.put("dataFine", dataFine);
-			jsonDati.put("oraFine", oraFine);
 			jsonDati.put("note", note); 
 			jsonGiornataIspettiva.put("Dati", jsonDati);
 			
@@ -357,7 +353,7 @@ public class GestioneGiornateIspettive extends CFSModule{
 
 			int dipartimentoId = Integer.parseInt(((JSONObject) jsonGiornataIspettiva.get("Dipartimento")).get("id").toString());
 			
-			ArrayList<Struttura> listaPerContoDi = Struttura.buildLista(db, annoCorrente, dipartimentoId);
+			ArrayList<Area> listaPerContoDi = Area.buildLista(db, annoCorrente, dipartimentoId);
 			context.getRequest().setAttribute("ListaPerContoDi", listaPerContoDi);		
 			} 
 
@@ -409,7 +405,7 @@ public class GestioneGiornateIspettive extends CFSModule{
 					jsonPerContoDi.put(jsonPerContoDi1);
 				}
 			}
-			jsonGiornataIspettiva.put("PerContoDi", jsonPerContoDi);
+			jsonGiornataIspettiva.put("PerContoDi", jsonPerContoDi); 
 
 		//}
 		Connection db = null;
@@ -679,7 +675,7 @@ public class GestioneGiornateIspettive extends CFSModule{
 				strutturaIds = strutturaIds.substring(0, strutturaIds.length()-1);
 					
 			ArrayList<Componente> listaComponenti = new ArrayList<Componente>(); 
-			listaComponenti = Componente.buildLista(db, annoCorrente, dipartimentoId, strutturaIds);
+			listaComponenti = Componente.buildLista(db, annoCorrente, -1);
 			context.getRequest().setAttribute("ListaComponenti", listaComponenti);
 
 		} 
@@ -721,7 +717,7 @@ public class GestioneGiornateIspettive extends CFSModule{
 
 			String[] componentiIds = null;
 
-			try {componentiIds = context.getRequest().getParameterValues("componenteId");} catch (Exception e) {}
+			try {componentiIds = context.getRequest().getParameterValues("componenteId");} catch (Exception e) {} 
 
 			JSONArray jsonComponenti= new JSONArray();
 
@@ -729,14 +725,14 @@ public class GestioneGiornateIspettive extends CFSModule{
 				for (int i = 0; i<componentiIds.length;i++){
 
 					JSONObject jsonComponente = new JSONObject();
-					int idComponente = Integer.parseInt(componentiIds[i]);
+					int idComponente = Integer.parseInt(componentiIds[i].split("_")[0]);
 					jsonComponente.put("id", idComponente);
 					jsonComponente.put("nominativo", context.getRequest().getParameter("componenteNome_"+componentiIds[i]).replaceAll("'", ""));
 					//jsonComponente.put("qualifica", context.getRequest().getParameter("componenteQualifica_"+componentiIds[i]).replaceAll("'", ""));
-					jsonComponente.put("struttura", context.getRequest().getParameter("componenteStruttura_"+componentiIds[i]).replaceAll("'", ""));
-					jsonComponente.put("idStruttura", context.getRequest().getParameter("componenteStrutturaId_"+componentiIds[i]).replaceAll("'", ""));
+					jsonComponente.put("descrizioneAreaSemplice", context.getRequest().getParameter("componenteAreaSemplice_"+componentiIds[i]).replaceAll("'", ""));
+					jsonComponente.put("idAreaSemplice", context.getRequest().getParameter("componenteAreaSempliceId_"+componentiIds[i]).replaceAll("'", ""));
 					jsonComponente.put("referente", Boolean.parseBoolean(context.getRequest().getParameter("componenteReferente_"+componentiIds[i])));
-					jsonComponente.put("responsabile", Boolean.parseBoolean(context.getRequest().getParameter("componenteResponsabile_"+componentiIds[i])));  
+					jsonComponente.put("dirigente", Boolean.parseBoolean(context.getRequest().getParameter("componenteDirigente_"+componentiIds[i])));  
 					jsonComponenti.put(jsonComponente);
 				}
 			}
@@ -973,9 +969,47 @@ public class GestioneGiornateIspettive extends CFSModule{
 
 		JSONObject jsonGiornataIspettiva = new JSONObject();
 
-		try {
-			jsonGiornataIspettiva = new JSONObject(context.getRequest().getParameter("jsonGiornataIspettiva"));
-		} catch (Exception e){}
+
+		try {jsonGiornataIspettiva = new JSONObject(context.getRequest().getParameter("jsonGiornataIspettiva"));} catch (Exception e){}
+		if (jsonGiornataIspettiva == null)
+			try {jsonGiornataIspettiva = new JSONObject((String) context.getRequest().getAttribute("jsonGiornataIspettiva"));} catch (Exception e){}
+
+		if (jsonGiornataIspettiva.has("Dati")) {
+			
+	      
+
+		        try {
+		        	String dataInizio =null;
+					String oraInizio=null;
+					String note = null;
+					//String dataFine = null;
+					//String oraFine = null;
+
+		            // Preleva il valore del campo "dataInizio"
+		            JSONObject dataInizio1 = (JSONObject) jsonGiornataIspettiva.get("Dati");
+		            dataInizio= (String) dataInizio1.get("dataInizio");
+		            oraInizio= (String) dataInizio1.get("oraInizio");
+		            note= (String) dataInizio1.get("note");
+			
+			
+			
+			//try {dataFine = context.getRequest().getParameter("dataFine");} catch (Exception e) {}
+			//try {oraFine = context.getRequest().getParameter("oraFine");} catch (Exception e) {}
+			
+			JSONObject jsonDati = new JSONObject();
+		//	jsonDati.put("dataFine", dataFine);
+			//jsonDati.put("oraFine", oraFine);
+			jsonDati.put("dataInizio", dataInizio);
+			jsonDati.put("oraInizio", oraInizio);
+			jsonDati.put("note", note);
+
+			jsonGiornataIspettiva.put("Dati", jsonDati);
+			}catch(Exception e){}
+
+		}
+
+		
+		
 
 		Connection db = null;
 
@@ -999,6 +1033,66 @@ public class GestioneGiornateIspettive extends CFSModule{
 		
 		context.getRequest().setAttribute("jsonGiornataIspettiva",  jsonGiornataIspettiva);
 		return "InsertOK";
+	}
+	
+	
+	
+	public String executeCommandClose(ActionContext context) throws NumberFormatException, IllegalAccessException, InstantiationException, ParseException
+	{
+
+		if (!hasPermission(context, "gestionenuovacu-add")) {
+			return ("PermissionError");
+		}
+
+		String giornata;
+		
+		Integer idGiornata;
+		String dataFine;
+		String oraFine;
+
+		giornata = context.getRequest().getParameter("idGiornataIspettiva");
+		dataFine = context.getRequest().getParameter("dataFine");
+		oraFine = context.getRequest().getParameter("oraFine");
+
+		idGiornata = Integer.parseInt(giornata);
+		JSONObject jsonGiornataIspettiva = new JSONObject();
+		JSONArray jsonCampioni = new JSONArray();
+		JSONArray jsonNonConformita = new JSONArray();
+		Connection db = null;
+
+		try 
+		{
+			db = this.getConnection(context);
+			GiornataIspettiva giornataIspettiva = new GiornataIspettiva();
+			giornataIspettiva.close(db, idGiornata,dataFine,oraFine);
+			
+			
+			int idGiornataIspettiva = -1;
+			
+			try {idGiornataIspettiva = Integer.parseInt(context.getRequest().getParameter("idGiornataIspettiva"));} catch (Exception e) {}
+			if (idGiornataIspettiva == -1)
+				try {idGiornataIspettiva = Integer.parseInt((String) context.getRequest().getAttribute("idGiornataIspettiva"));} catch (Exception e) {}
+
+			jsonGiornataIspettiva = GiornataIspettiva.getJson(db, idGiornataIspettiva);
+			jsonCampioni = Campione.getJsonLista(db, idGiornataIspettiva);
+			jsonNonConformita = NonConformita.getJsonLista(db, idGiornataIspettiva);
+
+	} 
+
+	catch (Exception e) 
+	{
+		e.printStackTrace();
+	}
+	finally 
+	{
+		this.freeConnection(context, db);
+	}
+
+	context.getRequest().setAttribute("jsonGiornataIspettiva", jsonGiornataIspettiva);
+	context.getRequest().setAttribute("jsonCampioni", jsonCampioni);
+	context.getRequest().setAttribute("jsonNonConformita", jsonNonConformita);
+
+	return "ViewOK";
 	}
 	
 	public String executeCommandPrepareSimulazione(ActionContext context) throws NumberFormatException, IllegalAccessException, InstantiationException, ParseException

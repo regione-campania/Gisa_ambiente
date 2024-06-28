@@ -341,13 +341,13 @@ public void buildList(Connection db) throws SQLException {
 	ResultSet rs = queryList(db, pst);
 	while (rs.next()) {
 
-		RicercaAIA thisopu = this.getObject(rs);
-		thisopu.setTipoRicerca(tipoRicerca);
+		RicercaAIA thisaia = this.getObject(rs);
+		thisaia.setTipoRicerca(tipoRicerca);
 		//Nuovo controllo: distinct in java
-		this.add(thisopu);
-//		if (!this.riferimentoList.contains(thisopu.getRiferimentoId())){
-//			this.add(thisopu);
-//			this.riferimentoList.add(thisopu.getRiferimentoId());
+		this.add(thisaia);
+//		if (!this.riferimentoList.contains(thisaia.getRiferimentoId())){
+//			this.add(thisaia);
+//			this.riferimentoList.add(thisaia.getRiferimentoId());
 //		}
 
 	    
@@ -368,13 +368,13 @@ public void buildListAllevamenti(Connection db) throws SQLException {
 	ResultSet rs = queryListAllevamenti(db, pst);
 	while (rs.next()) {
 
-		RicercaAIA thisopu = this.getObject(rs);
-		thisopu.setTipoRicerca(tipoRicerca);
+		RicercaAIA thisaia = this.getObject(rs);
+		thisaia.setTipoRicerca(tipoRicerca);
 		//Nuovo controllo: distinct in java
-		this.add(thisopu);
-//		if (!this.riferimentoList.contains(thisopu.getRiferimentoId())){
-//			this.add(thisopu);
-//			this.riferimentoList.add(thisopu.getRiferimentoId());
+		this.add(thisaia);
+//		if (!this.riferimentoList.contains(thisaia.getRiferimentoId())){
+//			this.add(thisaia);
+//			this.riferimentoList.add(thisaia.getRiferimentoId());
 //		}
 
 	    

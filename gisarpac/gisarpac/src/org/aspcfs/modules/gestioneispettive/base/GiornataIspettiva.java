@@ -41,6 +41,29 @@ public class GiornataIspettiva {
 			}
 	}
 
+	public void close(Connection db, Integer idGiornata,String dataGiornata, String oraFine) throws SQLException {
+	    String updateQuery = "UPDATE giornate_ispettive SET stato = 2, data_fine = ?::timestamp without time zone, ora_fine = ? WHERE id = ?";
+	    PreparedStatement pst = null;
+	    
+	    try {
+	        pst = db.prepareStatement(updateQuery);
+	        pst.setString(1, dataGiornata);
+	        pst.setString(2, oraFine);
+	        pst.setInt(3, idGiornata);
+
+	        System.out.println("[GESTIONE GIORNATE ISPETTIVE] [CLOSE] " + pst.toString());
+
+	        int rowsAffected = pst.executeUpdate();
+	        System.out.println("Rows affected: " + rowsAffected);
+	    } finally {
+	        // Chiudi PreparedStatement e ResultSet (se necessario) nel blocco finally
+	        if (pst != null) {
+	            pst.close();
+	        }
+	    }
+	}
+
+	
 	public static final JSONObject getJson(Connection db, int idGiornataIspettiva) throws SQLException, ParseException, JSONException {
 		JSONObject jsonGiornataIspettiva = new JSONObject();
 		String select = "select * from public.giornata_ispettiva_dettaglio_globale(?)";   

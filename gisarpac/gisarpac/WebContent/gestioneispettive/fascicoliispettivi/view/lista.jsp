@@ -121,11 +121,15 @@ $("#jsonFascicoliIspettivi").css('height', scroll_height + 'px');
 
 
 
-if(<%=request.getAttribute("controlloKO")%>)
-alert("ATTENZIONE! non possono essere aggiunti fascicoli ispettivi fino alla completa aggiunta dei dati autorizzativi.")
+
+
+if(<%=request.getAttribute("controlloIppcKO")%>)
+alert("ATTENZIONE! non e' possibile inserire un fascicolo ispettivo ad un impianto privo di codici IPPC. Utilizzare la funzionalita' MODIFICA CODICI IPPC per inserire/aggiornare i codici IPPC.")
 
 </script>
-
+<!-- if(<//request.getAttribute("controlloKO"))
+alert("ATTENZIONE! non possono essere aggiunti fascicoli ispettivi fino alla completa aggiunta dei dati autorizzativi.")
+ -->
 
 
 

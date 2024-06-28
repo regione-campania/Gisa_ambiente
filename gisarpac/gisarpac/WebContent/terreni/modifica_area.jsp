@@ -27,6 +27,9 @@ if (value)
 		 document.getElementById("idSito").value = "<%=area.getIdSito()%>";
 		 document.getElementById("foglioCatastale").value = "<%=area.getFoglioCatastale()%>";
 		 document.getElementById("particellaCatastale").value = "<%=area.getParticellaCatastale()%>";
+		 document.getElementById("idProvincia").value = "<%=area.getIdProvincia()%>";
+		 settaComuni();
+		 document.getElementById("idComune").value = "<%=area.getIdComune()%>";
 	}
 
 	document.getElementById("loadingCodice").style.display = "none";
@@ -35,10 +38,13 @@ if (value)
 
 function gestisciCodiceSito(){
 	
+	var codCatastale = document.getElementById("idComune").options[document.getElementById("idComune").selectedIndex].getAttribute("cod_catastale");
+	if (codCatastale == null)
+		codCatastale = '';
 	var idSito = document.getElementById("idSito").value;
 	var foglioCatastale = document.getElementById("foglioCatastale").value;
 	var particellaCatastale = document.getElementById("particellaCatastale").value;
-	var codiceSito = idSito + "F" + foglioCatastale + "P" + particellaCatastale;
+	var codiceSito = codCatastale + "_"+ idSito + "F" + foglioCatastale + "P" + particellaCatastale;
 	document.getElementById("codiceSito").value = codiceSito;
 	verificaEsistenzaCodice(codiceSito, <%=area.getId() %>);
 	
@@ -75,6 +81,17 @@ Modifica
 	<td><input type="text" <%=area.getListaSubparticelle().size()>0 ? "readonly style='background: lightgray' " : "" %> id="idSito" name="idSito" onChange="gestisciCodiceSito()" value="<%=area.getIdSito()%>"/>
 	<%=area.getListaSubparticelle().size()>0 ? "<font color= 'red'>In quest'area sono presenti subparticelle. Impossibile modificare elementi del Codice Sito.</font>" : "" %></td>
 </tr>
+
+<% if (area.getListaSubparticelle().size()>0){ %>
+<tr>
+	<td class="formLabel">PROVINCIA</td>
+	<td><input type="text" readonly style="background: lightgray" value="<%=area.getDescrizioneProvincia() %>"/> <font color= 'red'>In quest'area sono presenti subparticelle. Impossibile modificare elementi del Codice Sito.</font> <input type="hidden" id="idProvincia" name="idProvincia" value="<%=area.getIdProvincia()%>"/></td>
+</tr>
+<tr>
+	<td class="formLabel">COMUNE</td>
+	<td><input type="text" readonly style="background: lightgray" value="<%=area.getDescrizioneComune() %>"/> <font color= 'red'>In quest'area sono presenti subparticelle. Impossibile modificare elementi del Codice Sito.</font> <input type="hidden" id="idComune" name="idComune" value="<%=area.getIdComune()%>"/></td>
+</tr>
+<% } else { %>
 <tr>
 	<td class="formLabel">PROVINCIA</td>
 	<td>	
@@ -89,17 +106,21 @@ Modifica
 <tr>
 	<td class="formLabel">COMUNE</td>
 	<td>	
-		<select id="idComune" name="idComune">
+		<select id="idComune" name="idComune" onChange="gestisciCodiceSito()">
 		<option value="-1">-- SELEZIONA --</option>
 		<% for(int i=0; i<comuni.size();i++){ %>
-			<option cod_provincia="<%= comuni.get(i).getCod_provincia() %>" value="<%= comuni.get(i).getCode() %>"><%= comuni.get(i).getNome() %> </option>
+			<option cod_provincia="<%= comuni.get(i).getCod_provincia() %>" cod_catastale = "<%=comuni.get(i).getCodice() %>" value="<%= comuni.get(i).getCode() %>"><%= comuni.get(i).getNome() %> </option>
 		<% } %>
 		</select>
 	</td>
 </tr>
+<%} %>
+
 <tr>
 	<td class="formLabel">DATI CATASTALI</td>
-	<td><input type="text" <%=area.getListaSubparticelle().size()>0 ? "readonly style='background: lightgray' " : "" %> placeholder="FOGLIO" id="foglioCatastale" name="foglioCatastale" maxlength="3" onKeyUp="validaNumeri(this)" onChange="gestisciCodiceSito()" value="<%=area.getFoglioCatastale()%>"/>
+	<td>
+	<input type="text" placeholder="SEZIONE" id="sezione" name="sezione" maxlength="6" value="<%=area.getSezione()%>"/>
+	<input type="text" <%=area.getListaSubparticelle().size()>0 ? "readonly style='background: lightgray' " : "" %> placeholder="FOGLIO" id="foglioCatastale" name="foglioCatastale" maxlength="3" onKeyUp="validaNumeri(this)" onChange="gestisciCodiceSito()" value="<%=area.getFoglioCatastale()%>"/>
 	<input type="text" <%=area.getListaSubparticelle().size()>0 ? "readonly style='background: lightgray' " : ""%> placeholder="PARTICELLA" id="particellaCatastale" name="particellaCatastale" maxlength="6" onKeyUp="validaLettereNumeri(this)" onChange="gestisciCodiceSito()" value="<%=area.getParticellaCatastale()%>"/>
 	<%=area.getListaSubparticelle().size()>0 ? "<font color= 'red'>In quest'area sono presenti subparticelle. Impossibile modificare elementi del Codice Sito.</font>" : "" %>
 	</td>
@@ -108,12 +129,12 @@ Modifica
 	<td class="formLabel">CLASSE DI RISCHIO</td>
 	<td><input type="text" id="classeRischio" name="classeRischio" value="<%=area.getClasseRischio()%>"/></td>
 </tr>
-<tr>
-	<td class="formLabel">COORDINATE</td>
-	<td>X <input type="text" placeholder="X" id="coordinateX" name="coordinateX" onKeyUp="validaCoordinate(this)" value="<%=area.getCoordinateX()%>"/> 
-		Y <input type="text" placeholder="Y" id="coordinateY" name="coordinateY" onKeyUp="validaCoordinate(this)" value="<%=area.getCoordinateY()%>"/>
-	</td>
-</tr>
+<!-- <tr> -->
+<!-- 	<td class="formLabel">COORDINATE</td> -->
+<%-- 	<td>X <input type="text" placeholder="X" id="coordinateX" name="coordinateX" onKeyUp="validaCoordinate(this)" value="<%=area.getCoordinateX()%>"/>  --%>
+<%-- 		Y <input type="text" placeholder="Y" id="coordinateY" name="coordinateY" onKeyUp="validaCoordinate(this)" value="<%=area.getCoordinateY()%>"/> --%>
+<!-- 	</td> -->
+<!-- </tr> -->
 <tr>
 	<td class="formLabel">AREA (mq)</td>
 	<td><input type="text" id="area" name="area" onKeyUp="validaNumeri(this)" value="<%=area.getArea()%>"/></td>
@@ -172,29 +193,10 @@ function checkForm(form){
 		esito = false;	
 	}
 	
-	if(form.coordinateX.value==""){
-		msg +="Coordinate: Indicare Coordinata X.\n";
-		esito = false;	
-	}
-	
-	if(form.coordinateY.value==""){
-		msg +="Coordinate: Indicare Coordinata Y.\n";
-		esito = false;	
-	}
-	
-	if (form.coordinateY.value < MIN_COORD_Y || form.coordinateY.value > MAX_COORD_Y){
-		 msg += "Coordinate: Valore errato per il campo Coordinata Y, il valore deve essere compreso tra "+MIN_COORD_Y+" e "+MAX_COORD_Y +" \n";
-		 esito = false;
-	}
-	if (form.coordinateX.value < MIN_COORD_X || form.coordinateX.value > MAX_COORD_X){
-		 msg += "Coordinate: Valore errato per il campo Coordinata X, il valore deve essere compreso tra "+MIN_COORD_X+" e "+MAX_COORD_X +" \n";
-		 esito = false;
-	}
-	
-	if(form.area.value==""){
-		msg +="Indicare Area.\n";
-		esito = false;	
-	}
+// 	if(form.area.value==""){
+// 		msg +="Indicare Area.\n";
+// 		esito = false;	
+// 	}
 		
 	if (!esito){
 		alert(msg);

@@ -4,6 +4,16 @@
     content: counter(page) " su " counter(pages);
 		}
 }
+
+.footer {
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  height: 120px;
+  font-size: 11px;
+}
+
 td.td1, th.th1 {
 	  page-break-inside: avoid;
 	  word-wrap:break-word;

@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="/WEB-INF/dhv-taglib.tld" prefix="dhv" %>
 <%@ taglib uri="/WEB-INF/zeroio-taglib.tld" prefix="zeroio" %>
+<%@ page import="java.util.Iterator" %>
+<jsp:useBean id="jsonGiornateIspettive" class="org.json.JSONArray" scope="request"/>
 
 <jsp:useBean id="jsonFascicoloIspettivo" class="org.json.JSONObject" scope="request"/>
 
@@ -83,6 +85,7 @@ if (jsonCampiServizio.length()>0) {%>
 <col width="50%">
 <tr><th colspan="2">Chiusura Fascicolo Ispettivo</th></tr>
 <tr><td CLASS="formLabel">DATA</td> <td><input type="date" id="dataChiusura" name="dataChiusura" value=""/></td></tr>
+<tr><td CLASS="formLabel">ORA</td> <td><input type="time" id="oraChiusura" name="oraChiusura" value=""/></td></tr>
 <tr><th colspan="2">Dati relazione allegata al Fascicolo Ispettivo (SICRA)</th></tr>
 <tr><td CLASS="formLabel">ANNO PROTOCOLLO</td> <td><input type="text" id="annoProtocolloChiusura" name="annoProtocolloChiusura" value=""/></td></tr>
 <tr><td CLASS="formLabel">NUMERO PROTOCOLLO</td> <td><input type="text" id="numeroProtocolloChiusura" name="numeroProtocolloChiusura" value=""/></td></tr>
@@ -118,7 +121,54 @@ function checkForm(form){
 	let datainizio = document.getElementById("dataconf").value.substring(0,10);
 	let datafine = form.dataChiusura.value.toString();
 	
-	
+	   <%
+	   if (jsonGiornateIspettive.length()>0) {
+	   	for (int i = 0; i<jsonGiornateIspettive.length(); i++) {
+	   	JSONObject jsonGiornataIspettiva = (JSONObject) jsonGiornateIspettive.get(i);
+	   	 String dataInizio = jsonGiornataIspettiva.getString("dataInizio");
+	   	 String oraInizio = jsonGiornataIspettiva.getString("oraInizio");
+	   	String primaParteData = dataInizio.substring(0, 10); 
+	   	String dataFine ="";
+        if (jsonGiornataIspettiva.has("dataFine") && !jsonGiornataIspettiva.isNull("dataFine"))
+        	dataFine = jsonGiornataIspettiva.getString("dataFine");
+	   	String oraFine ="";
+        if (jsonGiornataIspettiva.has("oraFine") && !jsonGiornataIspettiva.isNull("oraFine"))
+        	oraFine = jsonGiornataIspettiva.getString("oraFine");
+	   	String primaParteDataFine = "";
+	         // Prendi solo i primi 10 caratteri
+	         if (jsonGiornataIspettiva.has("dataFine") && !jsonGiornataIspettiva.isNull("dataFine"))
+	        primaParteDataFine = dataFine.substring(0, 10); %> // Prendi solo i primi 10 caratteri
+
+	        console.log('<%= primaParteData %>')
+	   	 console.log('<%= oraInizio %>')
+
+			if(document.getElementById("dataChiusura").value<'<%= primaParteData %>')
+				{
+				alert("La data di chiusura fascicolo non puo' essere inferiore alla data inizio giornata ispettiva");
+				return false;
+				}
+	        if(document.getElementById("dataChiusura").value=='<%= primaParteData %>' && document.getElementById("oraChiusura").value<'<%= oraInizio %>')
+			{
+			alert("L' orario di chiusura fascicolo non puo' essere inferiore all'ora apertura giornata ispettiva");
+			return false;
+			}
+	        
+	        
+	        <%	    if (jsonGiornataIspettiva.has("dataFine") && !jsonGiornataIspettiva.isNull("dataFine")) { %>
+	        if(document.getElementById("dataChiusura").value<'<%= primaParteDataFine %>')
+			{
+			alert("La data di chiusura fascicolo non puo' essere inferiore alla data fine giornata ispettiva");
+			return false;
+			}
+	        
+	        if(document.getElementById("dataChiusura").value=='<%= primaParteDataFine %>' && document.getElementById("oraChiusura").value<'<%= oraFine %>')
+			{
+			alert("L' orario di chiusura fascicolo non puo' essere inferiore all'ora chiusura giornata ispettiva");
+			return false;
+			}
+	        
+	   <% }} %>
+	   <% } %>
 	
 	if (form.dataChiusura.value==''){
 		alert('Indicare una data di chiusura.');
@@ -147,5 +197,8 @@ function checkForm(form){
 		form.submit();
 	}
    }
+   
+
+   
 </script>
 

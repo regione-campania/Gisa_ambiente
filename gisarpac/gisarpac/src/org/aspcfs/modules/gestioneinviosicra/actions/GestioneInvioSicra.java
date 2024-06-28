@@ -109,7 +109,7 @@ public final class GestioneInvioSicra extends CFSModule {
 		try {
 			
 			UserBean u =((UserBean) context.getRequest().getSession().getAttribute("User"));
-			invioMail((new File(pathFile)), mailDestinatari, u);
+			invioMail((new File(pathFile)), mailDestinatari, nomeAllegato, tipoVerbale, u);
 			}catch(Exception e) {}
 
 		context.getRequest().setAttribute("idGiornataIspettiva", String.valueOf(idGiornataIspettiva));
@@ -498,8 +498,9 @@ public final class GestioneInvioSicra extends CFSModule {
 
 	}
 	
-	private void invioMail(File allegato, String altriDestinatari, UserBean user){
+	private void invioMail(File allegato, String altriDestinatari, String nomeAllegato, String tipoVerbale, UserBean user){
 		
+		String from=ApplicationProperties.getProperty("SENDER_EMAIL_FIRMA");
 		String toDest=ApplicationProperties.getProperty("DEST_EMAIL_FIRMA");
 		String object=ApplicationProperties.getProperty("OGGETTO_EMAIL_FIRMA");
 
@@ -508,12 +509,19 @@ public final class GestioneInvioSicra extends CFSModule {
 		
 		String testo = "E' stato generato un nuovo documento firmato.<br/><br/>"
 				+ "Data: "+ data + "<br/>"
+				+ "Tipo: "+ tipoVerbale + "<br/>"
+				+ "Nome: "+ nomeAllegato + "<br/>"
 				+ "Utente: "+ user.getContact().getNameFirst() + " " + user.getContact().getNameLast();
 		
 		String[] toDestArray = toDest.split(";");
 		String[] toAltriDestArray = altriDestinatari.split(";");
 		
-		String[] tuttiDestArray = (String[]) ArrayUtils.addAll(toDestArray, toAltriDestArray);
+		String[] tuttiDestArray  = new String []{"", ""};
+		
+		if (toAltriDestArray.length>0)
+			tuttiDestArray = (String[]) ArrayUtils.addAll(toDestArray, toAltriDestArray);
+		else
+			tuttiDestArray = toDestArray;
 		
 		HashMap<String,String> configs = new HashMap<String,String>();
 		configs.put("mail.smtp.starttls.enable",ApplicationProperties.getProperty("mail.smtp.starttls.enable"));
@@ -521,14 +529,14 @@ public final class GestioneInvioSicra extends CFSModule {
 		configs.put("mail.smtp.host", ApplicationProperties.getProperty("mail.smtp.host"));
 		configs.put("mail.smtp.port", ApplicationProperties.getProperty("mail.smtp.port"));
 		configs.put("mail.smtp.ssl.enable",ApplicationProperties.getProperty("mail.smtp.ssl.enable"));
-		configs.put("mail.smtp.ssl.protocols", "tlsv1.2");
-		configs.put("mail.smtp.socketFactory.class","javax.net.ssl.SSLSocketFactory");
-		configs.put("mail.smtp.socketFactory.fallback", "false");
+		configs.put("mail.smtp.ssl.protocols", ApplicationProperties.getProperty("mail.smtp.ssl.protocols"));
+		configs.put("mail.smtp.socketFactory.class", ApplicationProperties.getProperty("mail.smtp.socketFactory.class"));
+		configs.put("mail.smtp.socketFactory.fallback", ApplicationProperties.getProperty("mail.smtp.socketFactory.fallback"));
 		
 		PecMailSender sender = new PecMailSender(configs,ApplicationProperties.getProperty("username"), ApplicationProperties.getProperty("password"));
 		try {
 			System.out.println("[INVIO MAIL] "+object +"a: "+toDest+";"+altriDestinatari+" - "+ testo);
-			sender.sendMailConAllegato(object,testo,"gisasuap@cert.izsmportici.it", tuttiDestArray, allegato);
+			sender.sendMailConAllegato(object,testo,from, tuttiDestArray, allegato);
 		} catch (AddressException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

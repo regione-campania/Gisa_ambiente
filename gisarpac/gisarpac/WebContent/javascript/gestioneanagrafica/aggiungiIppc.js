@@ -16,7 +16,6 @@ $(function() {
 				var tipo_carat_id = document.getElementById('tipo_carattere').value.toString();
 				var tipo_carat_testo;
 				var principale = document.getElementById("principale").checked;
-				var quantitativi = document.getElementById("quantitativi_autorizzati").value;
 	
 				if (document.getElementById('tipo_carattere').value == '1'){
 					tipo_carat_testo = 'PERMANENTE';
@@ -27,7 +26,7 @@ $(function() {
 				var cun_popup = document.getElementById('cun_popup').value;
 				var ok_insert_popup = verifica_inserimento_ippc(cod_univ_ml, data_inizio_attivita, data_fine_attivita, tipo_carat_id, cun_popup);
 				if(ok_insert_popup){
-					aggiungi_riga(tipo_carat_testo, data_inizio_attivita, data_fine_attivita, cod_univ_ml, tipo_carat_id,cun_popup,principale,quantitativi);
+					aggiungi_riga(tipo_carat_testo, data_inizio_attivita, data_fine_attivita, cod_univ_ml, tipo_carat_id,cun_popup,principale);
 					loadModalWindowUnlock();
 					$( this ).dialog('close');
 				}
@@ -103,7 +102,6 @@ function aggiungi_ippc(){
 									'<select id="ippc"><option value="" selected="selected">SELEZIONA CODICE IPPC ATTIVITA</option></select>'+
 									'<input type="checkbox" id="principale" name="principale" checked />'+
 								    '<label for="principale">Principale</label>'+
-								    '<input style="margin-left:1rem; width: 250px" type="number" id="quantitativi_autorizzati" name="quantitativi_autorizzati"  required="true" min="1" placeholder="Quantitativi autorizzati" />'+
 									'</td>'+
 				
 						'</tr>'+
@@ -137,10 +135,10 @@ function aggiungi_ippc(){
 						
 						'<tr id="tr_data_inizio_popup">'+
 							'<td style="width:15%" align="left">' +
-								'<p>DATA INIZIO ATTIVITA</p>' +
+								'<p>DATA INIZIO VALIDITA CODICE IPPC</p>' +
 							'</td>'+
 							'<td style="width:80%" align="left">' +
-								'<input placeholder="DATA INIZIO ATTIVITA" type="text" id="data_inizio" autocomplete="off">' +
+								'<input placeholder="DATA INIZIO VALIDITA CODICE IPPC" type="text" id="data_inizio" autocomplete="off">' +
 							 '</td>' +
 						 '</tr>' +
 						 
@@ -357,7 +355,7 @@ function verifica_inserimento_ippc(cod_univ_ml, data_inizio_attivita, data_fine_
 			var diff = r2 - r1;
 
 			if(diff < 0){
-				messaggioerrore = 'la data inizio attivita non puo essere successiva alla data fine attivita';
+				messaggioerrore = 'la data inizio validita codice ippc non puo essere successiva alla data fine attivita';
 				esito = false;
 			} 
 			
@@ -366,10 +364,7 @@ function verifica_inserimento_ippc(cod_univ_ml, data_inizio_attivita, data_fine_
 			esito = false;
 		}
 	}
-	if(document.getElementById("quantitativi_autorizzati").value == "" || document.getElementById("quantitativi_autorizzati").value < 1){
-		messaggioerrore = 'selezionare i campi obbligatori';
-		esito = false;
-	}
+	
 	
 for( var i = 0; i < document.getElementsByName("check_descrizione_codice_univoco").length; i++){
 		
@@ -403,7 +398,7 @@ for( var i = 0; i < document.getElementsByName("check_descrizione_codice_univoco
 return esito;
 }
 
-function aggiungi_riga(tipo_carattere, data_inizio_attivita, data_fine_attivita, codice_univoco, tipo_carattere_id, cun,principale,quantitativi){
+function aggiungi_riga(tipo_carattere, data_inizio_attivita, data_fine_attivita, codice_univoco, tipo_carattere_id, cun,principale){
 	var urlservice = "GestioneAnagraficaGetDatiCategoriaIppc.do?command=Search&tiporichiesta=datidescrizione&iddescrizione=" + document.getElementById("descrizione").value;
 	loadModalWindow();
   	$.ajax({  	    
@@ -433,8 +428,7 @@ function aggiungi_riga(tipo_carattere, data_inizio_attivita, data_fine_attivita,
 		  				obj[i].codice, 
 		  				tipo_carattere_id,
 		  				cun,
-		  				principale,
-		  				quantitativi)
+		  				principale)
 		  				
 		  	}
 		  	loadModalWindowUnlock();
@@ -446,7 +440,7 @@ function aggiungi_riga(tipo_carattere, data_inizio_attivita, data_fine_attivita,
   	});
 }
 
-function aggiungi_riga_gui(categoria, ippc, attivita, tipo_carattere, data_inizio_attivita, data_fine_attivita, codice_univoco, tipo_carattere_id, cun,principale,quantitativi){
+function aggiungi_riga_gui(categoria, ippc, attivita, tipo_carattere, data_inizio_attivita, data_fine_attivita, codice_univoco, tipo_carattere_id, cun,principale){
 		
 	//aggiungo il componente tr
 	var numero_ippc = document.getElementById('numero_ippc').value;					
@@ -490,10 +484,9 @@ function aggiungi_riga_gui(categoria, ippc, attivita, tipo_carattere, data_inizi
 								'<br>->'+ippc+
 								'<br>->'+attivita+
 								'<br>PRINCIPALE: '+principale1+
-								'<br>QUANTITATIVI: '+quantitativi+
 								'<br><br><b>tipo attivita</b>: &emsp;'+tipo_attivita_label+
 								'<br><b>tipo carattere</b>: &emsp;'+tipo_carattere+
-								'<br><b>data inizio attivita</b>: &emsp;'+data_inizio_attivita+
+								'<br><b>data inizio validita codice ippc</b>: &emsp;'+data_inizio_attivita+
 								'<br><b>data fine attivita</b>: &emsp;'+data_fine_attivita+
 								cuntext + '<br></span>';
 		}else{
@@ -510,10 +503,9 @@ function aggiungi_riga_gui(categoria, ippc, attivita, tipo_carattere, data_inizi
 								'<br>->'+ippc+
 								'<br>->'+attivita+
 								'<br>PRINCIPALE: '+principale1+
-								'<br>QUANTITATIVI: '+quantitativi+
 								'<br><br><b>tipo attivita</b>: &emsp;'+tipo_attivita_label+
 								'<br><b>tipo carattere</b>: &emsp;'+tipo_carattere+
-								'<br><b>data inizio attivita</b>: &emsp;'+data_inizio_attivita+
+								'<br><b>data inizio validita codice ippc</b>: &emsp;'+data_inizio_attivita+
 								cuntext + '<br></span>';
 		}
 		
@@ -575,12 +567,7 @@ function aggiungi_riga_gui(categoria, ippc, attivita, tipo_carattere, data_inizi
 		hiddenfield7.setAttribute('value',document.getElementById('principale').checked);
 		document.getElementById(n_descrizione).appendChild(hiddenfield7);
 		
-		var hiddenfield8 = document.createElement('input');
-		hiddenfield8.setAttribute('type','hidden');
-		hiddenfield8.setAttribute('id','descrizione_' + numero_ippc + '_quantitativi');
-		hiddenfield8.setAttribute('name', 'descrizione_' + numero_ippc + '_quantitativi');
-		hiddenfield8.setAttribute('value',document.getElementById('quantitativi_autorizzati').value);
-		document.getElementById(n_descrizione).appendChild(hiddenfield8);
+		
 		
 		
 		var hiddenfield9 = document.createElement('input');

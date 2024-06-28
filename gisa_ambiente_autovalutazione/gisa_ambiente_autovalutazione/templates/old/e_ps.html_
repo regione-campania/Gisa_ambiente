@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<script>
+	var currTplName = "e_ps.html";
+</script>
+<html>
+<head>
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+</style>
+<body>
+
+<!----------------------------------- START OF COMMON HEADER PART -------------------------------------------> 
+{{$conf_punti := .Conf_punti }}
+<div class="container">
+	<span class="col-12 badge badge-info text-center">
+		<h4>{{$conf_punti.Cl_title}} </h4> 
+	</span>
+</div>
+<br>
+<hr>
+ <div class="container-fluid">
+ 	<div class="row">
+	  <div class="col-sm-12 bg-light"> 
+		  <div class="col-sm-4 bg-light font-weight-light">  
+	{{$conf_punti := .Conf_punti }} 
+			<bold>Calcolo Parametro - Sezione: {{$conf_punti.Sez_name}}</bold>
+			<table class="table table-bordered table-sm " style="font-size: 12px;">
+			<thead>
+			<tr> <td> </td><td style="background:orange;color:#f0f0eA;">rischio basso</td><th style="background:orange;color:#f0f0eA;">rischio medio</th><th style="background:orange;color:#f0f0eA;">rischio alto</th><tr>
+			</thead><tbody >
+			<tr> <th>Punteggio risultante</th><td>{{$conf_punti.Rischio_basso_punti}}</td><td>{{$conf_punti.Rischio_medio_punti}}</td><td>{{$conf_punti.Rischio_alto_punti}}</td><tr>
+			<tr> <th>Valore del parametro</th><td style="background:yellow">{{$conf_punti.Rischio_basso_param}}</td><td style="background:yellow">{{$conf_punti.Rischio_medio_param}}</td><td style="background:yellow">{{$conf_punti.Rischio_alto_param}}</td><tr>
+			</tbody></table>
+	 
+		  </div>
+		  <div class="col-sm-4 bg-light"> 
+		</div>
+	  </div>
+	</div>
+</div>
+<!----------------------------------- END OF COMMON HEADER PART -------------------------------------------> 
+
+
+<hr>
+<div class="container-fluid">
+  <table class = "table table-hover table-bordered">
+  <thead> <tr>
+    <th>Prog.</th>
+    <th>Domanda</th>
+    <th>Risposta</th>
+    <th>Punti</th>
+  </tr></thead>
+  <tbody>  
+  
+{{$precSez := ""}} {{range $i, $cls := .Cls }} 
+
+ {{ if ne $precSez $cls.Sez }} 
+ <tr style="background:orange;color:#f0f0eA;"><th colspan="4" >{{$cls.Sez}}</th> </tr> 
+ {{end}} 
+ 
+{{if $conf_punti.Risposta_tripla }}
+ <tr>
+    <td class="text-right align-middle">{{$cls.Prog}}</div>
+    <td class=" align-middle">{{$cls.Domanda}}</div>
+    <td class="align-middle"> 
+	
+	<div class="form-check-inline">
+	  <label class="text-monospace badge form-check-label badge-danger text-white">
+		<input type="radio" class=" form-check-input" name="risposta_{{$cls.Id}}" onclick="setPunti({{$cls.Punti}},{{$cls.Id}});updateTotale('{{$cls.Sez}}');" >Non conforme
+	  </label>
+	</div>
+	<div class="form-check-inline">
+	  <label class="badge text-monospace form-check-label badge-warning text-white">
+		<input type="radio" class="form-check-input" name="risposta_{{$cls.Id}}" onclick="setPunti({{$cls.Punti_ncc}},{{$cls.Id}});updateTotale('{{$cls.Sez}}');" >Non completamente conforme
+	  </label>
+	</div>
+	<div class="form-check-inline">
+	  <label class="badge text-monospace form-check-label badge-success text-white">
+		<input type="radio" class="form-check-input" name="risposta_{{$cls.Id}}" onclick="setPunti(0,{{$cls.Id}});updateTotale('{{$cls.Sez}}');" >Completamente conforme
+	  </label>
+	</div>
+	</td>  	
+    <td class="text-center align-middle"><span name="punti_gen" id="{{$cls.Id}}"> 0 </span></td>
+</tr>
+{{else}}
+<tr>
+    <td class="text-right align-middle">{{$cls.Prog}}</td>
+    <td class=" align-middle">{{$cls.Domanda}}</td>
+    <td class="align-middle"> 
+	
+	<div class="form-check-inline">
+	  <label class="text-monospace badge form-check-label badge-danger text-white">
+		<input 
+			type="radio" 
+			class=" form-check-input"
+			{{if eq "" $cls.Grp}} name='r_{{$cls.Id}}' {{else}} name='rg_{{$cls.Grp}}' {{end}}
+			onclick=" clearPuntiGrp('{{$cls.Grp}}'); setPunti('{{$cls.Punti}}','{{$cls.Id}}');updateTotale('{{$cls.Sez}}');"
+			
+			>SI&nbsp;
+	  </label>
+	</div>
+	{{if eq "" $cls.Grp}} 
+	<div class="form-check-inline">
+	  <label class="badge text-monospace form-check-label badge-success text-white">
+		<input 
+			type="radio" 
+			class="form-check-input" 
+			name="r_{{$cls.Id}}"
+			onclick="setPunti('0','{{$cls.Id}}');updateTotale('{{$cls.Sez}}');" 
+			>NO&nbsp;
+	  </label>
+	</div>
+	{{end}}
+	</td>  	
+    <td class="text-center align-middle">
+		<span 
+			name="punti_{{$cls.Sez}}" 
+			id="{{$cls.Id}}"
+			{{if ne "" $cls.Grp}} data-grpid='{{$cls.Grp}}' {{end}}
+		> 0 </span></td>
+</tr>
+
+{{end}}
+  {{ $precSez = $cls.Sez }} 
+ {{end}}
+ <tr style="background:orange;color:#f0f0eA;"><td colspan="3" class="text-right" > Totale punti </td> <th><span id="totale_gen"> </span></th></tr> 
+  </tbody></table>
+<script>
+	function setPunti(punti, id) {
+		const r=document.getElementById(id);
+		r.innerText=punti;	
+	}
+	
+	function updateTotale(sezione) {
+	
+		arr=document.getElementsByName("punti_"+sezione);
+	//	t=document.getElementById("totale_"+sezione);  // da usare in caso di totale per sezione
+		t=document.getElementById("totale_"+ "gen");
+		t.innerText="0";
+		arr.forEach((elem) => t.innerText=parseInt(t.innerText) + parseInt(elem.innerText));
+		
+	}
+	function clearPuntiGrp(grp) {
+		if ( grp.length > 0 ) {
+			const arr = document.querySelectorAll('[data-grpid="' + grp + '"]');	
+			arr.forEach((elem) => elem.innerText='0');
+		}
+	}
+
+</script>
+
+</body>
+</html>

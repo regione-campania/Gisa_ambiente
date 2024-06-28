@@ -57,7 +57,7 @@ Non conformita'
 
 <% if ( ((JSONObject) jsonNonConformita).has("Dati")) { %>
 <% JSONObject jsonDati = (JSONObject) jsonNonConformita.get("Dati"); %>
-<tr><td class="formLabel">Note</td><td><%=jsonDati.get("note") %> </td></tr>
+<tr><td class="formLabel">Descrizione N.C.</td><td><%=jsonDati.get("note") %> </td></tr>
 <%} %>
 
 <% if ( ((JSONObject) jsonNonConformita).has("TipoVerifica")) { %>
@@ -67,7 +67,7 @@ Non conformita'
 
 <% if ( ((JSONObject) jsonNonConformita).has("Linea")) { %>
 <% JSONObject jsonLinea = (JSONObject) jsonNonConformita.get("Linea"); %>
-<tr><td class="formLabel">Linea</td><td><%=jsonLinea.get("nome") %></a></td></tr>
+<tr><td class="formLabel">Codice IPPC</td><td><%=jsonLinea.get("nome") %></a></td></tr>
 <%} %>
 
 <% if ( ((JSONObject) jsonNonConformita).has("CampiServizio")) { %>

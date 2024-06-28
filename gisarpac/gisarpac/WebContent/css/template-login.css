@@ -18,6 +18,7 @@ TABLE, TD, TH, LI, P, UL, OL, TEXTAREA, INPUT, SELECT, A {
   height: 214px;
   border: solid 1px black;
   position: relative;
+  background-color: white;
 }
 
 .loginContainer .message {

@@ -72,8 +72,7 @@
 															IMPIANTO-&gt;CODICE IPPC-&gt;DESCRIZIONE</b><br><%=JsonIPPC.getJSONObject(i).get("categoria")%>
 														-&gt;<%=JsonIPPC.getJSONObject(i).get("codice")%>-&gt;<%=JsonIPPC.getJSONObject(i).get("descrizione")%><br>
 
-														<b>Data inizio</b>:<%=JsonIPPC.getJSONObject(i).get("data_inizio_attivita")%> <br> <b>Stato</b>: <%=JsonIPPC.getJSONObject(i).get("stato")%><br>
-														<b>Quantitativi autorizzati: </b><%=JsonIPPC.getJSONObject(i).get("quantitativi")%>
+														<b>Data inizio validita codice ippc</b>:<%=JsonIPPC.getJSONObject(i).get("data_inizio_attivita")%> <br> <b>Stato</b>: <%=JsonIPPC.getJSONObject(i).get("stato")%><br>
 														<br>
 													<br> 	</td>
 													<input type="hidden" id="descrizione_<%=i+1%>_codice_univoco" name="descrizione_<%=i+1%>_codice_univoco" value="<%=JsonIPPC.getJSONObject(i).get("id_ippc")%>">

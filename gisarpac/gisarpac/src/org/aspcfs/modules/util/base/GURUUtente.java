@@ -12,6 +12,8 @@ public class GURUUtente {
 	private int idAsl = -1;
 	private String username = "";
 	private String alias = "";
+	private Integer stabId;
+	private String ivaStab;
 	public int getId() {
 		return id;
 	}
@@ -74,6 +76,18 @@ public class GURUUtente {
 	}
 	public void setIdAsl(int idAsl) {
 		this.idAsl = idAsl;
+	}
+	public Integer getStabId() {
+		return stabId;
+	}
+	public void setStabId(Integer stabId) {
+		this.stabId = stabId;
+	}
+	public String getIvaStab() {
+		return ivaStab;
+	}
+	public void setIvaStab(String ivaStab) {
+		this.ivaStab = ivaStab;
 	}
 
 }

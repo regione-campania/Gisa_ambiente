@@ -50,7 +50,7 @@ public class Terreni extends CFSModule{
 				c.setCode(rs.getInt("id"));
 				c.setNome(rs.getString("nome"));
 				c.setCod_provincia(rs.getString("cod_provincia"));
-				
+				c.setCodice(rs.getString("codice_catastale"));				
 				comuni.add(c);
 				
 			}
@@ -172,7 +172,7 @@ public class Terreni extends CFSModule{
 				c.setCode(rs.getInt("id"));
 				c.setNome(rs.getString("nome"));
 				c.setCod_provincia(rs.getString("cod_provincia"));
-				
+				c.setCodice(rs.getString("codice_catastale"));				
 				comuni.add(c);
 				
 			}

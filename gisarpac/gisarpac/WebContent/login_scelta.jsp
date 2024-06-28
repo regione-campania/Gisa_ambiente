@@ -56,8 +56,8 @@ function settaUserId(userId){
              	
              	<% } %>
              
-       <input type="text" id="userIdScelta" name="userIdScelta" value=""/>
-       <input type="text" id="cfSpid" name="cfSpid" value="<%=cfSpid%>"/>
+       <input type="hidden" id="userIdScelta" name="userIdScelta" value=""/>
+       <input type="hidden" id="cfSpid" name="cfSpid" value="<%=cfSpid%>"/>
        
           </form>
           

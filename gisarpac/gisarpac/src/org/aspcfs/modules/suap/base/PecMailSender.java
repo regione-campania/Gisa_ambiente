@@ -58,15 +58,15 @@ public class PecMailSender {
 		configs.put("mail.smtp.host", ApplicationProperties.getProperty("mail.smtp.host"));
 		configs.put("mail.smtp.port", ApplicationProperties.getProperty("mail.smtp.port"));
 		configs.put("mail.smtp.ssl.enable",ApplicationProperties.getProperty("mail.smtp.ssl.enable"));
-		configs.put("mail.smtp.ssl.protocols", "tlsv1.2");
-		configs.put("mail.smtp.socketFactory.class","javax.net.ssl.SSLSocketFactory");
-		configs.put("mail.smtp.socketFactory.fallback", "false");
+		configs.put("mail.smtp.ssl.protocols", ApplicationProperties.getProperty("mail.smtp.ssl.protocols"));
+		configs.put("mail.smtp.socketFactory.class", ApplicationProperties.getProperty("mail.smtp.socketFactory.class"));
+		configs.put("mail.smtp.socketFactory.fallback", ApplicationProperties.getProperty("mail.smtp.socketFactory.fallback"));
 		
-		PecMailSender sender = new PecMailSender(configs,"M3023707", "US9560031");
+		PecMailSender sender = new PecMailSender(configs,ApplicationProperties.getProperty("username"), ApplicationProperties.getProperty("password"));
 		//	creo cartella temporanea per salvare file xml il cui contenuto e' estratto dal db	
 		try {
 			sender.sendMail("Test da Locale","Invio Test "+
-					"Test","gisasuap@cert.izsmportici.it", "gisadev@u-s.it", null);
+					"Test",ApplicationProperties.getProperty("mail.smtp.from"), "gisadev@u-s.it", null);
 		} catch (AddressException e) {
 
 			e.printStackTrace();

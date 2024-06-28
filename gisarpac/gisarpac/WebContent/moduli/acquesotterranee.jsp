@@ -230,8 +230,8 @@ function submitAjax()
 	<div style="text-align: justify">
 		Il giorno <u><input type="date" id="dver" j_obj="Dati" j_attr="dataInizio"></u> alle ore <u><input type="time" id="over"></u> i sottostritti C.T.P. dott. <u><input type="text" id="ctp"></u>
 		e A.T. <u><input type="text" id="at"></u>, tecnici del Dipartimento ARPAC di <u><input type="text" id="dipa1" ></u>, nell'ambito dell'ispezione AIA ordinaria iniziata in data
-		<u><input type="date" id="dini"></u>, si sono recati in <u><input type="text" id="luogo" size="50"></u> presso lo stabilimento della soc. <u><input type="text" id="soc"></u>,
-		altri presenti <u><input type="text"/></u>, alla presenza di <u><input type="text" id="presente"></u>, in qualita' di <u><input type="text" id="qualifica"></u> ed hanno effettuato le operazioni di prelievo di un campione di acqua sotterranea
+		<u><input type="date" id="dini"></u>, si sono recati in <u><input type="text" id="luogo" size="50"></u> presso lo stabilimento della soc. <u><input type="text" id="soc"></u>, alla presenza di <u><input type="text" id="presente"></u>, in qualita' di <u><input type="text" id="qualifica"></u>,,
+		altri presenti <u><input type="text"/></u> ed hanno effettuato le operazioni di prelievo di un campione di acqua sotterranea
 		dal piezometro/pozzo identificato con la sigla <u><input type="text" id="sigp1"></u> e avente coordinate UTM WGS 84: Nord<u><input type="text" id="coon" size="35"></u> - Est <u><input type="text" id="cooe" size="35"></u>.<br>
 		<strong>Attivita' svolte:</strong><br>
 		<u>PRELIEVO PIEZOMETRI/POZZI</u>: e' stato individuato il piezometro identificato con sigla <u><input type="text" id="sigp2"></u>, collocato a <u><input type="radio" name ="collocato" id="rad1">monte<input type="radio" name ="collocato" id="rad2">valle idrogeologica</u> rispetto alla direzione del flusso della falda idrica sotterranea.<br>

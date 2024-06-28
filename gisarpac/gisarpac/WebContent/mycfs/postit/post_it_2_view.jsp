@@ -8,8 +8,6 @@ Code by Creative Punch
 Create a CSS3 post-it note without images
 */
 
-@import url(http://fonts.googleapis.com/css?family=Satisfy);
-@import url(https://fonts.googleapis.com/css?family=Muli);
 
 .quote-container {
   margin-top: 50px;

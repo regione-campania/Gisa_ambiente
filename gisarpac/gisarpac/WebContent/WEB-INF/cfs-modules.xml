@@ -163,7 +163,21 @@
     <short_html value="Impianti AUA"/>
     <link value="StabilimentoAUA.do?command=SearchForm"/>
     <graphic width="83" height="36" on="menu-accounts-on.gif" off="menu-accounts-off.gif" rollover=""/>
+<submenu name="Ricerca">
+      <permission value=""/>
+      <long_html value="Ricerca"/>
+      <short_html value="Ricerca"/>
+      <link value="StabilimentoAUA.do?command=SearchForm"/>
+    </submenu>
 
+
+	<submenu name="Aggiungi impianto">
+     <permission value=""/>
+      <long_html value="Aggiungi impianto"/>
+      <short_html value="Aggiungi impianto"/>
+      <link value="StabilimentoAUA.do?command=Add"/>
+      
+    </submenu>
   </menu> 
   
    <menu>
@@ -340,33 +354,14 @@
 
  
   
-  
   <menu>
   	    <page title="DPAT"/>
   		<permission value="dpat-view"/>
   		<long_html value="DPAT"/>
     	<short_html value="DPAT"/>
-    	<link value="dpat2019.do"/>
+    	<link value="GestioneDPAT.do"/>
     	<graphic width="83" height="36" on="menu-myhome-on.gif" off="menu-myhome-off.gif" rollover=""/>
-    	<action name="dpat2019"/>
-    	<action name="DpatSDC"/>
-		<action name="DpatRS"/>
-		<action name="PianiMonitoraggio"/>
-		<action name="GestioneDocumenti_DPAT"/>
-		
-		
-	<submenu name="Configura Attivita Dpat">
-      <permission value="piani-piani-view"/>
-      <long_html value="Configura Piani Dpat"/>
-      <short_html value="Configura Piani Dpat"/>
-      <!-- vecchio flusso dpat  -->
-        <!-- <link value="Dpat.do?command=HomeConfiguraDpat"/> --> 
-      <!-- nuovo flusso dpat -->
-      <link value="dpat2019.do?command=HomeConfiguraDpatNEW"/>
-    </submenu>
-    
-	
-	
+    	<action name="GestioneDPAT"/>
   </menu>
   
    <menu>

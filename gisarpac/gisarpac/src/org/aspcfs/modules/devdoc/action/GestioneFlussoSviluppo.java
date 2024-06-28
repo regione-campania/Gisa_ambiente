@@ -373,13 +373,13 @@ public class GestioneFlussoSviluppo extends CFSModule{
 		configs.put("mail.smtp.host", ApplicationProperties.getProperty("mail.smtp.host"));
 		configs.put("mail.smtp.port", ApplicationProperties.getProperty("mail.smtp.port"));
 		configs.put("mail.smtp.ssl.enable",ApplicationProperties.getProperty("mail.smtp.ssl.enable"));
-		configs.put("mail.smtp.ssl.protocols", "tlsv1.2");
-		configs.put("mail.smtp.socketFactory.class","javax.net.ssl.SSLSocketFactory");
-		configs.put("mail.smtp.socketFactory.fallback", "false");
+		configs.put("mail.smtp.ssl.protocols", ApplicationProperties.getProperty("mail.smtp.ssl.protocols"));
+		configs.put("mail.smtp.socketFactory.class", ApplicationProperties.getProperty("mail.smtp.socketFactory.class"));
+		configs.put("mail.smtp.socketFactory.fallback", ApplicationProperties.getProperty("mail.smtp.socketFactory.fallback"));
 		
 		PecMailSender sender = new PecMailSender(configs,ApplicationProperties.getProperty("username"), ApplicationProperties.getProperty("password"));
 		try {
-			sender.sendMailConAllegato(object,testo,"gisasuap@cert.izsmportici.it", toDestArray, allegato);
+			sender.sendMailConAllegato(object,testo,ApplicationProperties.getProperty("mail.smtp.from"), toDestArray, allegato);
 		} catch (AddressException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -31,7 +31,6 @@
 <jsp:useBean id="LoginBean" class="org.aspcfs.modules.login.beans.LoginBean" scope="request"/>
 
 
-<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript" SRC="javascript/tasks.js"></script>
 <link href="css/nonconformita.css" rel="stylesheet" type="text/css" />
 
 

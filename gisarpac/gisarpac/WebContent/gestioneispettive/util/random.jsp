@@ -2,10 +2,10 @@
 
 function rispondiCaso() {
 
-	var nomi = ["PAOLO", "MARIO", "GIUSEPPE", "GIOVANNI", "ANTONIO", "PASQUALE", "RITA", "VIVIANA", "STEFANO", "VITTORIO", "GIOVANNA", "SIMONE", "WALTER", "VALENTINO", "BRUNO"];
-	var cognomi = ["BIANCHI", "ROSSI", "VERDI", "GIALLI", "DE AMICIS", "ESPOSITO", "RUSSO", "ROSATO", "COSTA", "GALLO", "RICCI", "VILLA", "FONTANA", "BRUNO"];
+	var nomi = ["RITA", "PAOLO", "STEFANO", "ALESSANDRO", "UOLTER", "ANTONIO", "CARMELA", "VIVIANA", "VALENTINO", "GIUSEPPE", "SIMONE", "MIRKO"];
+	 var cognomi = ["VERDI", "GIALLI", "ARANCIONI", "AZZURRI", "LOVER", "RUSSO", "ROSSI", "BIANCHI", "NERI", "BORDEAUX", "ESPOSITO", "DALLE MARCHE", "BARILE"];
 	var qualita = ["RESPONSABILE", "OSSERVATORE", "INCARICATO", "DIRIGENTE", "TECNICO", "AMMINISTRATORE"];
-	var termini = ["ABC", "DEF", "GHI", "TEST", "PROVA", "XYZ", "LOREM", "IPSUM", "QUANTUM", "CHECK", "EXT", "ESEMPIO", "BNS", "CHECKLIST", "SPECIE", "QWERTY", "DOLOR", "SIT", "AMET", "CONSECTETUR", "ELIT", "DIAM", "QUIS"];
+	var termini = ["ABC", "DEF", "GHI", "TEST", "PROVA", "XYZ", "LOREM", "IPSUM", "QUANTUM", "CHECK", "EXT", "ESEMPIO", "BNS", "CHECKLIST", "SPECIE", "QWERTY", "DOLOR", "SIT", "AMET", "CONSECTETUR", "ELIT", "DIAM", "QUIS", "TAVOLO", "SEDIA", "BOTTIGLIA", "SPINA", "QUADERNO", "LIBRO", "TAPPO", "MOBILE", "SCHERMO", "PORTA", "FINESTRA", "PAVIMENTO", "MATTONELLA", "LAVAGNA"];
 	var tipo = ["PRATICO", "UNICO", "RIPETUTO"];
 
 	
@@ -25,22 +25,30 @@ function rispondiCaso() {
                 if ($(inputs[i]).attr("onkeyup") == 'filtraInteri(this)') {
                     inputs[i].value = Math.floor((Math.random() * termini.length - 1) + 1) + '' + Math.floor((Math.random() * termini.length - 1) + 1) + '' + Math.floor((Math.random() * termini.length - 1) + 1);
                 }
-                else if ($(inputs[i]).attr("onkeyup") == 'validaCoordinate(this)') {
+                else if ($(inputs[i]).attr("onkeyup") == 'validaCoordinateFormato(this)') {
                     
                 	if (inputs[i].name.includes("X"))
-                		inputs[i].value = MIN_COORD_X;//+ Math.floor(Math.random() * 100001);
+                		inputs[i].value = VERTICE_NORDOVEST_X;//+ Math.floor(Math.random() * 100001);
                 	else if (inputs[i].name.includes("Y"))
-            			inputs[i].value = MIN_COORD_Y;// + Math.floor(Math.random() * 100001);
+            			inputs[i].value = VERTICE_NORDOVEST_Y;// + Math.floor(Math.random() * 100001);
                 }
                 else {
                 	if (inputs[i].placeholder.toUpperCase().includes("NOMINATIV"))
                 		inputs[i].value = nomi[Math.floor((Math.random() * nomi.length - 1) + 1)] + " " + cognomi[Math.floor((Math.random() * cognomi.length - 1) + 1)];
-                	else if (inputs[i].placeholder.toUpperCase().includes("QUALIT"))
+                	else if (inputs[i].placeholder.toUpperCase()=="NOME"){
+            			inputs[i].innerHTML = nomi[Math.floor((Math.random() * nomi.length - 1) + 1)];
+            			inputs[i].value = nomi[Math.floor((Math.random() * nomi.length - 1) + 1)];
+            		}
+            	    else if (inputs[i].placeholder.toUpperCase()=="COGNOME"){
+            			inputs[i].innerHTML = cognomi[Math.floor((Math.random() * cognomi.length - 1) + 1)];
+            			inputs[i].value = cognomi[Math.floor((Math.random() * cognomi.length - 1) + 1)];
+            		} 
+            	    else if (inputs[i].placeholder.toUpperCase().includes("QUALIT"))
                 		inputs[i].value = qualita[Math.floor((Math.random() * qualita.length - 1) + 1)];
                 	else if (inputs[i].placeholder.toUpperCase().includes("TIPO"))
                 		inputs[i].value = tipo[Math.floor((Math.random() * tipo.length - 1) + 1)];
                 	else if (inputs[i].placeholder.toUpperCase().includes("NOTE"))
-                    	inputs[i].value = termini[Math.floor((Math.random() * termini.length - 1) + 1)] + " " + termini[Math.floor((Math.random() * termini.length - 1) + 1)] + termini[Math.floor((Math.random() * termini.length - 1) + 1)] + " " + termini[Math.floor((Math.random() * termini.length - 1) + 1)] + termini[Math.floor((Math.random() * termini.length - 1) + 1)] + " " + termini[Math.floor((Math.random() * termini.length - 1) + 1)] + termini[Math.floor((Math.random() * termini.length - 1) + 1)] + " " + termini[Math.floor((Math.random() * termini.length - 1) + 1)] + termini[Math.floor((Math.random() * termini.length - 1) + 1)] + " " + termini[Math.floor((Math.random() * termini.length - 1) + 1)];
+                    	inputs[i].value = termini[Math.floor((Math.random() * termini.length - 1) + 1)] + " " + termini[Math.floor((Math.random() * termini.length - 1) + 1)] + " " + termini[Math.floor((Math.random() * termini.length - 1) + 1)] + " " + termini[Math.floor((Math.random() * termini.length - 1) + 1)] + " " + termini[Math.floor((Math.random() * termini.length - 1) + 1)] + " " + termini[Math.floor((Math.random() * termini.length - 1) + 1)] + " " + termini[Math.floor((Math.random() * termini.length - 1) + 1)] + " " + termini[Math.floor((Math.random() * termini.length - 1) + 1)] + " " + termini[Math.floor((Math.random() * termini.length - 1) + 1)] + " " + termini[Math.floor((Math.random() * termini.length - 1) + 1)];
                 	else
                     	inputs[i].value = termini[Math.floor((Math.random() * termini.length - 1) + 1)] + " " + termini[Math.floor((Math.random() * termini.length - 1) + 1)];
                 }
@@ -76,6 +84,14 @@ function rispondiCaso() {
     		inputs[i].innerHTML = nomi[Math.floor((Math.random() * nomi.length - 1) + 1)] + " " + cognomi[Math.floor((Math.random() * cognomi.length - 1) + 1)];
     		inputs[i].value = nomi[Math.floor((Math.random() * nomi.length - 1) + 1)] + " " + cognomi[Math.floor((Math.random() * cognomi.length - 1) + 1)];
     	}
+	    else if (inputs[i].placeholder.toUpperCase()=="NOME"){
+			inputs[i].innerHTML = nomi[Math.floor((Math.random() * nomi.length - 1) + 1)];
+			inputs[i].value = nomi[Math.floor((Math.random() * nomi.length - 1) + 1)];
+		}
+	    else if (inputs[i].placeholder.toUpperCase()=="COGNOME"){
+			inputs[i].innerHTML = cognomi[Math.floor((Math.random() * cognomi.length - 1) + 1)];
+			inputs[i].value = cognomi[Math.floor((Math.random() * cognomi.length - 1) + 1)];
+		}
     	else if (inputs[i].placeholder.toUpperCase().includes("QUALIT")){
     		inputs[i].innerHTML = qualita[Math.floor((Math.random() * qualita.length - 1) + 1)];
     		inputs[i].value = qualita[Math.floor((Math.random() * qualita.length - 1) + 1)];

@@ -31,7 +31,7 @@ function gestisciNumeroVerbaleAutomatico(cb){
 	}
 }
 
-function filtraRighe() {
+function filtraRigheMatrici() {
 	
 	  // Declare variables
 	  var table = document.getElementById("tableMatrici");
@@ -85,7 +85,7 @@ function filtraRighe() {
 
 <tr>
 <th></th>
-<th><input type="text" id="myInputMatrice" onkeyup="filtraRighe()" placeholder="FILTRA MATRICE" style="width: 100%"></th>
+<th><input type="text" id="myInputMatrice" onkeyup="filtraRigheMatrici()" placeholder="FILTRA MATRICE" style="width: 100%"></th>
 <th></th>
 </tr>
 

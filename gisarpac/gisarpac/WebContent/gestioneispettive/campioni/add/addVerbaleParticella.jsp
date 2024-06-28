@@ -63,27 +63,27 @@ function checkPresenzaRifiuti(radio){
 
 function checkProprietarioPresente(radio){
 	if (radio.checked && radio.value=='true'){
-			document.getElementById("divProprietarioPresenteS").style.display ="block";
-			document.getElementById("divProprietarioPresenteN").style.display ="none";
+// 			document.getElementById("divProprietarioPresenteS").style.display ="block";
+ 			document.getElementById("divProprietarioPresenteN").style.display ="none";
 			document.getElementById("datiAltraPersonaPresente").value="";
 			document.getElementById("qualitaAltraPersonaPresente").value="";
 	}
 		else if (radio.checked && radio.value == 'false'){
-			document.getElementById("divProprietarioPresenteS").style.display ="none";
+			//document.getElementById("divProprietarioPresenteS").style.display ="none";
 			document.getElementById("divProprietarioPresenteN").style.display ="block";
-			document.getElementById("datiProprietarioParticella").value="";
+			//document.getElementById("datiProprietarioParticella").value="";
 		}
 }
 
-function checkIrrigazioneInLoco(cb){
-	if (!cb.checked){
-			document.getElementById("irrigazioneInformazioni").style.display ="table-row";
-	}
-	else{
-			document.getElementById("irrigazioneInformazioni").style.display ="none";
-			document.getElementById("irrigazioneInformazioni").value="";
-		}
-}
+// function checkIrrigazioneInLoco(cb){
+// 	if (!cb.checked){
+// 			document.getElementById("irrigazioneInformazioni").style.display ="table-row";
+// 	}
+// 	else{
+// 			document.getElementById("irrigazioneInformazioni").style.display ="none";
+// 			document.getElementById("irrigazioneInformazioni").value="";
+// 		}
+// }
 
 function checkPozzoCampionamento(cb){
 	if (cb.checked){
@@ -112,33 +112,52 @@ function checkCampioniElementari(radio){
 	}			
 }
 
-function validaCoordinate(s) {
-    var rgx = /^[0-9]*\.?[0-9]*$/;
-    if (s.value.match(rgx) == null){
-    	alert("Valore non consentito! (Consentito solo il formato coordinate es. 13.150)");
-    	s.value = "";
-    }
-}
-
 function checkAliquota(cb, val){
 	
 	if (cb.checked){
 		
-		document.getElementById("aliquota"+val+"_data").style.display="table-row";
-		document.getElementById("aliquota"+val+"_ora").style.display="table-row";
+		if (document.getElementById("aliquota"+val+"_data")!=null)
+			document.getElementById("aliquota"+val+"_data").style.display="table-row";
+		if (document.getElementById("aliquota"+val+"_ora")!=null)
+			document.getElementById("aliquota"+val+"_ora").style.display="table-row";
+		if (document.getElementById("aliquota"+val+"_laboratorio")!=null)
+			document.getElementById("aliquota"+val+"_laboratorio").style.display="table-row";
 		
+		checkAliquotaData(cb);
+
 	} else {
-		document.getElementById("aliquota"+val+"_data").style.display="none";
-		document.getElementById("aliquota"+val+"_ora").style.display="none";
-		document.getElementById("aliquota"+val+"_data").value="";
-		document.getElementById("aliquota"+val+"_ora").value="";
+		if (document.getElementById("aliquota"+val+"_data")!=null){
+			document.getElementById("aliquota"+val+"_data").style.display="none";
+			document.getElementById("aliquota"+val+"_data").value="";
+			}
+		if (document.getElementById("aliquota"+val+"_ora")!=null){
+			document.getElementById("aliquota"+val+"_ora").style.display="none";
+			document.getElementById("aliquota"+val+"_ora").value="";
+			}
+		if (document.getElementById("aliquota"+val+"_laboratorio")!=null)
+			document.getElementById("aliquota"+val+"_laboratorio").style.display="none";
+		
 	}
 	
-	if (document.getElementById("aliquotaN").checked && (!document.getElementById("aliquotaBG").checked && !document.getElementById("aliquotaLM").checked)){
-		alert("L'aliquota N è selezionabile solo se almeno una coppia tra b-g / l-m è selezionata.");
+	if (document.getElementById("aliquotaBG").checked && document.getElementById("aliquotaLM").checked){
+		document.getElementById("aliquotaN").checked = true;
+		document.getElementById("aliquotaN_laboratorio").style.display="table-row";
+	}
+	if (document.getElementById("aliquotaN").checked && (!document.getElementById("aliquotaBG").checked || !document.getElementById("aliquotaLM").checked)){
+		alert("L'aliquota n è selezionabile solo se le aliquote b-g-l-m sono selezionate.");
 		document.getElementById("aliquotaN").checked = false;
-		document.getElementById("aliquotaN_data").value="";
-		document.getElementById("aliquotaN_ora").value="";
+		document.getElementById("aliquotaN_laboratorio").style.display="none";
+	}
+	
+}
+
+function checkAliquotaData(campo){
+	var data = campo.value;
+	
+	if (campo.id == 'aliquotaA_data' || campo.id == 'aliquotaC_data' || campo.id == 'aliquotaD_data'){
+		document.getElementById("aliquotaA_data").value=data;
+		document.getElementById("aliquotaC_data").value=data;
+		document.getElementById("aliquotaD_data").value=data;
 	}
 	
 }
@@ -185,9 +204,10 @@ Nominativi<br/> <textarea cols="100" rows="3" id="altriPartecipanti2" name="altr
 Nominativi<br/> <textarea cols="100" rows="3" id="altriPartecipanti3" name="altriPartecipanti3" placeholder="Nominativi"></textarea><br/>Presenti al campionamento in qualita' di<br/> <textarea cols="100" rows="3" id="qualitaAltriPartecipanti3" name="qualitaAltriPartecipanti3" placeholder="In qualità di"></textarea><br/></td></tr>
 <tr><td class="formLabel">Dati proprietario particella (nome e cognome)</td><td> 
 
-Proprietario presente: SI <input type="radio" id="proprietarioPresenteS" name="proprietarioPresente" value="true" checked onChange="checkProprietarioPresente(this)"> NO <input type="radio" id="proprietarioPresenteN" name="proprietarioPresente" value="false" onChange="checkProprietarioPresente(this)">
+Proprietario<br/>
+<textarea cols="100" rows="3" id="datiProprietarioParticella" name="datiProprietarioParticella" placeholder="Nominativo"></textarea><br/>
 
-<div id="divProprietarioPresenteS"><textarea cols="100" rows="3" id="datiProprietarioParticella" name="datiProprietarioParticella" placeholder="Nominativo"></textarea></div>
+Proprietario presente: SI <input type="radio" id="proprietarioPresenteS" name="proprietarioPresente" value="true" checked onChange="checkProprietarioPresente(this)"> NO <input type="radio" id="proprietarioPresenteN" name="proprietarioPresente" value="false" onChange="checkProprietarioPresente(this)">
 <div id="divProprietarioPresenteN" style="display:none">Altra persona presente<br/> <textarea cols="100" rows="3" id="datiAltraPersonaPresente" name="datiAltraPersonaPresente" placeholder="Nominativo"></textarea><br/> In qualita' di<br/> <textarea cols="100" rows="3" id="qualitaAltraPersonaPresente" name="qualitaAltraPersonaPresente" placeholder="In qualità di"></textarea></div>
 
 </td></tr>
@@ -215,16 +235,16 @@ Proprietario presente: SI <input type="radio" id="proprietarioPresenteS" name="p
 <tr>
 <td>Campione per VOC</td>
 <td><input type="text" readonly id="codiceIdentificativoVoc" name="codiceIdentificativoVoc" size="20" value="<%=codiceSito %>_VOC"/></td>
-<td><input type="text" id="coordinataXVoc" name="coordinataXVoc" size="20" onKeyUp="validaCoordinate(this)"/></td>
-<td><input type="text" id="coordinataYVoc" name="coordinataYVoc" size="20" onKeyUp="validaCoordinate(this)"/></td>
+<td><input type="text" id="coordinataXVoc" name="coordinataXVoc" size="20" onKeyUp="validaCoordinateFormato(this)"/></td>
+<td><input type="text" id="coordinataYVoc" name="coordinataYVoc" size="20" onKeyUp="validaCoordinateFormato(this)"/></td>
 </tr>
 
 <% for (int i = 1; i<=5; i++){ %>
 <tr id="trCampioneElementare<%=i%>" style="display:none">
 <td>Campione Elementare</td>
 <td><input type="text" readonly id="codiceIdentificativo<%=i %>" name="codiceIdentificativo<%=i %>" size="20" value="<%=codiceSito %>_<%=i%>"/></td>
-<td><input type="text" id="coordinataX<%=i %>" name="coordinataX<%=i %>" size="20" onKeyUp="validaCoordinate(this)"/></td>
-<td><input type="text" id="coordinataY<%=i %>" name="coordinataY<%=i %>" size="20" onKeyUp="validaCoordinate(this)"/></td>
+<td><input type="text" id="coordinataX<%=i %>" name="coordinataX<%=i %>" size="20" onKeyUp="validaCoordinateFormato(this)"/></td>
+<td><input type="text" id="coordinataY<%=i %>" name="coordinataY<%=i %>" size="20" onKeyUp="validaCoordinateFormato(this)"/></td>
 </tr>
 <% } %>
 
@@ -245,17 +265,17 @@ Proprietario presente: SI <input type="radio" id="proprietarioPresenteS" name="p
 
 
 <table cellpadding="10" cellspacing="10" style="border-collapse: collapse">
-<tr><th>Aliquota</th><th>Data</th><th>Ora</th><th>Richiesta ricerca fitofarmaci</th></tr>
-<tr><td><input type="checkbox" id="aliquotaA" name="aliquotaA" value="true" checked onClick="return false"/>a</td><td><input type="date" id="aliquotaA_data" name="aliquotaA_data"></td><td><input type="time" id="aliquotaA_ora" name="aliquotaA_ora"></td><td></td></tr>
-<tr><td><input type="checkbox" id="aliquotaBG" name="aliquotaBG" value="true" onClick="checkAliquota(this, 'BG')"/>b-g</td><td><input type="date" id="aliquotaBG_data" name="aliquotaBG_data" style="display:none"></td><td><input type="time" id="aliquotaBG_ora" name="aliquotaBG_ora" style="display:none"></td><td></td></tr>
-<tr><td><input type="checkbox" id="aliquotaC" name="aliquotaC" value="true" checked onClick="return false"/>c</td><td><input type="date" id="aliquotaC_data" name="aliquotaC_data"></td><td><input type="time" id="aliquotaC_ora" name="aliquotaC_ora"></td><td></td></tr>
-<tr><td><input type="checkbox" id="aliquotaD" name="aliquotaD" value="true" checked onClick="return false"/>d</td><td><input type="date" id="aliquotaD_data" name="aliquotaD_data"></td><td><input type="time" id="aliquotaD_ora" name="aliquotaD_ora"></td><td><input type="checkbox" id="aliquotaCD_fitofarmaci" name="aliquotaCD_fitofarmaci" value="true"/></td></tr>
-<tr><td><input type="checkbox" id="aliquotaE" name="aliquotaE" value="true" checked onClick="return false"/>e</td><td><input type="date" id="aliquotaE_data" name="aliquotaE_data"></td><td><input type="time" id="aliquotaE_ora" name="aliquotaE_ora"></td><td></td></tr>
-<tr><td><input type="checkbox" id="aliquotaF" name="aliquotaF" value="true" checked onClick="return false"/>f</td><td><input type="date" id="aliquotaF_data" name="aliquotaF_data"></td><td><input type="time" id="aliquotaF_ora" name="aliquotaF_ora"></td><td></td></tr>
-<tr><td><input type="checkbox" id="aliquotaH" name="aliquotaH" value="true" checked onClick="return false"/>h</td><td><input type="date" id="aliquotaH_data" name="aliquotaH_data"></td><td><input type="time" id="aliquotaH_ora" name="aliquotaH_ora"></td><td></td></tr>
-<tr><td><input type="checkbox" id="aliquotaI" name="aliquotaI" value="true" checked onClick="return false"/>i</td><td><input type="date" id="aliquotaI_data" name="aliquotaI_data"></td><td><input type="time" id="aliquotaI_ora" name="aliquotaI_ora"></td><td></td></tr>
-<tr><td><input type="checkbox" id="aliquotaLM" name="aliquotaLM" value="true" onClick="checkAliquota(this, 'LM')"/>l-m</td><td><input type="date" id="aliquotaLM_data" name="aliquotaLM_data" style="display:none"></td><td><input type="time" id="aliquotaLM_ora" name="aliquotaLM_ora" style="display:none"></td><td></td></tr>
-<tr><td><input type="checkbox" id="aliquotaN" name="aliquotaN" value="true" onClick="checkAliquota(this, 'N')"/>n</td><td><input type="date" id="aliquotaN_data" name="aliquotaN_data" style="display:none"></td><td><input type="time" id="aliquotaN_ora" name="aliquotaN_ora" style="display:none"></td><td></td></tr>
+<tr><th>Aliquota</th><th>Data apertura</th><th>Ora</th><th>Richiesta ricerca fitofarmaci</th><th>Laboratorio di destinazione</th></tr>
+<tr><td><input type="checkbox" id="aliquotaA" name="aliquotaA" value="true" checked onClick="return false"/>a</td><td><input type="date" id="aliquotaA_data" name="aliquotaA_data" onChange="checkAliquotaData(this)"></td><td><input type="time" id="aliquotaA_ora" name="aliquotaA_ora"></td><td></td><td><input type="text" readonly id="aliquotaA_laboratorio" name="aliquotaA_laboratorio" value="ARPAC"/></td></td></tr>
+<tr><td><input type="checkbox" id="aliquotaBG" name="aliquotaBG" value="true" onClick="checkAliquota(this, 'BG')"/>b-g</td><td></td><td></td><td></td><td><input type="text" readonly id="aliquotaBG_laboratorio" name="aliquotaBG_laboratorio" style="display:none" value="ARPAC"/></td></tr>
+<tr><td><input type="checkbox" id="aliquotaC" name="aliquotaC" value="true" checked onClick="return false"/>c</td><td><input type="date" id="aliquotaC_data" name="aliquotaC_data" onChange="checkAliquotaData(this)"></td><td><input type="time" id="aliquotaC_ora" name="aliquotaC_ora"></td><td rowspan="2"><input type="checkbox" id="aliquotaCD_fitofarmaci" name="aliquotaCD_fitofarmaci" value="true"/></td><td><input type="text" readonly id="aliquotaC_laboratorio" name="aliquotaC_laboratorio" value="ARPAC"/></td></tr>
+<tr><td><input type="checkbox" id="aliquotaD" name="aliquotaD" value="true" checked onClick="return false"/>d</td><td><input type="date" id="aliquotaD_data" name="aliquotaD_data" onChange="checkAliquotaData(this)"></td><td><input type="time" id="aliquotaD_ora" name="aliquotaD_ora"></td><td><input type="text" readonly id="aliquotaD_laboratorio" name="aliquotaD_laboratorio" value="ARPAC"/></td></tr>
+<tr><td><input type="checkbox" id="aliquotaE" name="aliquotaE" value="true" checked onClick="return false"/>e</td><td></td><td></td><td></td><td><input type="text" readonly id="aliquotaE_laboratorio" name="aliquotaE_laboratorio" size="30" value="Universita' Federico II di Napoli"/></td></tr>
+<tr><td><input type="checkbox" id="aliquotaF" name="aliquotaF" value="true" checked onClick="return false"/>f</td><td></td><td></td><td></td><td><input type="text" readonly id="aliquotaF_laboratorio" name="aliquotaF_laboratorio" value="ARPAC"/></td></tr>
+<tr><td><input type="checkbox" id="aliquotaH" name="aliquotaH" value="true" checked onClick="return false"/>h</td><td></td><td></td><td></td><td><input type="text" readonly id="aliquotaH_laboratorio" name="aliquotaH_laboratorio" value="ARPAC"/></td></tr>
+<tr><td><input type="checkbox" id="aliquotaI" name="aliquotaI" value="true" checked onClick="return false"/>i</td><td><input type="date" id="aliquotaI_data" name="aliquotaI_data" onChange="checkAliquotaData(this)"></td><td><input type="time" id="aliquotaI_ora" name="aliquotaI_ora"></td><td></td><td><input type="text" readonly id="aliquotaI_laboratorio" name="aliquotaI_laboratorio" value="ARPAC"/></td></tr>
+<tr><td><input type="checkbox" id="aliquotaLM" name="aliquotaLM" value="true" onClick="checkAliquota(this, 'LM')"/>l-m</td><td><input type="date" id="aliquotaLM_data" name="aliquotaLM_data" onChange="checkAliquotaData(this)" style="display:none"></td><td><input type="time" id="aliquotaLM_ora" name="aliquotaLM_ora" style="display:none"></td><td></td><td><input type="text" readonly id="aliquotaLM_laboratorio" name="aliquotaLM_laboratorio" style="display:none" size="30" value="Universita' Federico II di Napoli"/></td></tr>
+<tr><td><input type="checkbox" id="aliquotaN" name="aliquotaN" value="true" onClick="checkAliquota(this, 'N')"/>n</td><td></td><td></td><td></td><td><input type="text" readonly id="aliquotaN_laboratorio" name="aliquotaN_laboratorio" style="display:none" value="Controparte"/></td></tr>
 
 </table>
 
@@ -279,7 +299,7 @@ Proprietario presente: SI <input type="radio" id="proprietarioPresenteS" name="p
 <col width="30%">
 <tr><th colspan="2"><center><b>DATI IRRIGAZIONE</b></center></th></tr>
 
-<tr><td class="formLabel">Informazioni acquisite</td><td> In Loco <input type="checkbox" id="irrigazioneInLoco" name="irrigazioneInLoco" checked value="true" onClick="checkIrrigazioneInLoco(this)"/> <textarea cols="100" style="display:none" rows="3" id="irrigazioneInformazioni" name="irrigazioneInformazioni" placeholder="Dal sig... (Nominativo)"></textarea> </td></tr>
+<tr><td class="formLabel">Informazioni acquisite</td><td> In Loco <input type="checkbox" id="irrigazioneInLoco" name="irrigazioneInLoco" checked value="true" /> <textarea cols="100" rows="3" id="irrigazioneInformazioni" name="irrigazioneInformazioni" placeholder="Dal sig... (Nominativo)"></textarea> </td></tr>
 <tr><td class="formLabel">Derivazione acqua utilizzata</td><td> <textarea cols="100" rows="3" id="irrigazioneDerivazione" name="irrigazioneDerivazione" size="50" placeholder="Derivazione"></textarea> </td></tr>
 
 </table>
@@ -300,7 +320,7 @@ Proprietario presente: SI <input type="radio" id="proprietarioPresenteS" name="p
 <col width="30%">
 <tr><th colspan="2"><center><b>NOTE</b></center></th></tr>
 
-<tr><td class="formLabel">Dichiarazioni</td><td> <textarea cols="100" rows="3" id="dichiarazioni" name="dichiarazioni" placeholder="Dichiarazioni"></textarea> </td></tr>
+<tr><td class="formLabel">Dichiarazioni Controparte</td><td> <textarea cols="100" rows="3" id="dichiarazioni" name="dichiarazioni" placeholder="Dichiarazioni"></textarea> </td></tr>
 <tr><td class="formLabel">Strumentazione utilizzata</td><td> <textarea cols="100" rows="3" id="strumentazione" name="strumentazione" placeholder="Strumentazione"></textarea> </td></tr>
 <tr><td class="formLabel">Note aggiuntive</td><td> <textarea cols="100" rows="3" id="noteAggiuntive" name="noteAggiuntive" placeholder="Note"></textarea> </td></tr>
 
@@ -341,7 +361,7 @@ function checkForm(form){
 	var qualitaAltriPartecipanti1 = form.qualitaAltriPartecipanti1.value;
 	var qualitaAltriPartecipanti2 = form.qualitaAltriPartecipanti2.value;
 	var qualitaAltriPartecipanti3 = form.qualitaAltriPartecipanti3.value;
-	var proprietarioPresente = form.proprietarioPresente.checked;
+	var proprietarioPresente = form.proprietarioPresenteS.checked;
 	var datiProprietarioParticella = form.datiProprietarioParticella.value;
 	var datiAltraPersonaPresente = form.datiAltraPersonaPresente.value;
 	var qualitaAltraPersonaPresente = form.qualitaAltraPersonaPresente.value;
@@ -363,25 +383,15 @@ function checkForm(form){
 	var aliquotaLM = form.aliquotaLM;
 	var aliquotaN = form.aliquotaN;
 	var aliquotaA_data = form.aliquotaA_data.value;
-	var aliquotaBG_data = form.aliquotaBG_data.value;
 	var aliquotaC_data = form.aliquotaC_data.value;
 	var aliquotaD_data = form.aliquotaD_data.value;
-	var aliquotaE_data = form.aliquotaE_data.value;
-	var aliquotaF_data = form.aliquotaF_data.value;
-	var aliquotaH_data = form.aliquotaH_data.value;
 	var aliquotaI_data = form.aliquotaI_data.value;
 	var aliquotaLM_data = form.aliquotaLM_data.value;
-	var aliquotaN_data = form.aliquotaN_data.value;
 	var aliquotaA_ora = form.aliquotaA_ora.value;
-	var aliquotaBG_ora = form.aliquotaBG_ora.value;
 	var aliquotaC_ora = form.aliquotaC_ora.value;
 	var aliquotaD_ora = form.aliquotaD_ora.value;
-	var aliquotaE_ora = form.aliquotaE_ora.value;
-	var aliquotaF_ora = form.aliquotaF_ora.value;
-	var aliquotaH_ora = form.aliquotaH_ora.value;
 	var aliquotaI_ora = form.aliquotaI_ora.value;
 	var aliquotaLM_ora = form.aliquotaLM_ora.value;
-	var aliquotaN_ora = form.aliquotaN_ora.value;
 	
 	if (carabinieriForestali==""){
 		msg +="Indicare CARABINIERI FORESTALI.\n";
@@ -408,12 +418,13 @@ function checkForm(form){
 		esito = false;	
 	} 
 	
-	if (proprietarioPresente) {
-		if (datiProprietarioParticella==""){
-			msg +="Indicare DATI PROPRIETARIO PARTICELLA.\n";
-			esito = false;	
-		}
-	} else {
+	
+	if (datiProprietarioParticella==""){
+		msg +="Indicare DATI PROPRIETARIO PARTICELLA.\n";
+		esito = false;	
+	}
+	
+	if (!proprietarioPresente) {
 		if (datiAltraPersonaPresente==""){
 			msg +="Indicare ALTRA PERSONA PRESENTE\n";
 			esito = false;	
@@ -433,12 +444,8 @@ function checkForm(form){
 		esito = false;
 	}
 	
-	if (v4 < MIN_COORD_Y || v4 > MAX_COORD_Y){
-		 msg += "Coordinate: Valore errato per il campo campione VOC Coordinata Y, il valore deve essere compreso tra "+MIN_COORD_Y+" e "+MAX_COORD_Y +" \n";
-		 esito = false;
-	}
-	if (v3 < MIN_COORD_X || v3 > MAX_COORD_X){
-		 msg += "Coordinate: Valore errato per il campo campione VOC Coordinata X, il valore deve essere compreso tra "+MIN_COORD_X+" e "+MAX_COORD_X +" \n";
+	if (!validaCoordinateCampania(v3, v4)){
+		 msg += "Coordinate: Valore errato. Inserire una coppia di coordinate in Campania.\n";
 		 esito = false;
 	}
 	
@@ -456,12 +463,8 @@ function checkForm(form){
 			esito = false;
 		}
 		
-		if (c4 < MIN_COORD_Y || c4 > MAX_COORD_Y){
-			 msg += "Coordinate: Valore errato per il campo campione "+i+"+ Coordinata Y, il valore deve essere compreso tra "+MIN_COORD_Y+" e "+MAX_COORD_Y +" \n";
-			 esito = false;
-		}
-		if (c3 < MIN_COORD_X || c3 > MAX_COORD_X){
-			 msg += "Coordinate: Valore errato per il campo campione "+i+"+ Coordinata X, il valore deve essere compreso tra "+MIN_COORD_X+" e "+MAX_COORD_X +" \n";
+		if (!validaCoordinateCampania(c3, c4)){
+			 msg += "Coordinate: Valore errato per campione" +i+". Inserire una coppia di coordinate in Campania.\n";
 			 esito = false;
 		}
 	}
@@ -489,20 +492,6 @@ function checkForm(form){
 		const data2 = new Date(dataCampione);
 		if (data1<data2){
 			msg +="Indicare una data uguale o successiva alla data di campionamento ("+dataCampione+") per aliquota a.\n";
-			esito = false;	
-		}	
-	}
-	
-	if (aliquotaBG.checked && (aliquotaBG_data == '' || aliquotaBG_ora == '')){
-		msg +="Indicare DATA e ORA per aliquota b-g.\n";
-		esito = false;	
-	} else {
-		var data = aliquotaBG_data + ' ' + aliquotaBG_ora;
-		var dataCampione = '<%=dataPrelievo%> <%=oraPrelievo%>';
-		const data1 = new Date(data);
-		const data2 = new Date(dataCampione);
-		if (data1<data2){
-			msg +="Indicare una data uguale o successiva alla data di campionamento ("+dataCampione+") per aliquota b-g.\n";
 			esito = false;	
 		}	
 	}
@@ -535,48 +524,6 @@ function checkForm(form){
 		}	
 	}
 	
-	if (aliquotaE.checked && (aliquotaE_data == '' || aliquotaE_ora == '')){
-		msg +="Indicare DATA e ORA per aliquota e.\n";
-		esito = false;	
-	} else {
-		var data = aliquotaE_data + ' ' + aliquotaE_ora;
-		var dataCampione = '<%=dataPrelievo%> <%=oraPrelievo%>';
-		const data1 = new Date(data);
-		const data2 = new Date(dataCampione);
-		if (data1<data2){
-			msg +="Indicare una data uguale o successiva alla data di campionamento ("+dataCampione+") per aliquota e.\n";
-			esito = false;	
-		}	
-	}
-	
-	if (aliquotaF.checked && (aliquotaF_data == '' || aliquotaF_ora == '')){
-		msg +="Indicare DATA e ORA per aliquota f.\n";
-		esito = false;	
-	} else {
-		var data = aliquotaF_data + ' ' + aliquotaF_ora;
-		var dataCampione = '<%=dataPrelievo%> <%=oraPrelievo%>';
-		const data1 = new Date(data);
-		const data2 = new Date(dataCampione);
-		if (data1<data2){
-			msg +="Indicare una data uguale o successiva alla data di campionamento ("+dataCampione+") per aliquota f.\n";
-			esito = false;	
-		}	
-	}
-	
-	if (aliquotaH.checked && (aliquotaH_data == '' || aliquotaH_ora == '')){
-		msg +="Indicare DATA e ORA per aliquota h.\n";
-		esito = false;	
-	} else {
-		var data = aliquotaH_data + ' ' + aliquotaH_ora;
-		var dataCampione = '<%=dataPrelievo%> <%=oraPrelievo%>';
-		const data1 = new Date(data);
-		const data2 = new Date(dataCampione);
-		if (data1<data2){
-			msg +="Indicare una data uguale o successiva alla data di campionamento ("+dataCampione+") per aliquota h.\n";
-			esito = false;	
-		}	
-	}
-	
 	if (aliquotaI.checked && (aliquotaI_data == '' || aliquotaI_ora == '')){
 		msg +="Indicare DATA e ORA per aliquota i.\n";
 		esito = false;	
@@ -601,20 +548,6 @@ function checkForm(form){
 		const data2 = new Date(dataCampione);
 		if (data1<data2){
 			msg +="Indicare una data uguale o successiva alla data di campionamento ("+dataCampione+") per aliquota l-m.\n";
-			esito = false;	
-		}	
-	}
-	
-	if (aliquotaN.checked && (aliquotaN_data == '' || aliquotaN_ora == '')){
-		msg +="Indicare DATA e ORA per aliquota n.\n";
-		esito = false;	
-	} else {
-		var data = aliquotaN_data + ' ' + aliquotaN_ora;
-		var dataCampione = '<%=dataPrelievo%> <%=oraPrelievo%>';
-		const data1 = new Date(data);
-		const data2 = new Date(dataCampione);
-		if (data1<data2){
-			msg +="Indicare una data uguale o successiva alla data di campionamento ("+dataCampione+") per aliquota n.\n";
 			esito = false;	
 		}	
 	}

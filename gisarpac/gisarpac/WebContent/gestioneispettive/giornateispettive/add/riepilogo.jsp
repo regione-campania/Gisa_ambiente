@@ -46,8 +46,7 @@ if (jsonDipartimento.length()>0) {%>
 if (jsonDati.length()>0) {%>
 <tr><td class="formLabel">Data inizio </td><td><%=fixData(jsonDati.get("dataInizio"))%></td></tr>
 <tr><td class="formLabel">Ora inizio </td><td><%=jsonDati.get("oraInizio")%></td></tr>
-<tr><td class="formLabel">Data fine </td><td><%=fixData(jsonDati.get("dataFine"))%></td></tr>
-<tr><td class="formLabel">Ora fine </td><td><%=jsonDati.get("oraFine")%></td></tr>
+
 <tr><td class="formLabel">Note </td><td><%=jsonDati.get("note")%></td></tr>
 
 <%} } %>
@@ -116,7 +115,7 @@ if (jsonGruppoIspettivo.length()>0) {%>
 for (int i = 0; i<jsonGruppoIspettivo.length(); i++) {
 JSONObject jsonComponente = (JSONObject) jsonGruppoIspettivo.get(i);
 %>
-<%=jsonComponente.get("nominativo") %> - <%=jsonComponente.get("struttura") %>  <%=jsonComponente.has("referente") && Boolean.TRUE.equals(jsonComponente.get("referente")) ? "(<b>Referente Ispettivo</b>)" : "" %> <%=jsonComponente.has("responsabile") && Boolean.TRUE.equals(jsonComponente.get("responsabile")) ? "(<b>Incaricato di Funzione</b>)" : "" %><br/><br/>
+<%=jsonComponente.get("nominativo") %> - <%=jsonComponente.get("descrizioneAreaSemplice") %>  <%=jsonComponente.has("referente") && Boolean.TRUE.equals(jsonComponente.get("referente")) ? "(<b>Referente Ispettivo</b>)" : "" %> <%=jsonComponente.has("dirigente") && Boolean.TRUE.equals(jsonComponente.get("dirigente")) ? "(<b>Dirigente Coordinatore</b>)" : "" %><br/><br/>
 <% } %>
 </td></tr>
 <%} }%>

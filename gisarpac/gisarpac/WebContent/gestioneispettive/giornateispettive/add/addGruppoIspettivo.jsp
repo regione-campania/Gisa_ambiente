@@ -30,18 +30,18 @@ function svuotaAltri(cb){
 	
 }
 
-function gestisciResponsabile(cb){
+function gestisciDirigente(cb){
 	
 	var idComponente = cb.value;
 	
 	if (!cb.checked) {
 		document.getElementById("componenteReferente_"+idComponente).disabled=true;
-		document.getElementById("componenteResponsabile_"+idComponente).disabled=true;
+		document.getElementById("componenteDirigente_"+idComponente).disabled=true;
 		document.getElementById("componenteReferente_"+idComponente).checked=false;
-		document.getElementById("componenteResponsabile_"+idComponente).checked=false;
+		document.getElementById("componenteDirigente_"+idComponente).checked=false;
 	} else {
 		document.getElementById("componenteReferente_"+idComponente).disabled=false;
-		document.getElementById("componenteResponsabile_"+idComponente).disabled=false;
+		document.getElementById("componenteDirigente_"+idComponente).disabled=false;
 	}
 	
 }
@@ -79,19 +79,19 @@ function checkForm(form){
 	//	esito = false;
 	//}
 	
-	var almenoUnResponsabile = false;
+	var almenoUnDirigente = false;
 	
 	var resp = form.getElementsByTagName("input");
 	for(var i = 0; i < resp.length; i++) {
-	    if(resp[i].type == "checkbox" && resp[i].id.includes("componenteResponsabile")) {
+	    if(resp[i].type == "checkbox" && resp[i].id.includes("componenteDirigente")) {
 	    	if (resp[i].checked){
-				almenoUnResponsabile = true;
+				almenoUnDirigente = true;
 			}
 	    }  
 	}
 	
-	//if (!almenoUnResponsabile){
-	//	msg +="Indicare un componente come Responsabile Procedimento.\n";
+	//if (!almenoUnDirigente){
+	//	msg +="Indicare un componente come Dirigente Procedimento.\n";
 	//	esito = false;
 	//}
 	
@@ -132,15 +132,13 @@ function backForm(form){
 function filtraRighe() {
 	  // Declare variables
 	  var table = document.getElementById("tableGruppoIspettivo");
-	  var input1 = document.getElementById("myInputQualifica");
-	  var input2 = document.getElementById("myInputComponente");
-	  var input3 = document.getElementById("myInputStruttura");
+	  var input1 = document.getElementById("myInputComponente");
+	  var input2 = document.getElementById("myInputStruttura");
 	  
 	  var input, filter, table, tr, td, i, txtValue;
 	  
 	  filter1 = input1.value.toUpperCase();
 	  filter2 = input2.value.toUpperCase();
-	  filter3 = input3.value.toUpperCase();
 
 	  tr = table.getElementsByTagName("tr");
 
@@ -149,15 +147,13 @@ function filtraRighe() {
 	    td0 = tr[i].getElementsByTagName("td")[0];
 	    td1 = tr[i].getElementsByTagName("td")[1];
 	    td2 = tr[i].getElementsByTagName("td")[2];
-	    td3 = tr[i].getElementsByTagName("td")[3];
 
 	    if (td0) {
 	      txtValue0 = td0.textContent || td0.innerText;
 	      txtValue1 = td1.textContent || td1.innerText;
 	      txtValue2 = td2.textContent || td2.innerText;
-	      txtValue3 = td3.textContent || td3.innerText;
 
-	      if (txtValue1.toUpperCase().indexOf(filter1) > -1 && txtValue2.toUpperCase().indexOf(filter2) > -1 && txtValue3.toUpperCase().indexOf(filter3) > -1) {
+	      if (txtValue1.toUpperCase().indexOf(filter1) > -1 && txtValue2.toUpperCase().indexOf(filter2) > -1) {
 	        tr[i].style.display = "";
 	      } else {
 	        tr[i].style.display = "none";
@@ -187,7 +183,7 @@ function filtraRighe() {
 <th>Componente</th>
 <th>Struttura</th>
 <th>Incaricato di Funzione</th>
-<th>Responsabile procedimento</th>
+<th>Dirigente Coordinatore</th>
 
 </tr>
 
@@ -206,18 +202,18 @@ Componente comp = (Componente) ListaComponenti.get(i); %>
 
 <tr>
 <td>
-<input type="checkbox" id ="<%= comp.getId()%>" name="componenteId" value="<%= comp.getId()%>" onClick="gestisciResponsabile(this)"/>
-<input type="hidden" readonly id ="componenteNome_<%= comp.getId()%>" name ="componenteNome_<%= comp.getId()%>" value="<%= comp.getNominativo() %>"/>
+<input type="checkbox" id ="<%= comp.getId()%>_<%= comp.getIdAreaSemplice()%>" name="componenteId" value="<%= comp.getId()%>_<%= comp.getIdAreaSemplice()%>" onClick="gestisciDirigente(this)"/>
+<input type="hidden" readonly id ="componenteNome_<%= comp.getId()%>_<%= comp.getIdAreaSemplice()%>" name ="componenteNome_<%= comp.getId()%>_<%= comp.getIdAreaSemplice()%>" value="<%= comp.getNominativo() %>"/>
 <!--<input type="hidden" readonly id ="componenteQualifica_<%= comp.getId()%>" name ="componenteQualifica_<%= comp.getId()%>" value="<%= comp.getNomeQualifica() %>"/>-->
-<input type="hidden" readonly id ="componenteStruttura_<%= comp.getId()%>" name ="componenteStruttura_<%= comp.getId()%>" value="<%= comp.getNomeStruttura() %>"/>
-<input type="hidden" readonly id ="componenteStrutturaId_<%= comp.getId()%>" name ="componenteStrutturaId_<%= comp.getId()%>" value="<%= comp.getIdStruttura() %>"/>
+<input type="hidden" readonly id ="componenteAreaSemplice_<%= comp.getId()%>_<%= comp.getIdAreaSemplice()%>" name ="componenteAreaSemplice_<%= comp.getId()%>_<%= comp.getIdAreaSemplice()%>" value="<%= comp.getDescrizioneAreaSemplice() %>"/>
+<input type="hidden" readonly id ="componenteAreaSempliceId_<%= comp.getId()%>_<%= comp.getIdAreaSemplice()%>" name ="componenteAreaSempliceId_<%= comp.getId()%>_<%= comp.getIdAreaSemplice()%>" value="<%= comp.getIdAreaSemplice() %>"/>
 
 </td>
 <!--<td><%= comp.getNomeQualifica() %></td>-->
 <td><%= comp.getNominativo() %></td>
-<td><%= comp.getNomeStruttura() %></td>
-<td><input type="checkbox" disabled id ="componenteReferente_<%= comp.getId()%>" name="componenteReferente_<%= comp.getId()%>" value="true" onClick="svuotaAltri(this)"/></td>
-<td><input type="checkbox"  disabled id ="componenteResponsabile_<%= comp.getId()%>" name="componenteResponsabile_<%= comp.getId()%>" value="true" onClick="svuotaAltri(this)"/></td>
+<td><%= comp.getDescrizioneAreaSemplice() %></td>
+<td><input type="checkbox" disabled id ="componenteReferente_<%= comp.getId()%>_<%= comp.getIdAreaSemplice()%>" name="componenteReferente_<%= comp.getId()%>_<%= comp.getIdAreaSemplice()%>" value="true" onClick="svuotaAltri(this)"/></td>
+<td><input type="checkbox"  disabled id ="componenteDirigente_<%= comp.getId()%>_<%= comp.getIdAreaSemplice()%>" name="componenteDirigente_<%= comp.getId()%>_<%= comp.getIdAreaSemplice()%>" value="true" onClick="svuotaAltri(this)"/></td>
 </tr>
 <% } %>
 
@@ -265,16 +261,16 @@ function reloadDati(){
 for (int i = 0; i < jsonGruppoIspettivo.length(); i++) {
 JSONObject jsonObject = jsonGruppoIspettivo.getJSONObject(i);
 %>
-document.getElementById("<%=jsonObject.get("id")%>").setAttribute("checked","true")
+document.getElementById("<%=jsonObject.get("id")%>_<%=jsonObject.get("idAreaSemplice")%>").setAttribute("checked","true")
 
 if(<%=jsonObject.get("referente")%>)
-	document.getElementById("componenteReferente_<%=jsonObject.get("id")%>").setAttribute("checked","true")
-	document.getElementById("componenteReferente_<%=jsonObject.get("id")%>").removeAttribute("disabled")
+	document.getElementById("componenteReferente_<%=jsonObject.get("id")%>_<%=jsonObject.get("idAreaSemplice")%>").setAttribute("checked","true")
+	document.getElementById("componenteReferente_<%=jsonObject.get("id")%>_<%=jsonObject.get("idAreaSemplice")%>").removeAttribute("disabled")
 
 
-if(<%=jsonObject.get("responsabile")%>)
-		document.getElementById("componenteResponsabile_<%=jsonObject.get("id")%>").setAttribute("checked","true")
-		document.getElementById("componenteResponsabile_<%=jsonObject.get("id")%>").removeAttribute("disabled")
+if(<%=jsonObject.get("dirigente")%>)
+		document.getElementById("componenteDirigente_<%=jsonObject.get("id")%>_<%=jsonObject.get("idAreaSemplice")%>").setAttribute("checked","true")
+		document.getElementById("componenteDirigente_<%=jsonObject.get("id")%>_<%=jsonObject.get("idAreaSemplice")%>").removeAttribute("disabled")
 
 
 

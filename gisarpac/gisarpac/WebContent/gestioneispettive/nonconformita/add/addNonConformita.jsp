@@ -42,7 +42,7 @@ function checkForm(form){
      }
 	
 	if (!almenoUnRadio){
-		msg+= "Selezionare la linea.\n";
+		msg+= "Selezionare il codice IPPC.\n";
 		esito = false;
 	}
 	
@@ -86,7 +86,7 @@ for (int i = 0; i<jsonTipiVerifica.length(); i++) {
 
 </td></tr>
 
-<tr><td class="formLabel">Linea</td>
+<tr><td class="formLabel">Codice IPPC</td>
 
 <td>
 <% JSONArray jsonLinee = (JSONArray) jsonGiornataIspettiva.get("Linee");
@@ -101,7 +101,7 @@ for (int i = 0; i<jsonLinee.length(); i++) {
 
 </td></tr>
 
-<tr><td class="formLabel">Note </td><td><textarea id="note" name="note" cols="50" rows="5" placeholder="NOTE"></textarea></td></tr>
+<tr><td class="formLabel">Descrizione N.C. </td><td><textarea id="note" name="note" cols="50" rows="5" placeholder="Descrizione N.C."></textarea></td></tr>
 
 </table>
 

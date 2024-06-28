@@ -24,7 +24,11 @@ function modificaAlias(form, id){
 	loadModalWindow();
 	form.submit();
 }
-	
+function listaUtentiDaProc(form, id){
+	form.action= 'Utility.do?command=GURUListProc';
+	loadModalWindow();
+	form.submit();
+}
 
 </script>
 
@@ -45,6 +49,7 @@ function modificaAlias(form, id){
 <dhv:permission name="guru-view"><input type="button" class="buttonguru" onClick="listaUtenti(this.form)" value="LISTA UTENTI"/></dhv:permission></td></tr>
 <tr><td><input type="button" class="buttonguru" onClick="modificaPassword(this.form)" value="MODIFICA PASSWORD UTENTE"/></td>
 <td name="guru-view"><input type="button" class="buttonguru" onClick="modificaAlias(this.form)" value="MODIFICA ALIAS"/></td></tr>
+<td name="guru-view"><input type="button" class="buttonguru" onClick="listaUtentiDaProc(this.form)" value="LISTA UTENTI DA PROCESSARE"/></td></tr>
 
 </table>
 </center>

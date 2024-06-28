@@ -45,9 +45,6 @@ if (jsonDati.length()>0) {%>
 <tr><td class="formLabel">Data inizio </td><td><input type="date" id="dataInizio" name="dataInizio" /></td></tr>
 <script>document.getElementById("dataInizio").max = new Date().toISOString().split("T")[0];</script>
 <tr><td class="formLabel">Ora inizio </td><td><input type="time" id="oraInizio" name="oraInizio" /></td></tr>
-<tr><td class="formLabel">Data fine </td><td><input type="date" id="dataFine" name="dataFine" /></td></tr>
-<script>document.getElementById("dataFine").max = new Date().toISOString().split("T")[0];</script>
-<tr><td class="formLabel">Ora fine </td><td><input type="time" id="oraFine" name="oraFine" /></td></tr>
 <tr><td class="formLabel">Note </td><td><textarea id="note" name="note" cols="50" rows="5" placeholder="NOTE"></textarea></td></tr>
 
 
@@ -85,7 +82,6 @@ function checkForm(form){
 	let dataInizio = form.dataInizio.value.toString();
 	
 	let oraInizio = form.oraInizio.value;
-	let oraFine = form.oraFine.value;
 	
 	
 
@@ -101,14 +97,7 @@ function checkForm(form){
 	}
 	
 	
-	if (form.dataInizio.value>form.dataFine.value && form.dataFine.value!=''){
-		msg +="La data fine non puo' essere antecedente alla data inizio.\n";
-		esito = false;	
-	}else if(oraInizio>oraFine && form.dataInizio.value==form.dataFine.value)
-		{
-		msg +="L'ora fine non puo' essere antecedente all'ora inizio nello stesso giorno.\n";
-		esito = false;	
-		}
+	
 	
 	if (form.oraInizio.value==""){
 		msg +="Selezionare l'ora inizio.\n";
@@ -142,8 +131,7 @@ function reloadDati(){
 <% JSONObject jsonDati1 = (JSONObject) jsonGiornataIspettiva.get("Dati"); %>
 document.getElementById("dataInizio").value='<%=jsonDati1.get("dataInizio")%>'
 	document.getElementById("oraInizio").value='<%=jsonDati1.get("oraInizio")%>'
-	document.getElementById("dataFine").value='<%=jsonDati1.get("dataFine")%>'
-	document.getElementById("oraFine").value='<%=jsonDati1.get("oraFine")%>'
+
 	document.getElementById("note").value='<%=jsonDati1.get("note")%>'<%}%>
 }
 reloadDati();

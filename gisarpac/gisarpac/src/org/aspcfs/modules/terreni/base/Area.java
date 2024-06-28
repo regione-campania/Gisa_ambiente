@@ -22,6 +22,7 @@ public class Area implements Serializable{
 	private int idComune;
 	private String descrizioneProvincia;
 	private String descrizioneComune;
+	private String sezione;
 	private String foglioCatastale;
 	private String particellaCatastale;
 	private String classeRischio;
@@ -61,6 +62,7 @@ public class Area implements Serializable{
 		idSito = context.getRequest().getParameter("idSito");
 		idProvincia = Integer.parseInt((String) context.getRequest().getParameter("idProvincia"));
 		idComune = Integer.parseInt((String) context.getRequest().getParameter("idComune"));
+		sezione = context.getRequest().getParameter("sezione");
 		foglioCatastale = context.getRequest().getParameter("foglioCatastale");
 		particellaCatastale = context.getRequest().getParameter("particellaCatastale");
 		classeRischio = context.getRequest().getParameter("classeRischio");
@@ -79,6 +81,7 @@ public class Area implements Serializable{
 		idComune = rs.getInt("id_comune");
 		descrizioneProvincia = rs.getString("descrizione_provincia");
 		descrizioneComune = rs.getString("descrizione_comune");
+		sezione = rs.getString("sezione");
 		foglioCatastale = rs.getString("foglio_catastale");
 		particellaCatastale = rs.getString("particella_catastale");
 		classeRischio = rs.getString("classe_rischio");		
@@ -130,6 +133,13 @@ public class Area implements Serializable{
 		this.idComune = idComune;
 	}
 
+	public String getSezione() {
+		return sezione;
+	}
+
+	public void setSezione(String sezione) {
+		this.sezione = sezione;
+	}
 	public String getFoglioCatastale() {
 		return foglioCatastale;
 	}
@@ -240,15 +250,16 @@ public class Area implements Serializable{
 
 	public void insert(Connection db, int userId) throws SQLException {
 		PreparedStatement pst = null;
-		String sql = "select * from insert_area(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+		String sql = "select * from insert_area(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 		pst = db.prepareStatement(sql);
 		int i = 0;
-		pst.setString(++i, codiceSito);
-		pst.setString(++i, idSito);
+		pst.setString(++i, codiceSito.toUpperCase());
+		pst.setString(++i, idSito.toUpperCase());
 		pst.setInt(++i, idProvincia);
 		pst.setInt(++i, idComune);
-		pst.setString(++i, foglioCatastale);
-		pst.setString(++i, particellaCatastale);
+		pst.setString(++i, sezione.toUpperCase());
+		pst.setString(++i, foglioCatastale.toUpperCase());
+		pst.setString(++i, particellaCatastale.toUpperCase());
 		pst.setString(++i, classeRischio);
 		pst.setString(++i, coordinateX);
 		pst.setString(++i, coordinateY);
@@ -279,16 +290,17 @@ public class Area implements Serializable{
 
 	public void update(Connection db, int userId) throws SQLException {
 		PreparedStatement pst = null;
-		String sql = "select * from update_area(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+		String sql = "select * from update_area(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 		pst = db.prepareStatement(sql);
 		int i = 0;
 		pst.setInt(++i, id);
-		pst.setString(++i, codiceSito);
-		pst.setString(++i, idSito);
+		pst.setString(++i, codiceSito.toUpperCase());
+		pst.setString(++i, idSito.toUpperCase());
 		pst.setInt(++i, idProvincia);
 		pst.setInt(++i, idComune);
-		pst.setString(++i, foglioCatastale);
-		pst.setString(++i, particellaCatastale);
+		pst.setString(++i, sezione.toUpperCase());
+		pst.setString(++i, foglioCatastale.toUpperCase());
+		pst.setString(++i, particellaCatastale.toUpperCase());
 		pst.setString(++i, classeRischio);
 		pst.setString(++i, coordinateX);
 		pst.setString(++i, coordinateY);

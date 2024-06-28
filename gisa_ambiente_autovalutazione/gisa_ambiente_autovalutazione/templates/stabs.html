@@ -1,0 +1,108 @@
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+<style type="text/css">
+    .clinicaDiv {
+        width: 100%;
+    }
+    
+    .clinicaDiv a {
+        width: 100%;
+        border: 1px solid aliceBlue;
+        display:block;
+        color:#555555;
+        font-weight:bold;
+        height:100px;
+        line-height:29px;
+        margin-bottom:14px;
+        text-decoration:none;
+        -webkit-transition: color 0.2s linear;
+        -moz-transition: color 0.2s linear;
+        -moz-border-radius: 8px;
+        border-radius: 8px;
+    }
+    
+    .clinicaDiv a:hover {
+        color:#0066CC;
+    }
+    
+    .clinicaSpanH {
+        text-align: center;
+        display:block;
+        cursor: pointer;
+        text-transform: uppercase;
+        font-size: 18px;
+    }
+    
+    .clinicaSpanB {
+        text-align: center;
+        padding: 0px 10px 0px 10px;
+        display:block;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        font-weight: normal;
+        color: black;
+        line-height: normal;
+    }
+
+    .header {
+        top: 0px;
+        padding: 3px;
+        text-align: center;
+        margin-bottom: 10px;
+        background-image: linear-gradient(to bottom right, #0574d2, #00040a);
+        color: white;
+        font-size: 6px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);
+    }
+    
+    </style>
+    
+    <title>GISA AMBIENTE Autovalutazione</title>
+    <link rel="icon" href="../static/img/icon.png">
+    
+    <div class="header">
+		<h3>GISA AMBIENTE Autovalutazione</h3>		
+    </div>
+    <h3 style="text-align: center">Scegli Impianto</h3>
+
+    
+    <div class="logout">
+        <a onclick="href='/'">
+            <span class="clinicaSpanH">Indietro</span>
+            <span class="clinicaSpanB">
+            </span>
+        </a>
+    </div>
+            
+            
+    <div style="margin: 40px auto;">
+        {{if not .LoginData}}
+        <script>
+            alert("NESSUN IMPIANTO ASSOCIATO!");
+            window.location.href = "/index";
+        </script>
+    {{else}}
+      {{range $i, $qst := .LoginData }}
+            <div class="clinicaDiv">
+                <a href="/postLogin?rif_id={{$qst.Riferimento_id}}&rif_nome={{$qst.Riferimento_id_nome}}&rif_tab={{$qst.Riferimento_id_nome_tab}}">
+                    <strong><span class="clinicaSpanH"> {{$qst.Ragione_sociale}}</span></strong>
+                    <span class="clinicaSpanB">
+                        {{$qst.Dati_anag}}
+                    </span>
+                </a>
+            </div>
+     {{end}}
+     {{end}}
+    </div>
+
+    <script>
+      
+/*
+        if(sessionStorage.getItem("tipoUtente") != "ospite" && sessionStorage.getItem("tipoUtente") != "osa"){
+            alert('Eseguire login!');
+            window.location.href = "/index";
+
+        }
+        */
+    </script>

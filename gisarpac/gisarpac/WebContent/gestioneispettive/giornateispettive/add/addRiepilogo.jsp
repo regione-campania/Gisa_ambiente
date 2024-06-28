@@ -33,10 +33,16 @@ function backForm(form){
 <!-- RIEPILOGO -->
 <%@ include file="riepilogo.jsp"%>
 <!-- RIEPILOGO -->
+<table class="details" cellpadding="10" cellspacing="10" width="100%">
+<col width="20%">
 
-<br/>
-<center><font size="5px">La Giornata Ispettiva sarà inserita come riportato nel riepilogo.</font></center>
-<br/>
+
+
+
+<input type="hidden" id="tecnica" name="tecnica" value=<%=request.getAttribute("tecnica")%>>
+</table>
+
+
 
 <!-- BOTTONI -->
 <table class="details" cellpadding="10" cellspacing="10" width="100%">

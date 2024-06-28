@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<script>
+	var currTplName = "cl23.html";
+</script>
+<html>
+<head>
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+</style>
+
+<body>
+
+<!----------------------------------- START OF COMMON HEADER PART -------------------------------------------> 
+
+<div class="container">
+	<span class="col-12 badge badge-info text-center">
+		<h4>{{ $.Cl_title }} </h4> 
+	</span>
+</div>
+
+<!----------------------------------- END OF COMMON HEADER PART -------------------------------------------> 
+<hr>
+<div class="container-fluid">
+  <table class = "table table-hover table-bordered">
+  <thead> <tr>
+    <th>Prog.</th>
+    <th>Domanda</th>
+    <th>Risposta</th>
+    <th>Punti</th>
+  </tr></thead>
+  <tbody>  
+  
+{{$precSez := ""}} {{range $i, $cls := .Cls }} 
+
+ {{ if ne $precSez $cls.Sez }} 
+ <tr style="background:orange;color:#f0f0eA;"><th colspan="4" >{{$cls.Sez}}</th> </tr> 
+ {{end}} 
+ 
+
+<tr>
+    <td class="text-right align-middle">{{$cls.Prog}}</td>
+    <td class=" align-middle">{{$cls.Domanda}}</td>
+    <td class="align-middle"> 
+	<script>
+
+		console.log("ID:{{$cls.Id}} Punti:{{$cls.Punti_si}}")
+	</script>
+	<div class="form-check-inline">
+	  <label class="text-monospace badge form-check-label badge-success text-white">
+		<input 
+			type="radio" 
+			class=" form-check-input" data-q_id="{{$cls.Id}}" data-blocker="{{$cls.Blocker}}" data-grp-blck="{{$cls.Grp_block}}" data-risp-blck="{{$cls.Risposta_block}}" data-risposta="SI" value="{{ $cls.Punti_si }}"
+			{{if eq "" $cls.Grp}} name='r_{{$cls.Id}}' {{else}} name='rg_{{$cls.Grp}}'  {{end}}
+			onclick="{{if ne "" $cls.Grp}}setGrpToNo('rg_{{$cls.Grp}}', this); jsonGrp('rg_{{$cls.Grp}}','rg_{{$cls.Grp}}');{{end}} checkBlockers(this); upState(this); clearPuntiGrp('{{$cls.Grp}}'); setPunti('{{$cls.Punti_si}}','{{$cls.Id}}');updateTotale('{{$cls.Sez}}');"
+			
+			>SI&nbsp;
+	  </label>
+	</div>
+	{{if eq "" $cls.Grp}} 
+	<div class="form-check-inline">
+	  <label class="badge text-monospace form-check-label badge-danger text-white">
+		<input 
+			type="radio" 
+			class="form-check-input" data-q_id="{{$cls.Id}}" data-blocker="{{$cls.Blocker}}" data-grp-blck="{{$cls.Grp_block}}" data-risp-blck="{{$cls.Risposta_block}}" data-risposta="NO" value="{{ $cls.Punti_no}}"
+			name="r_{{$cls.Id}}"
+			onclick=" checkBlockers(this); setPunti('{{$cls.Punti_no}}','{{$cls.Id}}');updateTotale('{{$cls.Sez}}');upState(this);" 
+			>NO&nbsp;
+	  </label>
+	</div>
+
+	</td>  	
+	{{end}}
+    <td class="text-center align-middle">
+		<span 
+			id="{{$cls.Id}}"
+			name="punti_risposta"
+			{{if ne "" $cls.Grp}} data-grpid='{{$cls.Grp}}' {{end}}
+		> 0 </span></td>
+</tr>
+
+
+  {{ $precSez = $cls.Sez }} 
+ {{end}}
+ <tr style="background:orange;color:#f0f0eA;">
+	<td colspan="3" class="text-center" >
+ {{if lt .UserId 0}}
+ <button type="button" class="btn btn-outline-light btn-sm" onclick="window.parent.parent.confirm('Sei di sicuro di salvare e scaricare l\'autovalutazione in formato PDF?', 'h2p')"
+	 style="color:white; border-color: white;">Salva definitivo</button>
+ {{end}}
+
+ {{if gt .UserId 0}}
+  <button type="button" class="btn btn-outline-light btn-sm" onclick="window.parent.parent.confirm('Vuoi salvare in GISA la tua autovalutazione?', 'h2p')"
+	style="color:white; border-color: white;">Salva definitivo</button>
+ <!--mostro il bottone salva solo agli utenti registrati id>0-->
+ 
+ {{end}}
+ </td>
+ <td colspan="3" class="text-right" > Totale punti </td> <th><span id="tot">0 </span> <span id="rischio"> </span></th></tr> 
+  </tbody></table>
+<script>
+
+function setGrpToNo(groupName, element) {
+    const inputs = document.querySelectorAll(`input[name="${groupName}"]`);
+    inputs.forEach(input => {
+        if (input !== element) {
+            input.checked = false;
+            if (input.value.toLowerCase() === 'no') {
+                // Aggiorna il JSON content per l'input con valore "NO"
+                setPunti(input.value, input.getAttribute('data-q_id'));
+                // Aggiorna lo stato dell'input
+                upState(input);
+            }
+        }
+    });
+}
+
+
+function checkBlockers(element) {
+    const rispBlck = element.getAttribute('data-risp-blck');
+    const grpBlck = element.getAttribute('data-grp-blck');
+    const isBlocker = element.getAttribute('data-blocker') === "true";
+    const risposta = element.getAttribute('data-risposta');
+
+    if (isBlocker && rispBlck === risposta) {
+        const inputs = document.querySelectorAll(`input[data-grp-blck="${grpBlck}"]`);
+        inputs.forEach(input => {
+            if (input !== element && input.getAttribute('data-blocker') !== "true") {
+                input.disabled = true;
+				input.checked = false;
+                // Azzera le risposte e i punteggi
+                resetInput(input);
+            }
+        });
+        // Annulla il punteggio totale
+        updateTotale(0);
+    } else {
+        const inputs = document.querySelectorAll(`input[data-grp-blck="${grpBlck}"]`);
+        inputs.forEach(input => {
+            if (input.getAttribute('data-blocker') !== "true") {
+                input.disabled = false;
+				
+            }
+        });
+    }
+}
+
+function resetInput(input) {
+    const id = input.getAttribute('data-q_id');
+    document.getElementById(id).innerText = '0';
+    updJsonContent(id, 0, "");
+}
+
+
+function setPunti(punti, id) {
+                const r = document.getElementById(id);
+                r.innerText = parseFloat(punti).toFixed(2);
+
+                updateTotale(1);
+            }
+	
+			function updateTotale(sezione) {
+// Inizializza la variabile totale a 0
+		let total = 0;
+		// Loop attraverso ogni oggetto nell'array jsonContent
+		jsonContent.forEach((obj) => {
+			// Aggiungi il valore di Punti_Risposta di ogni oggetto al totale
+
+			total += parseFloat(obj.Punti_Risposta);
+		});
+
+		// Mostra il totale nella tua pagina HTML
+		document.getElementById("tot").innerText = total;
+
+	
+}
+	
+	function clearPuntiGrp(grp) {
+		if ( grp.length > 0 ) {
+			const arr = document.querySelectorAll('[data-grpid="' + grp + '"]');	
+			arr.forEach((elem) => elem.innerText='0');
+		}
+	}
+
+	'use strict';
+	
+	var jsonContent = [
+    {{range $i, $qst := .Cls }} {{if gt $i 0}} , {{end}} {"Id_Domanda": "{{$qst.Id}}","N":{{$i}}, "Capitolo": "{{$qst.Sez}}", "Domanda":"{{$qst.Domanda}}","Punti_Risposta":0,"Risposta":"","Id_Cl":{{$qst.Id_Cl}}}
+    {{end}}
+];
+	console.log(jsonContent);
+	
+	
+	document.addEventListener("DOMContentLoaded", function(){
+    var tot = 0;
+    jsonContent.forEach(function(d){
+        if(d.Punti_Risposta != 0 && d.Risposta !=""){
+            tot = parseFloat(tot).toFixed(2)  + parseFloat(d.Punti_Risposta).toFixed(2);
+        }
+        document.getElementById("tot").innerText = parseFloat(tot).toFixed(2);
+    });
+    updMancanti();
+});
+	function exportjson() {
+
+var j=JSON.stringify(jsonContent, null, 2);
+var ar=[];
+ar.push(j);
+var blob = new Blob(ar, {type: "text/plain;charset=utf-8"});
+
+if (window.parent.parent.confirm(ar)) {
+	saveAs(blob, "json.txt");
+}
+}
+
+function azzera(){
+	//if (confirm("Azzerare la simulazione corrente per la checklist corrente?", 'azzera')) {
+		let xhr = new XMLHttpRequest();
+		xhr.open("POST", "/delete_cl", false);
+		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+		xhr.onload = function (event) {
+			console.log(event);
+			console.log(xhr.response);
+			parent.document.getElementById('chpqst').contentWindow.location.reload(true);
+		};
+		xhr.send(JSON.stringify(jsonContent)); 
+	//}
+}
+
+function jsonGrp(q_id, name_domanda) {
+    var inputs = document.querySelectorAll('input[name=' + name_domanda + ']');
+    inputs.forEach(function(input) {
+        if (input.checked) {
+            console.log("Opzione selezionata:", input.value);
+            // Aggiorna il JSONContent solo per l'input selezionato
+            updJsonContent(input.dataset.q_id, input.value, "SI");
+        } else {
+            console.log("Opzione non selezionata:", input.value);
+            // Aggiorna il JSONContent per gli input non selezionati
+            updJsonContent(input.dataset.q_id, 0, "NO");
+        }
+    });
+}
+
+
+function updJsonContent(id, punti, risp) {
+    const objIndex = jsonContent.findIndex(obj => obj.Id_Domanda == id);
+    jsonContent[objIndex].Punti_Risposta = parseFloat(punti).toFixed(2);
+    jsonContent[objIndex].Risposta = risp;
+}
+
+function switchSD(t) { 
+    //--aggiorna stato sottodomande
+    var myid = t.dataset.id;
+    var d_parent = 'input[data-idparent="' + myid +'"]';
+    var sds = document.querySelectorAll(d_parent);  //tutte le sottomande hanno idparent==id  riga corrente 
+    
+    var rbAr = document.getElementsByName(t.name);  //current radiobutton array  
+    
+    if (rbAr[0].checked) { //SI
+        for (let i = 0; i < sds.length; i++) { //abilita sottodomande
+            sds[i].disabled = false;
+        }
+    } else { //disabilita sottodomande, rendi not active, azzera check, sottrai punteggi e  aggiorna json obj
+        for (let i = 0; i < sds.length; i++) {
+            if (sds[i].checked) {
+                //set rb not active
+                sds[i].parentElement.classList.remove("active");
+                //set rb not checked
+                sds[i].checked = false;
+                // upd tot
+                let p = parseFloat(sds[i].value);
+                updTot(-p);
+                // upd json record
+                    updJsonContent(sds[i].dataset.q_id, -1, "");
+                
+            }
+            //disable row
+            sds[i].disabled = true;
+            const nRow = parseFloat(sds[i].name.substring(1)) + 1;
+            $('#tr_'+nRow).removeClass('tr_hover');
+        }  
+    }
+    updMancanti();                            
+}
+
+
+function updMancanti(){
+	var replied = 0;
+	var toReply = 0;
+	$('input[data-risposta="SI"]').each(function(i){
+		if(!$( this )[0].disabled)
+			toReply++
+	})
+	$('input[data-risposta="SI"]').each(function(i){
+		if($( this )[0].checked)
+			replied++;
+	})
+	$('input[data-risposta="NO"]').each(function(i){
+		if($( this )[0].checked)
+			replied++;
+	})
+	//document.getElementById("mancanti").innerText=String(toReply - replied)//.padStart(3, '0');
+}
+
+function updTot(v) {
+//--aggiorna il campo punteggio (span #tot)
+
+	var i_tot=parseFloat(document.getElementById("tot").innerText).toFixed(2); //totale punteggio
+	var new_tot=parseFloat(i_tot) +parseFloat(v) ;
+	document.getElementById("tot").innerText=parseFloat(new_tot).toFixed(2)//.padStart(3, '0');
+	console.log("TOTALE:"+new_tot)
+	console.log("Debug itot:"+parseFloat(i_tot).toFixed(2))
+	console.log("Debug v:"+parseFloat(v).toFixed(2))
+
+
+	
+}
+
+function upState(t) {  
+//-- aggiorna stato lista in particolare:
+//--aggiorna totale punteggio
+//--aggiorna rb attivo domanda corrente 
+//--aggiorna stato sottodomande
+//--aggiorna json obj
+
+  const nRow = parseInt(t.name.substring(1)) + 1;
+  $('#tr_'+nRow).removeClass('tr_hover');
+
+  var rbAr=document.getElementsByName(t.name);  //current radiobutton array
+  
+  var i_currpv=parseFloat(t.value).toFixed(2)  //punteggio correntea
+  if (!t.name.startsWith('rg_')) { // Aggiungi questo controllo condizionale
+
+  updJsonContent(t.dataset.q_id, i_currpv, t.dataset.risposta) //aggiorna record corrispondente in json obj
+  }
+  if (t.dataset.sottodomanda !== 'SI') { //non è una sottodomanda
+	switchSD(t); // cambia stato alle eventuali sottodomande
+  }
+
+  for (let i=0; i<rbAr.length; i++) {  //poll radio button array (SI, NO)
+	if (rbAr[i].parentElement.classList.contains("active")) { // se il rb-i è attivo...
+		if(rbAr[i]!=t) { //... e diverso da quello corrente... 
+			rbAr[i].parentElement.classList.remove("active"); //...lo rende non attivo 
+			let i_oldv=parseFloat(rbAr[i].value).toFixed(2);                 //  e sottrae il suo valore...   
+			updTot(-i_oldv);                                      // al tot
+			updTot(i_currpv);									// e aggiunge il nuovo
+			t.parentElement.classList.add("active");
+			return;
+		} else {   //risulta già selezionato il rb clickato...
+			return;// niente altro da fare
+		}
+    }
+  }
+  // seleziona il radiob. corrente e aggiunge punti a tot nel caso in cui nessuno dei due era selezionato
+	updTot(i_currpv);		
+	updMancanti();							
+	t.parentElement.classList.add("active");  
+}
+
+
+
+function h2p() {
+
+
+console.log(jsonContent)
+var noRisp = "";
+    var rgAnswered = false; // Flag per verificare se almeno una domanda "rg" è stata risposta
+    var grpMap = {}; // Mappa per tenere traccia delle risposte delle domande con lo stesso valore di "grp"
+
+    jsonContent.forEach(function(d, i){
+        var q = i +1
+		console.log("Q: "+ q)
+        if ($('input[name="r_'+q+'"][data-risposta="SI"]:checked').length == 0 && 
+            $('input[name="r_'+q+'"][data-risposta="NO"]:checked').length == 0 &&
+            $('input[name="r_'+q+'"][data-risposta="NO"]').is(':enabled')) {
+                noRisp += d.N + ', ';
+                $('#tr_'+d.N).addClass('tr_hover');
+        }});
+
+    if (noRisp.length > 0) {
+        window.parent.parent.alert("Riepilogo: impossibile salvare! Rispondere a tutte le domande.");
+        return;
+    }
+
+	
+
+
+	saveToDb(false);
+
+	var content=jsonContent;
+	//Convert JSON to HTML Table.
+	
+	var dvTable=document.getElementById("pdfdiv");
+	
+	var table = document.createElement("TABLE");
+	table.border = "1";
+	table.rules="all";
+	
+	table.Id = "tblcontent";
+
+	var table2 = document.createElement("TABLE");
+	table2.border = "1";
+	table2.rules="all";
+	table2.Id = "tblcontent";
+	table2.style.marginBottom = "10px";
+
+	//Get the count of columns.
+	var columnCount = 5;
+
+	var topHeader = table2.insertRow(-1);
+
+	headerCell = document.createElement("TH");
+	headerCell.innerHTML = "Livello 1";
+	headerCell.style.backgroundColor = '#0a5c0a';
+	headerCell.style.color = "white";
+	topHeader.appendChild(headerCell);
+
+	headerCell = document.createElement("TH");
+	headerCell.innerHTML = "Livello 2";
+	headerCell.style.backgroundColor = '#0a5c0a';
+	headerCell.style.color = "white";
+	topHeader.appendChild(headerCell);
+
+	headerCell = document.createElement("TH");
+	headerCell.innerHTML = "Livello 3";
+	headerCell.style.backgroundColor = '#0a5c0a';
+	headerCell.style.color = "white";
+	topHeader.appendChild(headerCell);
+
+	/*headerCell = document.createElement("TH");
+	headerCell.innerHTML = "Checklist";
+	headerCell.style.backgroundColor = '#0a5c0a';
+	headerCell.style.color = "white";
+	topHeader.appendChild(headerCell);*/
+
+	headerCell = document.createElement("TH");
+	headerCell.innerHTML = "Punteggio";
+	headerCell.style.backgroundColor = '#0a5c0a';
+	headerCell.style.color = "white";
+	topHeader.appendChild(headerCell);
+
+	
+	var topRow = table2.insertRow(-1);
+
+	var topCell = document.createElement("TD");
+	topCell.innerHTML = window.parent.parent.getFld("macro");
+	topCell.style.color = "black";
+	topRow.appendChild(topCell);
+
+	topCell = document.createElement("TD");
+	topCell.innerHTML = window.parent.parent.getFld("aggre");
+	topCell.style.color = "black";
+	topRow.appendChild(topCell);
+
+	topCell = document.createElement("TD");
+	topCell.innerHTML = window.parent.parent.getFld("linea");
+	topCell.style.color = "black";
+	topRow.appendChild(topCell);
+
+	/*topCell = document.createElement("TD");
+	topCell.innerHTML = window.parent.parent.getCL().innerText;
+	topRow.appendChild(topCell);*/
+
+	topCell = document.createElement("TD");
+	topCell.innerHTML = document.getElementById("tot").innerText;
+	topCell.style.textAlign = "center";
+	topCell.style.color = "black";
+	topRow.appendChild(topCell);
+
+	var asteriscoOsa = "";
+	var testoOsa = "";
+	if(sessionStorage.getItem("tipoUtente") != 'ospite'){
+		asteriscoOsa = ''
+		testoOsa = "";
+	}
+
+
+
+	//Add the header row.
+	var row = table.insertRow(-1);
+	for (var i = 1; i <= columnCount; i++) {
+		var headerCell = document.createElement("TH");
+		if(i > 1) //salto N
+			headerCell.innerHTML = Object.keys(content[0])[i];
+		headerCell.style.backgroundColor = '#0a5c0a';
+		headerCell.style.color = "white";
+		row.style.padding.top = "10px";
+		row.appendChild(headerCell);
+	}
+
+	//Add the data rows.
+	var domandaIndex = 0;
+	var subDomandaIndex = 0;
+	var subDomandaText = ""
+	var oldDomanda = "";
+	for (var i = 0; i < content.length; i++) {
+
+		if(oldDomanda != content[i].Domanda){
+			domandaIndex++;
+			subDomandaIndex = 0;
+			subDomandaText = "";
+		}else{	
+				subDomandaIndex++;
+				subDomandaText = "."+subDomandaIndex;
+		}
+
+		oldDomanda = content[i].Domanda;
+
+		row = table.insertRow(-1);
+		cell = row.insertCell(-1);
+		cell.innerHTML = domandaIndex + subDomandaText;
+		cell.style.textAlign = "right";
+		cell.style.color = "black";
+
+		//row = table.insertRow(-1);
+		cell = row.insertCell(-1);
+		cell.innerHTML = content[i].Capitolo;
+		cell.style.color = "black";
+
+		cell = row.insertCell(-1);
+		cell.innerHTML = content[i].Domanda;
+		cell.style.color = "black";
+
+		
+		cell = row.insertCell(-1);
+		cell.innerHTML = content[i].Punti_Risposta;
+		cell.style.textAlign = "center";
+		cell.style.color = "black";
+
+		cell = row.insertCell(-1);
+		cell.innerHTML = content[i].Risposta;
+		cell.style.textAlign = "center";
+		cell.style.color = "black";
+
+	}
+
+
+	var image = document.createElement('img')
+	image.src = "/opt/go_projects/giava_amb23/static/img/regionecampania.png";
+	image.style.width = "200px";
+
+	var autovalutazioneLabel = document.createElement("label");
+	autovalutazioneLabel.innerText = "GISA Ambiente Autovalutazione";
+	autovalutazioneLabel.style.fontWeight = "bold";
+	autovalutazioneLabel.style.fontSize = "20px";
+	autovalutazioneLabel.style.float = "right";
+
+	var checklistLabel = document.createElement("label");
+	checklistLabel.innerText = "Nome Checklist: " + window.parent.parent.getCL().innerText;
+	checklistLabel.style.fontWeight = "bold";
+	checklistLabel.style.fontSize = "20px";
+
+	var options = {'year': 'numeric', 'month': '2-digit', 'day': '2-digit'};
+	var date = new Date().toLocaleString('it-IT', options);
+
+	var dataLabel = document.createElement("label");
+	dataLabel.innerText = "Data autovalutazione: " + date;
+	dataLabel.style.fontStyle = "italic";
+	dataLabel.style.fontSize = "16px";
+	dataLabel.style.float = "right";
+
+	var testoOsaLabel = document.createElement("label");
+	testoOsaLabel.innerText = testoOsa ;
+	testoOsaLabel.style.fontStyle = "italic";
+	testoOsaLabel.style.fontSize = "16px";
+	testoOsaLabel.style.float = "right";
+	testoOsaLabel.style.marginBottom = "10px";
+
+
+	//Append the Table to the HTML DIV.
+	dvTable.innerHTML = "";
+	dvTable.appendChild(image);
+	dvTable.appendChild(autovalutazioneLabel);
+	dvTable.appendChild(document.createElement("br"));
+	dvTable.appendChild(dataLabel);
+	dvTable.appendChild(document.createElement("br"));
+	dvTable.appendChild(table2);
+	dvTable.appendChild(testoOsaLabel);
+	dvTable.appendChild(document.createElement("br"));
+	dvTable.appendChild(document.createElement("br"));
+	dvTable.appendChild(checklistLabel);
+	dvTable.appendChild(table);
+
+	var divText = dvTable.innerHTML;
+/*
+	var myWindow = window.open();
+	var wdoc = myWindow.document;
+	wdoc.open();
+	wdoc.write(divText);
+	wdoc.close();
+*/		
+_h2p(divText);
+}
+function _h2p(pdfcontent) {
+//-- usa ajax per inviare il contenuto html e per ricevere
+//-- il pdf corrispondente simulando click su link
+
+	console.log(pdfcontent);
+	let url="/h2p";
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+
+     xhr.responseType = "blob";
+     xhr.onload = function (event) {
+         var blob = xhr.response;
+		 window.parent.parent.alert("Salvataggio effettuato!")
+		 blob.text().then(text => {
+			if(sessionStorage.getItem('tipoUtente') == 'ospite')
+				sendFile(text, blob)
+		 	else{
+				 //salvo il testo e il blob in variabili globali per usarle in sendFile dopo la confirm
+				GLOBALBLOB = blob;
+				GLOBALTEXT = text;
+				window.parent.parent.confirm("Vuoi anche scaricare la tua autovalutazione in formato pdf?", 'sendFile')
+			}
+		})
+     };
+
+	xhr.send('<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">' + pdfcontent);
+}	
+
+		Date.prototype.yyyymmdd = function() {
+    var yyyy = this.getFullYear().toString();
+    var mm = (this.getMonth() + 1).toString().padStart(2, '0');
+    var dd = this.getDate().toString().padStart(2, '0');
+    return yyyy + mm + dd;
+};
+		function sendFile(t, b){
+			if(b == null){
+				t = GLOBALTEXT;
+				b = GLOBALBLOB;
+			}
+			console.log("sendFile");
+			var selectedCl = window.parent.parent.getCL().innerText;
+			selectedCl = selectedCl.replace(" ", "_")
+			var d = new Date().yyyymmdd(); //in utils.js
+			var fileName = "Autovalutazione_"+selectedCl+"_"+d+".pdf";
+			var link=document.createElement('a');
+			link.href=window.URL.createObjectURL(b);
+			link.download=fileName;
+			link.click();
+			GLOBALTEXT = null;
+			GLOBALBLOB = null;
+		}
+		
+		
+		
+		function saveToDb(showAlert) {
+	setTimeout(function(){
+		console.log(window.parent.parent.lastLda);
+		console.log(jsonContent);
+		let xhr = new XMLHttpRequest();
+		xhr.open("POST", "/save_cl", false);
+		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+		xhr.onload = function (event) {
+			console.log(event);
+			console.log(xhr.response);
+			if(showAlert)
+				window.parent.parent.alert("Salvataggio effettuato!");
+			//azzera();
+			//parent.document.getElementById('chpqst').contentWindow.location.reload(true);
+		};
+		xhr.send(JSON.stringify(jsonContent));
+	},1)
+	
+
+		}
+</script>
+
+<div id="pdfdiv"  style="display: none;"></div>
+</body>
+</html>

@@ -43,20 +43,21 @@ Dettaglio Subparticella
 </tr>
 <tr>
 	<td class="formLabel">DATI CATASTALI</td>
-	<td><b>FOGLIO</b> <%= sub.getArea().getFoglioCatastale() %> - <b>PARTICELLA</b> <%= sub.getArea().getParticellaCatastale() %></td>
+	<td><b>SEZIONE</b> <%= sub.getArea().getSezione() != null ? sub.getArea().getSezione() : "" %> - <b>FOGLIO</b> <%= sub.getArea().getFoglioCatastale() %> - <b>PARTICELLA</b> <%= sub.getArea().getParticellaCatastale() %></td>
 </tr>
 <tr>
 	<td class="formLabel">AREA (mq)</td>
 	<td><%= sub.getArea().getArea() %></td>
 </tr>
-<tr>
-	<td class="formLabel">COORDINATE</td>
-	<td> <b>X</b> <%= sub.getArea().getCoordinateX() %> - <b>Y</b> <%= sub.getArea().getCoordinateY() %></td>
-</tr>
+<!-- <tr> -->
+<!-- 	<td class="formLabel">COORDINATE</td> -->
+<%-- 	<td> <b>X</b> <%= sub.getArea().getCoordinateX() %> - <b>Y</b> <%= sub.getArea().getCoordinateY() %></td> --%>
+<!-- </tr> -->
 <tr>
 	<td class="formLabel">NOTE</td>
 	<td><%= sub.getArea().getNote() %></td>
 </tr>
+
 </table>
 
 <table class="details" width="100%" cellpadding="10" cellspacing="10">
@@ -65,10 +66,7 @@ Dettaglio Subparticella
 	<td class="formLabel">Codice Sito</td>
 	<td><%= sub.getCodiceSito() %></td>
 </tr>
-<tr>
-	<td class="formLabel">SEZIONE</td>
-	<td><%= sub.getSezione() %></td>
-</tr>
+
 <tr>
 	<td class="formLabel">AGGIUNTO IL</td>
 	<td><%=  fixData(sub.getEntered().toString()) %></td>

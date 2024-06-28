@@ -5,41 +5,10 @@
 <jsp:useBean id="User" class="org.aspcfs.modules.login.beans.UserBean" scope="session"/>
 
 <%
-// Leggo l'url a cui sono connesso attualmente
-String HEADER_URI = request.getRequestURI();
-String HEADER_URL = request.getRequestURL().toString();
-String HEADER_DOMINIO = HEADER_URL.replaceAll(HEADER_URI, "").replaceAll("https://", "").replaceAll("http://", "");
-if (HEADER_DOMINIO.indexOf(":")>0)
-	HEADER_DOMINIO = HEADER_DOMINIO.substring(0, HEADER_DOMINIO.indexOf(":"));
-System.out.println("### HEADER_DOMINIO: " +HEADER_DOMINIO);
 
-// Istanzio le url che usero' per connettermi
-String GISA_CONNESSIONE_HOST = "";
+String HOST_GISA_RISORSE = ApplicationProperties.getProperty("HOST_GISA_RISORSE");
+System.out.println("### HOST_GISA_RISORSE: " +HOST_GISA_RISORSE);
 
-//ATTENZIONE. PER FUNZIONARE SUL FILEHOST DEVE ESSERCI ESATTAMENTE 131.1.255.97 colarpac.gisacampania.it srvGISAW srvDOCUMENTALEW srvDOCUMENTALE 
-
-
-String GISA_HOST = "";
-String GISA_IP = "";
-String GISA_PORTA = "";
-
-GISA_IP = InetAddress.getByName("srvGISAW").getHostAddress();
-GISA_HOST = java.net.InetAddress.getByName(java.net.InetAddress.getByName("srvGISAW").getHostAddress()).getHostName();
-GISA_PORTA = ApplicationProperties.getProperty("APP_PORTA_GISA");
-
-if (GISA_PORTA!=null && GISA_PORTA.equals(":80"))
-	GISA_PORTA = "";
-
-System.out.println("### GISA_IP+GISA_PORTA: " +GISA_IP+GISA_PORTA);
-System.out.println("### GISA_HOST+GISA_PORTA: " +GISA_HOST+GISA_PORTA);
-
-if (!HEADER_DOMINIO.contains("colarpac")){ //SE MI SONO CONNESSO TRAMITE colarpac.gisacampania.it
-	GISA_CONNESSIONE_HOST = HEADER_DOMINIO+GISA_PORTA;
-} else { //SE MI SONO CONNESSO TRAMITE IP
-	GISA_CONNESSIONE_HOST = GISA_HOST+GISA_PORTA;
-}
-
-System.out.println("### GISA_CONNESSIONE_HOST: " +GISA_CONNESSIONE_HOST);
 %>
 
 
@@ -203,8 +172,8 @@ function submitAjax()
 <html>
 <title>VERBALE VERIFICA ISPETTIVA</title>
 
-<link rel="stylesheet" type="text/css" media="screen" href="<%=request.getScheme() %>://<%=GISA_CONNESSIONE_HOST %>/gisarpac/moduli/css/screen.css" />
-<link rel="stylesheet" type="text/css" media="print"  href="<%=request.getScheme() %>://<%=GISA_CONNESSIONE_HOST %>/gisarpac/moduli/css/print.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="<%=HOST_GISA_RISORSE %>/gisarpac/moduli/css/screen.css" />
+<link rel="stylesheet" type="text/css" media="print"  href="<%=HOST_GISA_RISORSE %>/gisarpac/moduli/css/print.css" />
 
 
 <body>
@@ -213,7 +182,7 @@ function submitAjax()
 	<form id="modulo" action="" method="POST" target="_blank">
 		<table class="innertable">
 			<tr>
-				<td class="testa innertd" rowspan = "2"><img src="http://<%=GISA_CONNESSIONE_HOST %>/gisarpac/moduli/img/arpac_ico.jpg" alt="..." width="100" height="125">
+				<td class="testa innertd" rowspan = "2"><img src="<%=HOST_GISA_RISORSE %>/gisarpac/moduli/img/arpac_ico.jpg" alt="..." width="100" height="125">
 					<div class="boxIdDocumento"></div>
 					<div class="boxOrigineDocumento"><%@ include file="../../../hostName.jsp" %></div>
 				</td>
@@ -222,7 +191,7 @@ function submitAjax()
 			</tr>
 			<tr>
 				<td class="testa innertd" align="center">Procedura di riferimento: PT 7.5 A6</td>
-				<td class="testa innertd" align="right">Data<u><input type = "date" id = "ddoc"></u> </td>
+				<td class="testa innertd" align="right">Data<u><input type="date" id="dver" j_obj="Dati" j_attr="dataInizio"></u> </td>
 			</tr>
 		</table>
 		<br>
@@ -233,7 +202,7 @@ function submitAjax()
 		<br><br>
 		<div align = "left">
 		Il giorno <u><input type="date" id="dver" j_obj="Dati" j_attr="dataInizio"></u> alle ore <u><input type="time" id="hver" j_obj="Dati" j_attr="oraInizio"></u>, il Gruppo Ispettivo	prosegue la visita presso lo stabilimento
-		<u><input type="text" id="stab" value="" j_obj="Anagrafica" j_attr="ragioneSociale">,</u>altri presenti <u><input type="text"/></u>,
+		<u><input type="text" id="stab" value="" j_obj="Anagrafica" j_attr="ragioneSociale"></u>,
 		<br><br>
 			<table>
 				<tr>
@@ -259,12 +228,12 @@ function submitAjax()
 					<th>Per la Societa' sono presenti:</th>
 				</tr>
 				<tr>
-					<td>.<u><input type="text" placeholder="Nome e Cognome" id="soc1"></u></td>
+					<td>.<u><input type="text" placeholder="Nome e Cognome" id="soc1" j_obj="Anagrafica" j_attr="gestore"></u></td>
 					<td><u><input type="text" placeholder="Qualifica" id="qso1" value="Gestore dello stabilimento" readonly></u></td>
 				</tr>
 				<tr>
-					<td>.<u><input type="text" placeholder="Nome e Cognome" id="soc2"></u></td>
-					<td><u><input type="text" placeholder="Qualifica" id="qso2" value="Responabile IPPC" readonly></u></td>
+					<td>.<u><input type="text" placeholder="Nome e Cognome" id="soc2" j_obj="Anagrafica" j_attr="responsabile"></u></td>
+					<td><u><input type="text" placeholder="Qualifica" id="qso2" value="Responsabile IPPC" readonly></u></td>
 				</tr>
 				<tr>
 					<td>.<u><input type="text" placeholder="Nome e Cognome" id="soc3"></u></td>
@@ -274,54 +243,53 @@ function submitAjax()
 					<td>.<u><input type="text" placeholder="Nome e Cognome" id="soc4"></u></td>
 					<td><u><input type="text" placeholder="Qualifica" id="qso4"></u></td>
 				</tr>
+				<tr>
+					<th>Altri Presenti:</th>
+				</tr>
+				<tr>
+					<td>.<u><input type="text" placeholder="Nome e Cognome" id="al1"></u></td>
+					<td><u><input type="text" placeholder="Qualifica" id="qso_1"></u></td>
+				</tr>
+				<tr>
+					<td>.<u><input type="text" placeholder="Nome e Cognome" id="al2"></u></td>
+					<td><u><input type="text" placeholder="Qualifica" id="qso_2"></u></td>
+				</tr>
+				<tr>
+					<td>.<u><input type="text" placeholder="Nome e Cognome" id="al3"></u></td>
+					<td><u><input type="text" placeholder="Qualifica" id="qso_3"></u></td>
+				</tr>
 			</table>
 			<br>
 			Nel corso della giornata odierna sono state svolte le seguenti verifiche dell'allegato tecnico:
 			<br><br>
 			<div style="overflow-x:auto;">
 			<table class="innertable tab">
+			
 				<tr >
 					<th class="innerth th1">Tipo verifica</th>
 					<th class="innerth th1">&nbsp Matrice</th>
 					<th class="innerth th1">&nbsp Conclusa</th>
 					<th class="innerth th1">&nbsp Note</th>
 				</tr>
-				<tr >
-					<td class="innertd td1"><input type="text" id="tve1"></td>
-					<td class="innertd td1"><input type="text" id="mat1"></td>
-					<td class="innertd td1"><input type="checkbox" id="sta1"></td>
-					<td class="innertd td1"><input type="text" id="not1"></td>
+				
+				<% if ( ((JSONObject) json).has("TipiVerifica")) { 
+JSONArray jsonTipiVerifica = (JSONArray) json.get("TipiVerifica");
+if (jsonTipiVerifica.length()>0) {%>
+<% for (int i = 0; i<jsonTipiVerifica.length(); i++) {
+JSONObject jsonTipoVerifica = (JSONObject) jsonTipiVerifica.get(i);
+%>
+<tr >
+					<td class="innertd td<%=i+1%>"><input type="text" id="tve<%=i+1%>" value=<%=jsonTipoVerifica.get("nome") %>></td>
+					<td class="innertd td<%=i+1%>"><input type="text" id="mat<%=i+1%>"></td>
+					<td class="innertd td<%=i+1%>"><input type="checkbox" id="sta<%=i+1%>  "></td>
+					<td class="innertd td<%=i+1%>"><textarea id="not<%=i+1%>" style="width:500px;height:60px;"></textarea></td>
 				</tr>
-				<tr >
-					<td class="innertd td1"><input type="text" id="tve2"></td>
-					<td class="innertd td1"><input type="text" id="mat2"></td>
-					<td class="innertd td1"><input type="checkbox" id="sta2"></td>
-					<td class="innertd td1"><input type="text" id="not2"></td>
-				</tr>
-				<tr >
-					<td class="innertd td1"><input type="text" id="tve3"></td>
-					<td class="innertd td1"><input type="text" id="mat3"></td>
-					<td class="innertd td1"><input type="checkbox" id="sta3"></td>
-					<td class="innertd td1"><input type="text" id="not3"></td>
-				</tr>
-				<tr >
-					<td class="innertd td1"><input type="text" id="tve4"></td>
-					<td class="innertd td1"><input type="text" id="mat4"></td>
-					<td class="innertd td1"><input type="checkbox" id="sta4"></td>
-					<td class="innertd td1"><input type="text" id="not4"></td>
-				</tr>
-				<tr >
-					<td class="innertd td1"><input type="text" id="tve5"></td>
-					<td class="innertd td1"><input type="text" id="mat5"></td>
-					<td class="innertd td1"><input type="checkbox" id="sta5"></td>
-					<td class="innertd td1"><input type="text" id="not5"></td>
-				</tr>
-				<tr >
-					<td class="innertd td1"><input type="text" id="tve6"></td>
-					<td class="innertd td1"><input type="text" id="mat6"></td>
-					<td class="innertd td1"><input type="checkbox" id="sta6"></td>
-					<td class="innertd td1"><input type="text" id="not6"></td>
-				</tr>
+
+<br/>
+<% } %>
+</td></tr>
+<%} } %>
+				
 			</table>
 			</div>
 			<br><br>
@@ -340,37 +308,37 @@ function submitAjax()
 					<td class="innertd td1"><input type="text" id="mat7"></td>
 					<td class="innertd td1"><input type="text" id="mip7"></td>
 					<td class="innertd td1"><input type="date" id="dat7"></td>
-					<td class="innertd td1"><input type="text" id="not7"></td>
+					<td class="innertd td1"><textarea id="not7" style="width:500px;height:60px;"></textarea></td>
 				</tr>
 				<tr align="center">
 					<td class="innertd td1"><input type="text" id="mat8"></td>
 					<td class="innertd td1"><input type="text" id="mip8"></td>
 					<td class="innertd td1"><input type="date" id="dat8"></td>
-					<td class="innertd td1"><input type="text" id="not8"></td>
+					<td class="innertd td1"><textarea id="not8" style="width:500px;height:60px;"></textarea></td>
 				</tr>
 				<tr align="center">
 					<td class="innertd td1"><input type="text" id="mat9"></td>
 					<td class="innertd td1"><input type="text" id="mip9"></td>
 					<td class="innertd td1"><input type="date" id="dat9"></td>
-					<td class="innertd td1"><input type="text" id="not9"></td>
+					<td class="innertd td1"><textarea id="not9" style="width:500px;height:60px;"></textarea></td>
 				</tr>
 				<tr align="center">
 					<td class="innertd td1"><input type="text" id="mat10"></td>
 					<td class="innertd td1"><input type="text" id="mip10"></td>
 					<td class="innertd td1"><input type="date" id="dat10"></td>
-					<td class="innertd td1"><input type="text" id="not10"></td>
+					<td class="innertd td1"><textarea id="not10" style="width:500px;height:60px;"></textarea></td>
 				</tr>
 				<tr align="center">
 					<td class="innertd td1"><input type="text" id="mat11"></td>
 					<td class="innertd td1"><input type="text" id="mip11"></td>
 					<td class="innertd td1"><input type="date" id="dat11"></td>
-					<td class="innertd td1"><input type="text" id="not11"></td>
+					<td class="innertd td1"><textarea id="not11" style="width:500px;height:60px;"></textarea></td>
 				</tr>
 				<tr align="center">
 					<td class="innertd td1"><input type="text" id="mat12"></td>
 					<td class="innertd td1"><input type="text" id="mip12"></td>
 					<td class="innertd td1"><input type="date" id="dat12"></td>
-					<td class="innertd td1"><input type="text" id="not12"></td>
+					<td class="innertd td1"><textarea id="not12" style="width:500px;height:60px;"></textarea></td>
 				</tr>
 			</table>
 			</div>
@@ -391,37 +359,37 @@ function submitAjax()
 					<td class="innertd td1"><input type="text" id="doc1"></td>
 					<td class="innertd td1"><input type="text" id="rif1"></td>
 					<td class="innertd td1"><input type="text" id="for1"></td>
-					<td class="innertd td1"><input type="text" id="not13"></td>
+					<td class="innertd td1"><textarea id="not13" style="width:500px;height:60px;"></textarea></td>
 				</tr>
 				<tr align="center">
 					<td class="innertd td1"><input type="text" id="doc2"></td>
 					<td class="innertd td1"><input type="text" id="rif2"></td>
 					<td class="innertd td1"><input type="text" id="for2"></td>
-					<td class="innertd td1"><input type="text" id="not14"></td>
+					<td class="innertd td1"><textarea id="not14" style="width:500px;height:60px;"></textarea></td>
 				</tr>
 				<tr align="center">
 					<td class="innertd td1"><input type="text" id="doc3"></td>
 					<td class="innertd td1"><input type="text" id="rif3"></td>
 					<td class="innertd td1"><input type="text" id="for3"></td>
-					<td class="innertd td1"><input type="text" id="not15"></td>
+					<td class="innertd td1"><textarea id="not15" style="width:500px;height:60px;"></textarea></td>
 				</tr>
 				<tr align="center">
 					<td class="innertd td1"><input type="text" id="doc4"></td>
 					<td class="innertd td1"><input type="text" id="rif4"></td>
 					<td class="innertd td1"><input type="text" id="for4"></td>
-					<td class="innertd td1"><input type="text" id="not16"></td>
+					<td class="innertd td1"><textarea id="not16" style="width:500px;height:60px;"></textarea></td>
 				</tr>
 				<tr align="center">
 					<td class="innertd td1"><input type="text" id="doc5"></td>
 					<td class="innertd td1"><input type="text" id="rif5"></td>
 					<td class="innertd td1"><input type="text" id="for5"></td>
-					<td class="innertd td1"><input type="text" id="not17"></td>
+					<td class="innertd td1"><textarea id="not17" style="width:500px;height:60px;"></textarea></td>
 				</tr>
 				<tr align="center">
 					<td class="innertd td1"><input type="text" id="doc6"></td>
 					<td class="innertd td1"><input type="text" id="rif6"></td>
 					<td class="innertd td1"><input type="text" id="for6"></td>
-					<td class="innertd td1"><input type="text" id="not18"></td>
+					<td class="innertd td1"><textarea id="not18" style="width:500px;height:60px;"></textarea></td>
 				</tr>
 			</table>
 			</div>
@@ -449,7 +417,7 @@ function submitAjax()
 			<br>
 			<tr>
 				<td>.<u><input type="text" id="arp5" j_obj="GruppoIspettivo" j_attr="nominativo0"></u><br>(Coordinatore della Verifica Ispettiva) &nbsp &nbsp </td>
-				<td>.<u><input type="text" id="soc5"></u><br>(Responabile IPPC)</td>
+				<td>.<u><input type="text" id="soc5" j_obj="Anagrafica" j_attr="responsabile"></u><br>(Responsabile IPPC)</td>
 			</tr>
 			<tr>
 				<td>.<u><input type="text" id="arp6" j_obj="GruppoIspettivo" j_attr="nominativo1"></u></td>
@@ -476,7 +444,7 @@ function submitAjax()
 	<br><br>
 	<br>
 	</form>
-	<h2 align="center">FIRMA G.I. &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp FIRMA IPPC</h2><br><br><br>
+	</u><p align="center" ><b>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp FIRMA G.I. &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp FIRMA dei presenti all'ispezione per l'azienda</b></p><br><br><br>
 
 </div>
 
@@ -543,6 +511,9 @@ if ( ((JSONObject) json).has("Anagrafica")) {
 	%>
 	<script>
 	settaSelector("Anagrafica","ragioneSociale","<%= jsonAnagrafica.get("ragioneSociale").toString() %>");
+	settaSelector("Anagrafica","responsabile","<%= jsonAnagrafica.get("responsabile").toString() %>");
+	settaSelector("Anagrafica","gestore","<%= jsonAnagrafica.get("gestore").toString() %>");
+
 	</script>
 	<%
 }

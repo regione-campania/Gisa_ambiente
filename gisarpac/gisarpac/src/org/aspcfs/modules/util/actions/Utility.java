@@ -170,6 +170,80 @@ public final class Utility extends CFSModule {
 		return "GURUListOK";
 
 	}
+	
+	public String executeCommandGURUValida(ActionContext context) {
+
+		if (!hasPermission(context, "guru-view")) {
+			return ("PermissionError");
+		}
+
+		Connection db = null;
+		PreparedStatement pst = null;
+		String userId = context.getRequest().getParameter("userId");
+
+		try {
+			db = this.getConnection(context);
+			ArrayList<GURUUtente> listaUtenti = new ArrayList<GURUUtente>();
+
+			pst = db.prepareStatement("select * from valida_utente(?)"); 
+			pst.setInt(1, Integer.parseInt(userId));
+			pst.executeUpdate();
+			
+			context.getRequest().setAttribute("listaUtenti", listaUtenti);
+
+		} catch (Exception e) {
+			context.getRequest().setAttribute("Error", e);
+			return ("SystemError");
+		} finally{
+			freeConnection(context, db);
+		}
+
+		return "GURUListProcOK";
+
+	}
+	
+	public String executeCommandGURUListProc(ActionContext context) {
+
+		if (!hasPermission(context, "guru-view")) {
+			return ("PermissionError");
+		}
+
+		Connection db = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+
+		try {
+			db = this.getConnection(context);
+			ArrayList<GURUUtente> listaUtenti = new ArrayList<GURUUtente>();
+
+			pst = db.prepareStatement("select * from utenti_modulospid where processato is false"); 
+			rs = pst.executeQuery();
+			while (rs.next()){
+				GURUUtente utente = new GURUUtente();
+				utente.setId(rs.getInt("user_id"));
+				utente.setNome(rs.getString("namefirst"));
+				utente.setCognome(rs.getString("namelast"));
+				utente.setCf(rs.getString("cf"));  
+				utente.setIvaStab(rs.getString("stab_iva_cf"));
+				utente.setStabId(rs.getInt("stab_id"));
+
+				listaUtenti.add(utente);
+			}
+
+			context.getRequest().setAttribute("listaUtenti", listaUtenti);
+
+		} catch (Exception e) {
+			context.getRequest().setAttribute("Error", e);
+			return ("SystemError");
+		} finally{
+			freeConnection(context, db);
+		}
+
+		return "GURUListProcOK";
+
+	}
+	
+	
 
 	public String executeCommandGURUModify(ActionContext context) {
 

@@ -111,7 +111,6 @@ function mostraNascondiRiga(op){
 <th>DECRETO DIRIGENZIALE DATA</th>
 <th>NOTA</th>
 <th>BURC</th>
-<th>MATRICI</th>
 </tr>
 
 <% for (int i = 0; i<listaDati.size(); i++) {
@@ -123,17 +122,13 @@ DatoAutorizzativo dato = (DatoAutorizzativo) listaDati.get(i);%>
 <td><input type="date" id="dataDecreto_<%=i %>" name="dataDecreto_<%=i %>" value="<%=dato.getDataDecreto()%>"/></td>
 <td><input type="text" id="nota_<%=i %>" name="nota_<%=i %>" value="<%=toHtml(dato.getNota())%>"/></td>
 <td><input type="text" id="burc_<%=i %>" name="burc_<%=i %>" value="<%=toHtml(dato.getBurc())%>"/></td>
-<td>
-<% for (int p = 0; p<matriciList.size(); p++) {
-LookupElement m = (LookupElement) matriciList.get(p); %>
-<input type="checkbox" id ="matriceId_<%=i %>_<%=p%>" name="matriceId_<%=i %>" value="<%= m.getCode()%>" <% for (int k = 0; k<dato.getListaMatrici().size(); k++) { Matrice ma = (Matrice) dato.getListaMatrici().get(k); if (ma.getIdMatrice() == m.getCode()){%> checked <% break; }} %> /> <%=m.getDescription() %><br/>
-<% } %>
+
 </td>
 </tr>
 
 <%} %>
 
-<tr><td colspan="9">
+<tr><td colspan="8">
 <input type="button" id="buttonAggiungi" value="Aggiungi Nuovo Decreto" onClick="mostraNascondiRiga('Aggiungi')"/>
 <input type="button" id="buttonRimuovi" value="Rimuovi Nuovo Decreto" style="display:none" onClick="mostraNascondiRiga('Rimuovi')"/>
 </td></tr>
@@ -147,12 +142,7 @@ LookupElement m = (LookupElement) matriciList.get(p); %>
 <td><input type="date" id="dataDecreto_<%=i %>" name="dataDecreto_<%=i %>" value=""/></td>
 <td><input type="text" id="nota_<%=i %>" name="nota_<%=i %>" value=""/></td>
 <td><input type="text" id="burc_<%=i %>" name="burc_<%=i %>" value=""/></td>
-<td>
-<% for (int p = 0; p<matriciList.size(); p++) {
-LookupElement m = (LookupElement) matriciList.get(p); %>
-<input type="checkbox" id ="matriceId_<%=i %>_<%=p%>" name="matriceId_<%=i %>" value="<%= m.getCode()%>"/> <%=m.getDescription() %><br/>
-<% } %>
-</td>
+
 </tr>
 
 <%} %>

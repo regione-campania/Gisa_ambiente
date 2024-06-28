@@ -18,7 +18,7 @@
 function checkForm(form){
 	var msg = "";
 	var esito = true;
-	
+	//
 	var almenoUnPerContoDi = false;
 
 	var x = document.getElementsByName("perContoDiId");
@@ -32,7 +32,7 @@ function checkForm(form){
 	if (!almenoUnPerContoDi){
 		msg +="Selezionare almeno un per conto di.\n";
 		esito = false;
-	}
+		}
 	
 	
 		
@@ -137,16 +137,16 @@ function filtraRighe() {
 
 <% 
 for (int i = 0; i<ListaPerContoDi.size(); i++) {
-Struttura perContoDi = (Struttura) ListaPerContoDi.get(i); %>
+Area perContoDi = (Area) ListaPerContoDi.get(i); %>
 
 <tr>
 <td>
 <input type="checkbox" id ="<%= perContoDi.getId()%>" name="perContoDiId" value="<%= perContoDi.getId()%>" <%=ListaPerContoDi.size()==1 ? "checked: checked" : "" %>/>
-<input type="hidden" readonly id ="perContoDiNome_<%= perContoDi.getId()%>" name ="perContoDiNome_<%= perContoDi.getId()%>" value="<%= perContoDi.getDipartimento()%> -> <%= perContoDi.getTipologia() %> -> <%= perContoDi.getAppartenenza() %> -> <%= perContoDi.getDescrizione() %>"/>
+<input type="hidden" readonly id ="perContoDiNome_<%= perContoDi.getId()%>" name ="perContoDiNome_<%= perContoDi.getId()%>" value="<%= perContoDi.getDipartimento()%> -> <%= perContoDi.getTipologia() %> -> <%= perContoDi.getDescrizioneAreaComplessa() %> -> <%= perContoDi.getDescrizioneAreaSemplice() %>"/>
 </td>
-<td><%= perContoDi.getDescrizione() %></td>
+<td><%= perContoDi.getDescrizioneAreaSemplice() %></td>
 <td><%= perContoDi.getTipologia() %></td>
-<td><%= perContoDi.getAppartenenza() %></td>
+<td><%= perContoDi.getDescrizioneAreaComplessa() %></td>
 <td><%= perContoDi.getDipartimento() %></td>
 </tr>
 <% } %>

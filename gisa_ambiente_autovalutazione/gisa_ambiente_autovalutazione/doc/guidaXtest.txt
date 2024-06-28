@@ -1,0 +1,17 @@
+
+
+http://mon.gisacampania.it:8080/test
+
+role: -1 regione, [1,17] dest
+
+schede originali (estratte dalle email di Valatino): mon.gisacampania.it:/root/go_projects/src/iris_2/schede/schede.orig
+
+file xls -> xlsx L<n><dest><lazione>.xlsx -> /root/go_projects/src/iris_2/schede/tutti
+
+lettura dei campi indirizzati per tab e cella -> /root/go_projects/src/iris_2/schede/tutti/readxslx.go
+
+esecuzione import celle per tutti i destinatri -> /root/go_projects/src/iris_2/schede/tutti/readfiles.sh
+
+log: tail -f /root/go_projects/src/iris_2/nohup.out
+
+documenti: /root/go_projects/src/iris_2/doc

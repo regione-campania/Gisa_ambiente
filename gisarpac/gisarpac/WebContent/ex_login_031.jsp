@@ -1,5 +1,3 @@
-
-
 <%--
   - Copyright(c) 2004 Concursive Corporation (http://www.concursive.com/) All
   - rights reserved. This material cannot be distributed without written
@@ -162,7 +160,23 @@
   }
   
 </script>
-<body leftmargin="0" topmargin="0" marginwidth="0<" marginheight="0" onLoad="<%
+
+<link rel="stylesheet" href="css/template1.css" type="text/css">
+
+<% 
+String ambiente = org.aspcfs.modules.util.imports.ApplicationProperties.getAmbienteFromMon(); 
+String classColor = "";
+	if (!ambiente.toLowerCase().contains("ufficiale") && !ambiente.toLowerCase().contains("cred")){
+		if (ambiente.equalsIgnoreCase("sviluppo"))
+			classColor ="colore_sviluppo";
+		else
+			classColor = "colore_demo";
+	
+	}
+%>
+     
+
+<body class="<%=classColor %>" leftmargin="0" topmargin="0" marginwidth="0<" marginheight="0" onLoad="<%
   if (request.getParameter("popup") != null) {
     out.println("window.opener.location='MyCFS.do?command=Home'; window.close();");
   } else if (request.getParameter("inline") != null) {
@@ -173,6 +187,9 @@
     out.println("document.login.password.focus()");
   }
 %>">
+
+           
+
 <table width="100%" border="0" cellspacing="0" cellpadding="0" height="100%">
   <tr>
     <td height="20%" valign="top" width="100%">
@@ -245,6 +262,14 @@
 		 	 <!--  <a href="javascript:loginCNS()">Entra con CNS</a>-->
               </div>
             </div>
+            
+            
+<% 	if (!ambiente.toLowerCase().contains("ufficiale") && !ambiente.toLowerCase().contains("cred")){%>
+<center>
+<font size="5">AMBIENTE <b><font color="red"><%=ambiente%></font></b>!!!</font>
+</center>
+<% }%>
+            
 <%}%>
             <dhv:evaluate if='<%= LoginBean.getRedirectTo() != null %>'>
               <input type="hidden" name="redirectTo" value="<%= LoginBean.getRedirectTo() %>" />
@@ -271,6 +296,7 @@
     </td>
   </tr>
 </table>
+
 
 <script language="JavaScript">
   

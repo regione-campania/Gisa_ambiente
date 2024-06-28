@@ -31,10 +31,13 @@ if (value)
 
 function gestisciCodiceSito(){
 	
+	var codCatastale = document.getElementById("idComune").options[document.getElementById("idComune").selectedIndex].getAttribute("cod_catastale");
+	if (codCatastale == null)
+		codCatastale = '';
 	var idSito = document.getElementById("idSito").value;
 	var foglioCatastale = document.getElementById("foglioCatastale").value;
 	var particellaCatastale = document.getElementById("particellaCatastale").value;
-	var codiceSito = idSito + "F" + foglioCatastale + "P" + particellaCatastale;
+	var codiceSito = codCatastale + "_"+ idSito + "F" + foglioCatastale + "P" + particellaCatastale;
 	document.getElementById("codiceSito").value = codiceSito;
 	verificaEsistenzaCodice(codiceSito);
 	
@@ -84,30 +87,34 @@ Aggiungi Area
 <tr>
 	<td class="formLabel">COMUNE</td>
 	<td>	
-		<select id="idComune" name="idComune">
+		<select id="idComune" name="idComune" onChange="gestisciCodiceSito()">
 		<option value="-1">-- SELEZIONA --</option>
 		<% for(int i=0; i<comuni.size();i++){ %>
-			<option cod_provincia="<%= comuni.get(i).getCod_provincia() %>" value="<%= comuni.get(i).getCode() %>"><%= comuni.get(i).getNome() %> </option>
+			<option cod_provincia="<%= comuni.get(i).getCod_provincia() %>" cod_catastale = "<%=comuni.get(i).getCodice() %>" value="<%= comuni.get(i).getCode() %>"><%= comuni.get(i).getNome() %> </option>
 		<% } %>
 		</select>
 	</td>
 </tr>
 <tr>
 	<td class="formLabel">DATI CATASTALI</td>
-	<td><input type="text" placeholder="FOGLIO" id="foglioCatastale" name="foglioCatastale" maxlength="3" onKeyUp="validaNumeri(this)" onChange="gestisciCodiceSito()"/>
+	<td>
+	<input type="text" placeholder="SEZIONE" id="sezione" name="sezione" maxlength="6"/>
+	<input type="text" placeholder="FOGLIO" id="foglioCatastale" name="foglioCatastale" maxlength="3" onKeyUp="validaNumeri(this)" onChange="gestisciCodiceSito()"/>
 	<input type="text" placeholder="PARTICELLA" id="particellaCatastale" name="particellaCatastale" maxlength="6" onKeyUp="validaLettereNumeri(this)" onChange="gestisciCodiceSito()"/>
+</tr>
+	
 	</td>
 </tr>
 <tr>
 	<td class="formLabel">CLASSE DI RISCHIO</td>
 	<td><input type="text" id="classeRischio" name="classeRischio"/></td>
 </tr>
-<tr>
-	<td class="formLabel">COORDINATE</td>
-	<td>X <input type="text" placeholder="X" id="coordinateX" name="coordinateX" onKeyUp="validaCoordinate(this)"/> 
-		Y <input type="text" placeholder="Y" id="coordinateY" name="coordinateY" onKeyUp="validaCoordinate(this)"/>
-	</td>
-</tr>
+<!-- <tr> -->
+<!-- 	<td class="formLabel">COORDINATE</td> -->
+<!-- 	<td>X <input type="text" placeholder="X" id="coordinateX" name="coordinateX" onKeyUp="validaCoordinate(this)"/>  -->
+<!-- 		Y <input type="text" placeholder="Y" id="coordinateY" name="coordinateY" onKeyUp="validaCoordinate(this)"/> -->
+<!-- 	</td> -->
+<!-- </tr> -->
 <tr>
 	<td class="formLabel">AREA (mq)</td>
 	<td><input type="text" id="area" name="area" onKeyUp="validaNumeri(this)"/></td>
@@ -160,29 +167,11 @@ function checkForm(form){
 			esito = false;	
 		}
 		
-		if(form.coordinateX.value==""){
-			msg +="Coordinate: Indicare Coordinata X.\n";
-			esito = false;	
-		}
 		
-		if(form.coordinateY.value==""){
-			msg +="Coordinate: Indicare Coordinata Y.\n";
-			esito = false;	
-		}
-		
-		if (form.coordinateY.value < MIN_COORD_Y || form.coordinateY.value > MAX_COORD_Y){
-			 msg += "Coordinate: Valore errato per il campo Coordinata Y, il valore deve essere compreso tra "+MIN_COORD_Y+" e "+MAX_COORD_Y +" \n";
-			 esito = false;
-		}
-		if (form.coordinateX.value < MIN_COORD_X || form.coordinateX.value > MAX_COORD_X){
-			 msg += "Coordinate: Valore errato per il campo Coordinata X, il valore deve essere compreso tra "+MIN_COORD_X+" e "+MAX_COORD_X +" \n";
-			 esito = false;
-		}
-		
-		if(form.area.value==""){
-			msg +="Indicare Area.\n";
-			esito = false;	
-		}
+// 		if(form.area.value==""){
+// 			msg +="Indicare Area.\n";
+// 			esito = false;	
+// 		}
 			
 		if (!esito){
 			alert(msg);

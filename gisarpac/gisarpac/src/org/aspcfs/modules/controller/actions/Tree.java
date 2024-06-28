@@ -3,14 +3,8 @@ package org.aspcfs.modules.controller.actions;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -19,7 +13,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.log4j.Logger;
 import org.aspcfs.modules.actions.CFSModule;
 import org.aspcfs.modules.controller.base.TreeDAOImpl;
-import org.aspcfs.modules.oia.base.OiaNodo;
 import org.aspcfs.utils.web.LookupList;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -57,37 +50,7 @@ public class Tree extends CFSModule{
 	
 	public String executeCommandReloadStruttura(ActionContext context)
 	{
-		
-		
-		HashMap<Integer,ArrayList<OiaNodo>> strutture_asl =  (HashMap<Integer, ArrayList<OiaNodo>>) context.getServletContext().getAttribute("StruttureOIA");
-		
-		Connection db = null ;
-		try
-		{
-		db = this.getConnection(context);
-		OiaNodo n = new OiaNodo();
-		
-
-		Calendar calCorrente = GregorianCalendar.getInstance();
-		Date dataCorrente = new Date(System.currentTimeMillis());
-		int tolleranzaGiorni = 0;
-		//dataCorrente.setDate(dataCorrente.getDate()- tolleranzaGiorni);
-		calCorrente.setTime(new Timestamp(dataCorrente.getTime()));
-		int anno_corrente = calCorrente.get(Calendar.YEAR);
-		 logger.info("Caricamento Strutture Per Conto Di In memoria Anno "+anno_corrente); 
-		
-		strutture_asl.put(Integer.parseInt(context.getParameter("idAsl")), n.loadbyidAsl(context.getParameter("idAsl"),anno_corrente, db));
-
 	
-	context.getServletContext().setAttribute("StruttureOIA",strutture_asl);
-		}catch(SQLException e)
-	{
-		
-	}
-	finally
-	{
-		freeConnection(context, db);
-	}
 	 return executeCommandListTree(context);
 	}
 

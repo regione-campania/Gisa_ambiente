@@ -5,41 +5,10 @@
 <%@ include file="../initPage.jsp"%>
 
 <%
-// Leggo l'url a cui sono connesso attualmente
-String HEADER_URI = request.getRequestURI();
-String HEADER_URL = request.getRequestURL().toString();
-String HEADER_DOMINIO = HEADER_URL.replaceAll(HEADER_URI, "").replaceAll("https://", "").replaceAll("http://", "");
-if (HEADER_DOMINIO.indexOf(":")>0)
-	HEADER_DOMINIO = HEADER_DOMINIO.substring(0, HEADER_DOMINIO.indexOf(":"));
-System.out.println("### HEADER_DOMINIO: " +HEADER_DOMINIO);
 
-// Istanzio le url che usero' per connettermi
-String GISA_CONNESSIONE_HOST = "";
+String HOST_GISA_RISORSE = ApplicationProperties.getProperty("HOST_GISA_RISORSE");
+System.out.println("### HOST_GISA_RISORSE: " +HOST_GISA_RISORSE);
 
-//ATTENZIONE. PER FUNZIONARE SUL FILEHOST DEVE ESSERCI ESATTAMENTE 131.1.255.97 colarpac.gisacampania.it srvGISAW srvDOCUMENTALEW srvDOCUMENTALE 
-
-
-String GISA_HOST = "";
-String GISA_IP = "";
-String GISA_PORTA = "";
-
-GISA_IP = InetAddress.getByName("srvGISAW").getHostAddress();
-GISA_HOST = java.net.InetAddress.getByName(java.net.InetAddress.getByName("srvGISAW").getHostAddress()).getHostName();
-GISA_PORTA = ApplicationProperties.getProperty("APP_PORTA_GISA");
-
-if (GISA_PORTA!=null && GISA_PORTA.equals(":80"))
-	GISA_PORTA = "";
-
-System.out.println("### GISA_IP+GISA_PORTA: " +GISA_IP+GISA_PORTA);
-System.out.println("### GISA_HOST+GISA_PORTA: " +GISA_HOST+GISA_PORTA);
-
-if (!HEADER_DOMINIO.contains("colarpac")){ //SE MI SONO CONNESSO TRAMITE colarpac.gisacampania.it
-	GISA_CONNESSIONE_HOST = HEADER_DOMINIO+GISA_PORTA;
-} else { //SE MI SONO CONNESSO TRAMITE IP
-	GISA_CONNESSIONE_HOST = GISA_HOST+GISA_PORTA;
-}
-
-System.out.println("### GISA_CONNESSIONE_HOST: " +GISA_CONNESSIONE_HOST);
 %>
 
 <% org.json.JSONObject json = new JSONObject(request.getParameter("json"));
@@ -116,24 +85,14 @@ boolean datiVerbaleAliquotaN = false;
 
 String datiVerbaleAliquotaA_data = "";
 String datiVerbaleAliquotaA_ora = "";
-String datiVerbaleAliquotaBG_data = "";
-String datiVerbaleAliquotaBG_ora = "";
 String datiVerbaleAliquotaC_data = "";
 String datiVerbaleAliquotaC_ora = "";
 String datiVerbaleAliquotaD_data = "";
 String datiVerbaleAliquotaD_ora = "";
-String datiVerbaleAliquotaE_data = "";
-String datiVerbaleAliquotaE_ora = "";
-String datiVerbaleAliquotaF_data = "";
-String datiVerbaleAliquotaF_ora = "";
-String datiVerbaleAliquotaH_data = "";
-String datiVerbaleAliquotaH_ora = "";
 String datiVerbaleAliquotaI_data = "";
 String datiVerbaleAliquotaI_ora = "";
 String datiVerbaleAliquotaLM_data = "";
 String datiVerbaleAliquotaLM_ora = "";
-String datiVerbaleAliquotaN_data = "";
-String datiVerbaleAliquotaN_ora = "";
 
 String datiVerbaleDichiarazioni = "";
 String datiVerbaleStrumentazione = "";
@@ -172,12 +131,15 @@ if ( ((JSONObject) json).has("Campione")) {
 	}
 	
 	if (((JSONObject) jsonCampione).has("GruppoAddetti")){
-		JSONArray jsonGruppoAddetti = (JSONArray) jsonCampione.get("GruppoAddetti");
-		for (int i = 0; i<jsonGruppoAddetti.length(); i++) {
-			JSONObject jsonComponente = (JSONObject) jsonGruppoAddetti.get(i);
-			gruppoAddetti+= jsonComponente.get("nominativo") + " ("+jsonComponente.get("qualifica") + ") / ";
-			}		
-	}
+		JSONObject jsonGruppoAddetti = (JSONObject) jsonCampione.get("GruppoAddetti");
+		
+		if (jsonGruppoAddetti.get("nome1") != "" && jsonGruppoAddetti.get("cognome1") != "")
+			gruppoAddetti += jsonGruppoAddetti.get("nome1") + " " + jsonGruppoAddetti.get("cognome1")+ " / ";
+		if (jsonGruppoAddetti.get("nome2") != "" && jsonGruppoAddetti.get("cognome2") != "")
+			gruppoAddetti += jsonGruppoAddetti.get("nome2") + " " + jsonGruppoAddetti.get("cognome2")+ " / ";
+		if (jsonGruppoAddetti.get("nome3") != "" && jsonGruppoAddetti.get("cognome3") != "")
+			gruppoAddetti += jsonGruppoAddetti.get("nome3") + " " + jsonGruppoAddetti.get("cognome3")+ " / ";
+		}
 		
 	if (((JSONObject) jsonCampione).has("Anagrafica")){
 		JSONObject jsonAnagrafica = (JSONObject) jsonCampione.get("Anagrafica");
@@ -244,24 +206,14 @@ if ( ((JSONObject) json).has("Campione")) {
 		
 		datiVerbaleAliquotaA_data = jsonDatiVerbale.get("aliquotaA_data").toString();
 		datiVerbaleAliquotaA_ora = jsonDatiVerbale.get("aliquotaA_ora").toString();
-		datiVerbaleAliquotaBG_data = jsonDatiVerbale.get("aliquotaBG_data").toString();
-		datiVerbaleAliquotaBG_ora = jsonDatiVerbale.get("aliquotaBG_ora").toString();
 		datiVerbaleAliquotaC_data = jsonDatiVerbale.get("aliquotaC_data").toString();
 		datiVerbaleAliquotaC_ora = jsonDatiVerbale.get("aliquotaC_ora").toString();
 		datiVerbaleAliquotaD_data = jsonDatiVerbale.get("aliquotaD_data").toString();
 		datiVerbaleAliquotaD_ora = jsonDatiVerbale.get("aliquotaD_ora").toString();
-		datiVerbaleAliquotaE_data = jsonDatiVerbale.get("aliquotaE_data").toString();
-		datiVerbaleAliquotaE_ora = jsonDatiVerbale.get("aliquotaE_ora").toString();
-		datiVerbaleAliquotaF_data = jsonDatiVerbale.get("aliquotaF_data").toString();
-		datiVerbaleAliquotaF_ora = jsonDatiVerbale.get("aliquotaF_ora").toString();
-		datiVerbaleAliquotaH_data = jsonDatiVerbale.get("aliquotaH_data").toString();
-		datiVerbaleAliquotaH_ora = jsonDatiVerbale.get("aliquotaH_ora").toString();
 		datiVerbaleAliquotaI_data = jsonDatiVerbale.get("aliquotaI_data").toString();
 		datiVerbaleAliquotaI_ora = jsonDatiVerbale.get("aliquotaI_ora").toString();
 		datiVerbaleAliquotaLM_data = jsonDatiVerbale.get("aliquotaLM_data").toString();
 		datiVerbaleAliquotaLM_ora = jsonDatiVerbale.get("aliquotaLM_ora").toString();
-		datiVerbaleAliquotaN_data = jsonDatiVerbale.get("aliquotaN_data").toString();
-		datiVerbaleAliquotaN_ora = jsonDatiVerbale.get("aliquotaN_ora").toString();
 		
 		datiVerbaleDichiarazioni = jsonDatiVerbale.get("dichiarazioni").toString();
 		datiVerbaleStrumentazione = jsonDatiVerbale.get("strumentazione").toString();
@@ -280,8 +232,6 @@ if ( ((JSONObject) json).has("Campione")) {
 }
 
 %>
-
-
 
 <script src="../javascript/jquery/jquery-1.8.2.js"></script> 
 <script src="../javascript/jquery/ui/1.9.1/jquery-ui.js"></script>
@@ -445,12 +395,12 @@ function submitAjax()
 <html>
 <title>VERBALE VERIFICA ISPETTIVA</title>
 
-<link rel="stylesheet" type="text/css" media="screen" href="<%=request.getScheme() %>://<%=GISA_CONNESSIONE_HOST %>/gisarpac/moduli/css/screen.css" />
-<link rel="stylesheet" type="text/css" media="print"  href="<%=request.getScheme() %>://<%=GISA_CONNESSIONE_HOST %>/gisarpac/moduli/css/print.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="<%=HOST_GISA_RISORSE %>/gisarpac/moduli/css/screen.css" />
+<link rel="stylesheet" type="text/css" media="print"  href="<%=HOST_GISA_RISORSE %>/gisarpac/moduli/css/print.css" />
 
 <body>
 
-<img src="http://<%=GISA_CONNESSIONE_HOST %>/gisarpac/moduli/img/arpac_ico.jpg" alt="..." width="100" height="125">
+<img src="<%=HOST_GISA_RISORSE %>/gisarpac/moduli/img/arpac_ico.jpg" alt="..." width="100" height="125">
 
 <center>
 <h2>VERBALE DI CAMPIONAMENTO "TERRENO" N. <u><%= datiNumeroVerbale %></u> del <u><%= toDateasStringFromString(datiDataPrelievo) %></u></h2>
@@ -541,6 +491,9 @@ Nel "punto centrale" della particella catastale, previo scortico dei primi 10 cm
 <% if (datiVerbaleAliquotaBG){ %> e <b><u>b</u></b> <%} else {%><s>e <b><u>b</u></b></s><%} %>, <br/>
 
 ciascuna  posta in un barattolo di vetro da 500 ml riempito fino all'orlo e chiuso immediatamente. <br/>
+
+<div style="page-break-before:always">
+ 
 La prima aliquota viene inviata all'U.O.C. Siti Contaminati e Bonifiche dell'ARPAC, sita in Via Antiniana n. 55 - Pozzuoli (NA) per le successive analisi e/o per il successivo smistamento presso i laboratori ISPRA e/o altre ARPA e/o UNINA, mentre la seconda viene consegnata alla parte presente sul posto.<br/>
 Da ciascuno dei <u><%=datiVerbaleNumCampioniElementari %></u> "campioni elementari" di suolo, sottoposti a vaglio con maglia da 2 cm., viene prelevata, in un unico esemplare, un'aliquota pari a ¼ circa del peso, riposta in una busta di PE, per eventuali successivi accertamenti e trasportata al laboratorio ARPAC - U.O.C. Siti Contaminati e Bonifiche dell'ARPAC, sita in Via Antiniana n. 55 - Pozzuoli (NA), unitamente al presente verbale, per la conservazione/smistamento.<br/>
 Il campione "medio composito" di suolo, ottenuto a seguito delle operazioni di omogenizzazione e quartatura delle restanti parti dei cinque campioni elementari, e' stato suddiviso nelle seguenti aliquote/contenitori:<br/>
@@ -626,21 +579,24 @@ l'apertura delle aliquote <b>l</b> ed <b>m</b> dei campioni di terreno avverra' 
 <%} %>
 <br/>
 
-Il Sig. <u><%= datiVerbaleProprietarioPresente ? datiVerbaleProprietario : datiVerbaleAltraPersonaPresente %></u> e'informato che, atteso che la determinazione degli altri parametri viene effettuata anche da Laboratori fuori regione, il diritto alla difesa e' garantito dalla conservazione di un campione di riserva custodito presso il laboratorio preposto.<br/>  
-In caso di difformita' degli esiti analitici per uno o piu' parametri, il laboratorio preposto ne' dara' comunicazione all'interessato, il quale potra' richiedere la revisione delle analisi, ai sensi dell'art. 223 del D.L.vo n 271/89.<br/>
-Il presente verbale e' redatto in n <u><input type="text" style="width:60px"/></u> (<u><input type="text"/></u>) copie di cui una viene rilasciata,<br/>  
+<div style="page-break-before:always"> 
 
-<% if (datiVerbaleAliquotaBG){ %> unitamente all'<b>aliquota b</b> (per i VOC) e all'<b>aliquota g</b><%} else { %> <s> unitamente all'<b>aliquota b</b> (per i VOC) e all'<b>aliquota g</b></s> <%} %>,<br/>   
+Il Sig. <u><%= datiVerbaleProprietarioPresente ? datiVerbaleProprietario : datiVerbaleAltraPersonaPresente %></u> e'informato che, atteso che la determinazione degli altri parametri viene effettuata anche da Laboratori fuori regione, il diritto alla difesa e' garantito dalla conservazione di un campione di riserva custodito presso il laboratorio preposto.<br/><br/>  
+In caso di difformita' degli esiti analitici per uno o piu' parametri, il laboratorio preposto ne' dara' comunicazione all'interessato, il quale potra' richiedere la revisione delle analisi, ai sensi dell'art. 223 del D.L.vo n 271/89.<br/><br/><br/>
+Il presente verbale e' redatto in n <u><input type="text" style="width:60px"/></u> (<u><input type="text"/></u>) copie di cui una viene rilasciata,<br/><br/>
+<% if (datiVerbaleAliquotaBG){ %> unitamente all'<b>aliquota b</b> (per i VOC) e all'<b>aliquota g</b><%} else { %> <s> unitamente all'<b>aliquota b</b> (per i VOC) e all'<b>aliquota g</b></s> <%} %>,<br/><br/>   
 
 al Sig. <u><%= datiVerbaleProprietarioPresente ? datiVerbaleProprietario : datiVerbaleAltraPersonaPresente %></u> che ha  firmato previa integrale lettura  e chiede di inserire le seguenti dichiarazioni:<br/>
-<u><%=datiVerbaleDichiarazioni %></u><br/>
+<u><%=datiVerbaleDichiarazioni %></u><br/><br/>
 
-<% if (datiVerbaleAliquotaN){ %> <input type="checkbox" checked disabled/> Viene inoltre consegnata alla controparte anche l'<b>aliquota n</b> (microbiologici).<%} else { %> <input type="checkbox" disabled/> <s>Viene inoltre consegnata alla controparte anche l'<b>aliquota n</b> (microbiologici).</s> <% } %><br/>
+<% if (datiVerbaleAliquotaN){ %> <input type="checkbox" checked disabled/> Viene inoltre consegnata alla controparte anche l'<b>aliquota n</b> (microbiologici).<%} else { %> <input type="checkbox" disabled/> <s>Viene inoltre consegnata alla controparte anche l'<b>aliquota n</b> (microbiologici).</s> <% } %><br/><br/>
 
-Le altre <u><input type="text" style="width:60px"/></u> copie del presente verbale vengono rilasciate a: <u><input type="text"/></u>. <br/>
-Si e' proceduto alla decontaminazione/pulizia delle attrezzature utilizzate tra un campione elementare ed un altro.<br/>
+Le altre <u><input type="text" style="width:60px"/></u> copie del presente verbale vengono rilasciate a: <u><input type="text"/></u>. <br/><br/>
+Si e' proceduto alla decontaminazione/pulizia delle attrezzature utilizzate tra un campione elementare ed un altro.<br/><br/>
 Strumentazione utillizzata: 
 <u><%=datiVerbaleStrumentazione %></u>.<br/>
+
+<div style="page-break-before:always"> 
 
 <b>Informazioni Aggiuntive:</b><br/>
 <u>Coltivazioni Presenti</u><br/>
@@ -675,7 +631,7 @@ si rappresenta che l'acqua utilizzata per l'irrigazione del terreno oggi indagat
 <% if (datiVerbalePozzoCampionamento){ %><input type="checkbox" checked disabled/> Si e' quindi proceduto al campionamento delle acque sotterranee prelevate nel pozzo presente nella proprieta', cosi' come da verbale <u><%=datiVerbalePozzoCampionamentoVerbaleNumero %></u> del <u><%=datiVerbalePozzoCampionamentoVerbaleData %></u>.<%} else { %><input type="checkbox" disabled/> <s>Si e' quindi proceduto al campionamento delle acque sotterranee prelevate nel pozzo presente nella proprieta', cosi' come da verbale <u>________________</u> del <u>______________</u>.</s><%} %>
 <br/>
  
-<b>Note aggiuntive:</b>
+ <b>Note aggiuntive:</b>
 <br/>
 <u><%=datiVerbaleNoteAggiuntive %></u>.
 <br/>
@@ -690,11 +646,27 @@ LCS, alle ore: <u><input type="time"/></u>.
 <br><br>
 <br/>
 </div>
+
 <h2 align="center">LA PARTE &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp IL VERBALIZZANTE</h2><br><br><br>
 
 </div>
 </div>
 </body>
+
+<div class="footer"> 
+<hr>
+<table>
+<col width="20%">
+<tr>
+<td valign="top"><img src="<%=HOST_GISA_RISORSE %>/gisarpac/moduli/img/qualityaustria.png" alt="..." height="60px"/></td>
+<td align="center"><b>ARPAC - Agenzia Regionale Protezione Ambientale Campania</b> - Ente di Diritto Pubblico istituito con L.R. 10/98<br/>
+<b>Sede Legale</b>: via Vicinale S. Maria del Pianto - Centro Polifunzionale, Torre 1 - 80143 Napoli<br/>
+tel. 0812326111 - fax 0812326225 - direzionegenerale.arpac@pec.arpacampania.it - www.arpacampania.it - P.I. 07407530638
+</td>
+</tr>
+</table>
+
+</div>
 
 </html>
 </div>

@@ -35,7 +35,7 @@ public static  void sendMailPec(String testo,String object,String toDest)
 	
 	Session sess = Session.getInstance(props, new javax.mail.Authenticator() {
 		protected PasswordAuthentication getPasswordAuthentication() {
-			return new PasswordAuthentication("M3023707", "US9560031");
+			return new PasswordAuthentication("M3023707", "US9560031.1a");
 		}
 	 });
 	
@@ -66,6 +66,6 @@ public static  void sendMailPec(String testo,String object,String toDest)
 		
 		
 
-		//sendMailPec("nella jsp c'è la"  , "##CONFIGURAZIONE CHE FUNZIONA##", "gisadev@u-s.it");
+		//sendMailPec("nella jsp c'è la"  , "##CONFIGURAZIONE CHE FUNZIONA##", "gisadev@smail.it");
 
 %>

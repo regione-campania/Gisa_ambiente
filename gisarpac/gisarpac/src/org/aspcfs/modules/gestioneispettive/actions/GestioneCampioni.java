@@ -295,9 +295,9 @@ public class GestioneCampioni extends CFSModule{
 					JSONObject jsonTipoAnalisi = new JSONObject();
 					int idTipoAnalisi = Integer.parseInt(tipiAnalisiIds[i]);
 					jsonTipoAnalisi.put("id", idTipoAnalisi);
-					jsonTipoAnalisi.put("livello1", context.getRequest().getParameter("tipoAnalisiLivello1_"+tipiAnalisiIds[i]).replaceAll("'", ""));
-					jsonTipoAnalisi.put("livello2", context.getRequest().getParameter("tipoAnalisiLivello2_"+tipiAnalisiIds[i]).replaceAll("'", ""));
-					jsonTipoAnalisi.put("livello3", context.getRequest().getParameter("tipoAnalisiLivello3_"+tipiAnalisiIds[i]).replaceAll("'", ""));
+					jsonTipoAnalisi.put("prodotto", context.getRequest().getParameter("tipoAnalisiProdotto_"+tipiAnalisiIds[i]).replaceAll("'", ""));
+					jsonTipoAnalisi.put("metodi", context.getRequest().getParameter("tipoAnalisiMetodi_"+tipiAnalisiIds[i]).replaceAll("'", ""));
+					jsonTipoAnalisi.put("prova", context.getRequest().getParameter("tipoAnalisiProva_"+tipiAnalisiIds[i]).replaceAll("'", ""));
 					jsonTipiAnalisi.put(jsonTipoAnalisi);
 				}
 			}
@@ -397,8 +397,8 @@ public class GestioneCampioni extends CFSModule{
 					jsonComponente.put("id", idComponente);
 					jsonComponente.put("nominativo", context.getRequest().getParameter("componenteNome_"+componentiIds[i]).replaceAll("'", ""));
 					jsonComponente.put("qualifica", context.getRequest().getParameter("componenteQualifica_"+componentiIds[i]).replaceAll("'", ""));
-					jsonComponente.put("struttura", context.getRequest().getParameter("componenteStruttura_"+componentiIds[i]).replaceAll("'", ""));
-					jsonComponente.put("idStruttura", context.getRequest().getParameter("componenteStrutturaId_"+componentiIds[i]).replaceAll("'", ""));
+					jsonComponente.put("descrizioneAreaSemplice", context.getRequest().getParameter("componenteAreaSemplice_"+componentiIds[i]).replaceAll("'", ""));
+					jsonComponente.put("idAreaSemplice", context.getRequest().getParameter("componenteAreaSempliceId_"+componentiIds[i]).replaceAll("'", ""));
 					jsonComponenti.put(jsonComponente);
 				}
 			}
@@ -514,6 +514,13 @@ public class GestioneCampioni extends CFSModule{
 			try {idSubparticella = Integer.parseInt(context.getRequest().getParameter("idSubparticella"));} catch (Exception e) {}
 			if (idSubparticella == -1)
 				try {idSubparticella = Integer.parseInt((String) context.getRequest().getAttribute("idSubparticella"));} catch (Exception e) {}
+			
+			JSONArray jsonCampioni = Campione.getJsonListaParticella(db, idSubparticella);
+			if (jsonCampioni.length()>0){
+				context.getRequest().setAttribute("idSubparticella", String.valueOf(idSubparticella));
+				context.getRequest().setAttribute("Messaggio", "Sulla subparticella risulta gia' presente un campionamento. Impossibile aggiungerne uno nuovo.");
+				return executeCommandListaParticella(context);
+			}
 		
 			if (!jsonCampione.has("Anagrafica")){
 				Subparticella sub = new Subparticella(db, idSubparticella);
@@ -735,12 +742,17 @@ public class GestioneCampioni extends CFSModule{
 			try {annoCorrente = Integer.parseInt(dataPrelievo.substring(0,4));} catch (Exception e) {}
 						
 			ArrayList<Componente> listaComponentiTecnici = new ArrayList<Componente>(); 
-			listaComponentiTecnici = Componente.buildListaParticella(db, 9, -1); 
+			ArrayList<Componente> listaComponentiTecniciCampionamento = Componente.buildListaParticella(db, 9, -1);
+			ArrayList<Componente> listaComponentiDirezioneTecnicaArpac = Componente.buildListaParticella(db, 44, -1);
+			
+			listaComponentiTecnici.addAll(listaComponentiTecniciCampionamento);
+			listaComponentiTecnici.addAll(listaComponentiDirezioneTecnicaArpac);
+			
 			context.getRequest().setAttribute("ListaComponentiTecnici", listaComponentiTecnici);
 			
-			ArrayList<Componente> listaComponentiAddetti = new ArrayList<Componente>(); 
-			listaComponentiAddetti = Componente.buildListaParticella(db, 8, -1);
-			context.getRequest().setAttribute("ListaComponentiAddetti", listaComponentiAddetti);
+//			ArrayList<Componente> listaComponentiAddetti = new ArrayList<Componente>(); 
+//			listaComponentiAddetti = Componente.buildListaParticella(db, 8, -1);
+//			context.getRequest().setAttribute("ListaComponentiAddetti", listaComponentiAddetti);
 		} 
 
 		catch (Exception e) 
@@ -800,23 +812,27 @@ public class GestioneCampioni extends CFSModule{
 		
 		if (!jsonCampione.has("GruppoAddetti")) {
 		
-			String[] componentiAddettiIds = null;
+			String componenteAddettoNome1 = "";
+			String componenteAddettoNome2 = "";
+			String componenteAddettoNome3 = "";
+			String componenteAddettoCognome1 = "";
+			String componenteAddettoCognome2 = "";
+			String componenteAddettoCognome3 = "";			
 
-			try {componentiAddettiIds = context.getRequest().getParameterValues("componenteAddettoId");} catch (Exception e) {}
+			try {componenteAddettoNome1 = context.getRequest().getParameter("componenteAddettoNome1");} catch (Exception e) {}
+			try {componenteAddettoNome2 = context.getRequest().getParameter("componenteAddettoNome2");} catch (Exception e) {}
+			try {componenteAddettoNome3 = context.getRequest().getParameter("componenteAddettoNome3");} catch (Exception e) {}
+			try {componenteAddettoCognome1 = context.getRequest().getParameter("componenteAddettoCognome1");} catch (Exception e) {}
+			try {componenteAddettoCognome2 = context.getRequest().getParameter("componenteAddettoCognome2");} catch (Exception e) {}
+			try {componenteAddettoCognome3 = context.getRequest().getParameter("componenteAddettoCognome3");} catch (Exception e) {}
 
-			JSONArray jsonComponentiAddetti= new JSONArray();
-
-			if (componentiAddettiIds != null) {
-				for (int i = 0; i<componentiAddettiIds.length;i++){
-
-					JSONObject jsonComponenteAddetto = new JSONObject();
-					int idComponente = Integer.parseInt(componentiAddettiIds[i]);
-					jsonComponenteAddetto.put("id", idComponente);
-					jsonComponenteAddetto.put("nominativo", context.getRequest().getParameter("componenteAddettoNome_"+componentiAddettiIds[i]).replaceAll("'", ""));
-					jsonComponenteAddetto.put("qualifica", context.getRequest().getParameter("componenteAddettoQualifica_"+componentiAddettiIds[i]).replaceAll("'", ""));
-					jsonComponentiAddetti.put(jsonComponenteAddetto);
-				}
-			}
+			JSONObject jsonComponentiAddetti = new JSONObject();
+			jsonComponentiAddetti.put("nome1", componenteAddettoNome1.replaceAll("'", ""));
+			jsonComponentiAddetti.put("cognome1", componenteAddettoCognome1.replaceAll("'", ""));
+			jsonComponentiAddetti.put("nome2", componenteAddettoNome2.replaceAll("'", ""));
+			jsonComponentiAddetti.put("cognome2", componenteAddettoCognome2.replaceAll("'", ""));
+			jsonComponentiAddetti.put("nome3", componenteAddettoNome3.replaceAll("'", ""));
+			jsonComponentiAddetti.put("cognome3", componenteAddettoCognome3.replaceAll("'", ""));
 			jsonCampione.put("GruppoAddetti", jsonComponentiAddetti);
 		
 		}
@@ -876,6 +892,514 @@ public class GestioneCampioni extends CFSModule{
 			String datiAltraPersonaPresente = null;
 			String qualitaAltraPersonaPresente = null;
 			
+			
+			try {carabinieriForestali = context.getRequest().getParameter("carabinieriForestali");} catch (Exception e) {}
+			try {altriPartecipanti1 = context.getRequest().getParameter("altriPartecipanti1");} catch (Exception e) {}
+			try {qualitaAltriPartecipanti1 = context.getRequest().getParameter("qualitaAltriPartecipanti1");} catch (Exception e) {}
+			try {altriPartecipanti2 = context.getRequest().getParameter("altriPartecipanti2");} catch (Exception e) {}
+			try {qualitaAltriPartecipanti2 = context.getRequest().getParameter("qualitaAltriPartecipanti2");} catch (Exception e) {}
+			try {altriPartecipanti3 = context.getRequest().getParameter("altriPartecipanti3");} catch (Exception e) {}
+			try {qualitaAltriPartecipanti3 = context.getRequest().getParameter("qualitaAltriPartecipanti3");} catch (Exception e) {}
+			try {proprietarioPresente = Boolean.parseBoolean(context.getRequest().getParameter("proprietarioPresente"));} catch (Exception e) {}
+			try {datiProprietarioParticella = context.getRequest().getParameter("datiProprietarioParticella");} catch (Exception e) {}
+			try {datiAltraPersonaPresente = context.getRequest().getParameter("datiAltraPersonaPresente");} catch (Exception e) {}
+			try {qualitaAltraPersonaPresente = context.getRequest().getParameter("qualitaAltraPersonaPresente");} catch (Exception e) {}
+
+			jsonDatiVerbaleCampione.put("carabinieriForestali", carabinieriForestali);
+			
+			jsonDatiVerbaleCampione.put("altriPartecipanti1", altriPartecipanti1);
+			jsonDatiVerbaleCampione.put("qualitaAltriPartecipanti1", qualitaAltriPartecipanti1);
+			
+			jsonDatiVerbaleCampione.put("altriPartecipanti2", altriPartecipanti2);
+			jsonDatiVerbaleCampione.put("qualitaAltriPartecipanti2", qualitaAltriPartecipanti2);
+			
+			jsonDatiVerbaleCampione.put("altriPartecipanti3", altriPartecipanti3);
+			jsonDatiVerbaleCampione.put("qualitaAltriPartecipanti3", qualitaAltriPartecipanti3);
+			
+			jsonDatiVerbaleCampione.put("proprietarioPresente", proprietarioPresente);
+			jsonDatiVerbaleCampione.put("datiProprietarioParticella", datiProprietarioParticella);
+			jsonDatiVerbaleCampione.put("datiAltraPersonaPresente", datiAltraPersonaPresente);
+			jsonDatiVerbaleCampione.put("qualitaAltraPersonaPresente", qualitaAltraPersonaPresente);
+
+			String codiceIdentificativoVoc = null;
+			String coordXVoc = null;
+			String coordYVoc = null;
+			
+			String codiceIdentificativoMedioComposito = null;
+			
+			String[] codiceIdentificativo = new String[5];
+			String[] coordX = new String[5];
+			String[] coordY = new String[5];
+			
+			try {codiceIdentificativoVoc = context.getRequest().getParameter("codiceIdentificativoVoc");} catch (Exception e) {}
+			try {coordXVoc = context.getRequest().getParameter("coordinataXVoc");} catch (Exception e) {}
+			try {coordYVoc = context.getRequest().getParameter("coordinataYVoc");} catch (Exception e) {}
+			
+			try {codiceIdentificativoMedioComposito = context.getRequest().getParameter("codiceIdentificativoMedioComposito");} catch (Exception e) {}
+
+			for (int i = 0; i<5; i++){
+				try {codiceIdentificativo[i] = context.getRequest().getParameter("codiceIdentificativo"+(i+1));} catch (Exception e) {}
+				try {coordX[i] = context.getRequest().getParameter("coordinataX"+(i+1));} catch (Exception e) {}
+				try {coordY[i] = context.getRequest().getParameter("coordinataY"+(i+1));} catch (Exception e) {}
+			}
+			
+			jsonDatiVerbaleCampione.put("codiceIdentificativoVoc", codiceIdentificativoVoc);
+			jsonDatiVerbaleCampione.put("coordinataXVoc", coordXVoc);
+			jsonDatiVerbaleCampione.put("coordinataYVoc", coordYVoc);
+			
+			jsonDatiVerbaleCampione.put("codiceIdentificativoMedioComposito", codiceIdentificativoMedioComposito);
+			
+			for (int i = 0; i<5; i++){
+				jsonDatiVerbaleCampione.put("codiceIdentificativo"+(i+1), codiceIdentificativo[i]);
+				jsonDatiVerbaleCampione.put("coordinataX"+(i+1), coordX[i]);
+				jsonDatiVerbaleCampione.put("coordinataY"+(i+1), coordY[i]);
+			}
+			
+			String numCampioniElementari = null;
+			String tipoColturaCodice = null;
+			String tipoColturaDescrizione = null;
+			String tipoColturaNote = null;
+			String tipoColturaMotivazione = null;
+
+			String presenzaRifiuti = null;
+			String presenzaRifiutiNote = null;
+			String presenzaRifiutiDescrizione = null;
+			
+			boolean irrigazioneInLoco = false;
+			String irrigazioneInformazioni = null;
+			String irrigazioneDerivazione = null;
+			boolean pozzoCampionamento = false;
+			String pozzoCampionamentoVerbaleNumero = null;
+			String pozzoCampionamentoVerbaleData = null;
+			String dichiarazioni = null;
+			String strumentazione = null;
+			String noteAggiuntive = null;
+
+			try {numCampioniElementari = context.getRequest().getParameter("numCampioniElementari");} catch (Exception e) {}
+			try {tipoColturaCodice = context.getRequest().getParameter("tipoColturaParticellaCodice");} catch (Exception e) {}
+			try {tipoColturaDescrizione = context.getRequest().getParameter("tipoColturaParticellaDescrizione_"+tipoColturaCodice);} catch (Exception e) {}
+			try {tipoColturaNote = context.getRequest().getParameter("tipoColturaParticellaNote");} catch (Exception e) {}
+			try {tipoColturaMotivazione = context.getRequest().getParameter("tipoColturaParticellaMotivazione");} catch (Exception e) {}
+			try {presenzaRifiuti = context.getRequest().getParameter("presenzaRifiuti");} catch (Exception e) {}
+			try {presenzaRifiutiNote = context.getRequest().getParameter("presenzaRifiutiNote");} catch (Exception e) {}
+			try {presenzaRifiutiDescrizione = context.getRequest().getParameter("presenzaRifiutiDescrizione");} catch (Exception e) {}
+			
+			try {irrigazioneInLoco = Boolean.parseBoolean(context.getRequest().getParameter("irrigazioneInLoco"));} catch (Exception e) {}
+			try {irrigazioneInformazioni = context.getRequest().getParameter("irrigazioneInformazioni");} catch (Exception e) {}
+			try {irrigazioneDerivazione = context.getRequest().getParameter("irrigazioneDerivazione");} catch (Exception e) {}
+			try {pozzoCampionamento = Boolean.parseBoolean(context.getRequest().getParameter("pozzoCampionamento"));} catch (Exception e) {}
+			try {pozzoCampionamentoVerbaleNumero = context.getRequest().getParameter("pozzoCampionamentoVerbaleNumero");} catch (Exception e) {}
+			try {pozzoCampionamentoVerbaleData = context.getRequest().getParameter("pozzoCampionamentoVerbaleData");} catch (Exception e) {}
+			try {dichiarazioni = context.getRequest().getParameter("dichiarazioni");} catch (Exception e) {}
+			try {strumentazione = context.getRequest().getParameter("strumentazione");} catch (Exception e) {}
+			try {noteAggiuntive = context.getRequest().getParameter("noteAggiuntive");} catch (Exception e) {}
+
+			jsonDatiVerbaleCampione.put("numCampioniElementari", numCampioniElementari);
+			jsonDatiVerbaleCampione.put("tipoColturaCodice", tipoColturaCodice);
+			jsonDatiVerbaleCampione.put("tipoColturaDescrizione", tipoColturaDescrizione);
+			jsonDatiVerbaleCampione.put("tipoColturaNote", tipoColturaNote);
+			jsonDatiVerbaleCampione.put("tipoColturaMotivazione", tipoColturaMotivazione);
+			jsonDatiVerbaleCampione.put("presenzaRifiuti", presenzaRifiuti);
+			jsonDatiVerbaleCampione.put("presenzaRifiutiNote", presenzaRifiutiNote);
+			jsonDatiVerbaleCampione.put("presenzaRifiutiDescrizione", presenzaRifiutiDescrizione); 
+			
+			jsonDatiVerbaleCampione.put("irrigazioneInLoco", irrigazioneInLoco); 
+			jsonDatiVerbaleCampione.put("irrigazioneInformazioni", irrigazioneInformazioni); 
+			jsonDatiVerbaleCampione.put("irrigazioneDerivazione", irrigazioneDerivazione); 
+			jsonDatiVerbaleCampione.put("pozzoCampionamento", pozzoCampionamento); 
+			jsonDatiVerbaleCampione.put("pozzoCampionamentoVerbaleNumero", pozzoCampionamentoVerbaleNumero); 
+			jsonDatiVerbaleCampione.put("pozzoCampionamentoVerbaleData", pozzoCampionamentoVerbaleData); 
+			jsonDatiVerbaleCampione.put("dichiarazioni", dichiarazioni); 
+			jsonDatiVerbaleCampione.put("strumentazione", strumentazione); 
+			jsonDatiVerbaleCampione.put("noteAggiuntive", noteAggiuntive); 
+
+
+			boolean aliquotaA = false;
+			boolean aliquotaBG = false;
+			boolean aliquotaC = false;
+			boolean aliquotaD = false;
+			boolean aliquotaE = false;
+			boolean aliquotaF = false;
+			boolean aliquotaH = false;
+			boolean aliquotaI = false;
+			boolean aliquotaLM = false;
+			boolean aliquotaN = false;
+			boolean aliquotaCD_fitofarmaci = false;
+			
+			String aliquotaA_data = null;
+			String aliquotaC_data = null;
+			String aliquotaD_data = null;
+			String aliquotaI_data = null;
+			String aliquotaLM_data = null;
+			
+			String aliquotaA_ora = null;
+			String aliquotaC_ora = null;
+			String aliquotaD_ora = null;
+			String aliquotaI_ora = null;
+			String aliquotaLM_ora = null;
+			
+			try {aliquotaA = Boolean.parseBoolean(context.getRequest().getParameter("aliquotaA"));} catch (Exception e) {} 
+			try {aliquotaBG = Boolean.parseBoolean(context.getRequest().getParameter("aliquotaBG"));} catch (Exception e) {}
+			try {aliquotaC = Boolean.parseBoolean(context.getRequest().getParameter("aliquotaC"));} catch (Exception e) {}
+			try {aliquotaD = Boolean.parseBoolean(context.getRequest().getParameter("aliquotaD"));} catch (Exception e) {}
+			try {aliquotaE = Boolean.parseBoolean(context.getRequest().getParameter("aliquotaE"));} catch (Exception e) {}
+			try {aliquotaF = Boolean.parseBoolean(context.getRequest().getParameter("aliquotaF"));} catch (Exception e) {}
+			try {aliquotaH = Boolean.parseBoolean(context.getRequest().getParameter("aliquotaH"));} catch (Exception e) {}
+			try {aliquotaI = Boolean.parseBoolean(context.getRequest().getParameter("aliquotaI"));} catch (Exception e) {}
+			try {aliquotaLM = Boolean.parseBoolean(context.getRequest().getParameter("aliquotaLM"));} catch (Exception e) {}
+			try {aliquotaN = Boolean.parseBoolean(context.getRequest().getParameter("aliquotaN"));} catch (Exception e) {}			
+			try {aliquotaCD_fitofarmaci = Boolean.parseBoolean(context.getRequest().getParameter("aliquotaCD_fitofarmaci"));} catch (Exception e) {}
+			
+			try {aliquotaA_data = context.getRequest().getParameter("aliquotaA_data");} catch (Exception e) {} 
+			try {aliquotaC_data = context.getRequest().getParameter("aliquotaC_data");} catch (Exception e) {}
+			try {aliquotaD_data = context.getRequest().getParameter("aliquotaD_data");} catch (Exception e) {}
+			try {aliquotaI_data = context.getRequest().getParameter("aliquotaI_data");} catch (Exception e) {}
+			try {aliquotaLM_data = context.getRequest().getParameter("aliquotaLM_data");} catch (Exception e) {}
+			
+			try {aliquotaA_ora = context.getRequest().getParameter("aliquotaA_ora");} catch (Exception e) {} 
+			try {aliquotaC_ora = context.getRequest().getParameter("aliquotaC_ora");} catch (Exception e) {}
+			try {aliquotaD_ora = context.getRequest().getParameter("aliquotaD_ora");} catch (Exception e) {}
+			try {aliquotaI_ora = context.getRequest().getParameter("aliquotaI_ora");} catch (Exception e) {}
+			try {aliquotaLM_ora = context.getRequest().getParameter("aliquotaLM_ora");} catch (Exception e) {}
+			
+			jsonDatiVerbaleCampione.put("aliquotaA", aliquotaA); 
+			jsonDatiVerbaleCampione.put("aliquotaBG", aliquotaBG);
+			jsonDatiVerbaleCampione.put("aliquotaC", aliquotaC);
+			jsonDatiVerbaleCampione.put("aliquotaD", aliquotaD);
+			jsonDatiVerbaleCampione.put("aliquotaE", aliquotaE);
+			jsonDatiVerbaleCampione.put("aliquotaF", aliquotaF);
+			jsonDatiVerbaleCampione.put("aliquotaH", aliquotaH);
+			jsonDatiVerbaleCampione.put("aliquotaI", aliquotaI);
+			jsonDatiVerbaleCampione.put("aliquotaLM", aliquotaLM);
+			jsonDatiVerbaleCampione.put("aliquotaN", aliquotaN);			
+			jsonDatiVerbaleCampione.put("aliquotaCD_fitofarmaci", aliquotaCD_fitofarmaci);		
+			
+			jsonDatiVerbaleCampione.put("aliquotaA_data", aliquotaA_data);
+			jsonDatiVerbaleCampione.put("aliquotaC_data", aliquotaC_data);
+			jsonDatiVerbaleCampione.put("aliquotaD_data", aliquotaD_data);
+			jsonDatiVerbaleCampione.put("aliquotaI_data", aliquotaI_data);
+			jsonDatiVerbaleCampione.put("aliquotaLM_data", aliquotaLM_data);
+			
+			jsonDatiVerbaleCampione.put("aliquotaA_ora", aliquotaA_ora);
+			jsonDatiVerbaleCampione.put("aliquotaC_ora", aliquotaC_ora);
+			jsonDatiVerbaleCampione.put("aliquotaD_ora", aliquotaD_ora);
+			jsonDatiVerbaleCampione.put("aliquotaI_ora", aliquotaI_ora);
+			jsonDatiVerbaleCampione.put("aliquotaLM_ora", aliquotaLM_ora);
+			
+			jsonCampione.put("DatiVerbaleCampione", jsonDatiVerbaleCampione);
+		
+		}
+	
+		context.getRequest().setAttribute("jsonCampione", jsonCampione);
+
+		return "AddRiepilogoParticellaOK";	
+	
+	}
+	
+	public String executeCommandInsertParticella(ActionContext context) throws NumberFormatException, IllegalAccessException, InstantiationException
+	{
+
+		if (!hasPermission(context, "gestionenuovacu-add")) {
+			return ("PermissionError");
+		}
+
+		JSONObject jsonCampione = new JSONObject();
+
+		try {
+			jsonCampione = new JSONObject(context.getRequest().getParameter("jsonCampione"));
+		} catch (Exception e){}
+
+		Connection db = null;
+
+		try 
+		{
+			db = this.getConnection(context);
+			Campione ca = new Campione();
+			ca.insertParticella(db, jsonCampione);
+			context.getRequest().setAttribute("Campione",  ca);
+
+		} 
+
+		catch (Exception e)  
+		{
+			e.printStackTrace();
+		}
+		finally 
+		{
+			this.freeConnection(context, db);
+		}
+		
+		context.getRequest().setAttribute("jsonCampione",  jsonCampione);
+		return "InsertParticellaOK";
+	}
+	
+	public String executeCommandViewParticella(ActionContext context) throws NumberFormatException, IllegalAccessException, InstantiationException
+	{
+
+		if (!hasPermission(context, "gestionenuovacu-add")) {
+			return ("PermissionError");
+		}
+	
+		JSONObject jsonCampione = new JSONObject();
+		
+		Connection db = null;
+
+		try 
+		{
+			db = this.getConnection(context);
+
+			
+				int idCampione = -1;
+				
+				try {idCampione = Integer.parseInt(context.getRequest().getParameter("idCampione"));} catch (Exception e) {}
+				if (idCampione == -1)
+					try {idCampione = Integer.parseInt((String) context.getRequest().getAttribute("idCampione"));} catch (Exception e) {}
+
+				jsonCampione = Campione.getJsonParticella(db, idCampione);
+
+		} 
+
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		finally 
+		{
+			this.freeConnection(context, db);
+		}
+
+		context.getRequest().setAttribute("jsonCampione", jsonCampione);
+
+		return "ViewParticellaOK";
+	}
+	
+	public String executeCommandListaParticella(ActionContext context) throws NumberFormatException, IllegalAccessException, InstantiationException
+	{ 
+
+		if (!hasPermission(context, "gestionenuovacu-add")) {
+			return ("PermissionError");
+		}
+	
+		int idSubparticella = -1;
+
+		try {idSubparticella = Integer.parseInt(context.getRequest().getParameter("idSubparticella"));} catch (Exception e) {}
+		if (idSubparticella == -1)
+			try {idSubparticella = Integer.parseInt((String) context.getRequest().getAttribute("idSubparticella"));} catch (Exception e) {}
+
+		context.getRequest().setAttribute("Messaggio", String.valueOf((String) context.getRequest().getAttribute("Messaggio")));
+
+		Subparticella sub = null;
+		JSONArray jsonCampioni = new JSONArray();
+
+		Connection db = null;
+
+		try 
+		{
+			db = this.getConnection(context);
+			
+			sub = new Subparticella(db, idSubparticella);
+			jsonCampioni = Campione.getJsonListaParticella(db, idSubparticella);
+	
+		} 
+
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		finally 
+		{
+			this.freeConnection(context, db);
+		}
+
+		context.getRequest().setAttribute("Anagrafica", sub);
+		context.getRequest().setAttribute("jsonCampioni", jsonCampioni);
+
+		return "ListaParticellaOK";
+	}
+	
+	public String executeCommandModifyParticella(ActionContext context) throws NumberFormatException, IllegalAccessException, InstantiationException
+	{
+
+		if (!hasPermission(context, "gestionenuovacu-add")) {
+			return ("PermissionError");
+		}
+	
+		JSONObject jsonCampione = new JSONObject();
+		
+		Connection db = null;
+
+		try 
+		{
+			db = this.getConnection(context);
+
+			
+				int idCampione = -1;
+				
+				try {idCampione = Integer.parseInt(context.getRequest().getParameter("idCampione"));} catch (Exception e) {}
+				if (idCampione == -1)
+					try {idCampione = Integer.parseInt((String) context.getRequest().getAttribute("idCampione"));} catch (Exception e) {}
+
+				jsonCampione = Campione.getJsonParticella(db, idCampione);
+				
+				int riferimentoId = Integer.parseInt(((JSONObject) jsonCampione.get("Anagrafica")).get("riferimentoId").toString());
+
+				ArrayList<MotivoCampionamentoParticella> listaMotivi = new ArrayList<MotivoCampionamentoParticella>(); 
+				listaMotivi = MotivoCampionamentoParticella.buildLista(db, riferimentoId);
+				context.getRequest().setAttribute("ListaMotivi", listaMotivi);
+				
+				ArrayList<Matrice> listaMatrici = Matrice.buildListaCampionamentoParticella(db);
+				context.getRequest().setAttribute("ListaMatrici", listaMatrici);
+				
+				int annoCorrente = -1;
+				String dataPrelievo = (String) ((JSONObject) jsonCampione.get("Dati")).get("dataPrelievo");
+				try {annoCorrente = Integer.parseInt(dataPrelievo.substring(0,4));} catch (Exception e) {}
+							
+				ArrayList<Componente> listaComponentiTecnici = new ArrayList<Componente>(); 
+				listaComponentiTecnici = Componente.buildListaParticella(db, 9, -1); 
+				context.getRequest().setAttribute("ListaComponentiTecnici", listaComponentiTecnici);
+					
+				ArrayList<TipoColturaParticella> listaTipiColture = new ArrayList<TipoColturaParticella>(); 
+				listaTipiColture = TipoColturaParticella.buildLista(db);
+				context.getRequest().setAttribute("ListaTipiColture", listaTipiColture);
+
+		} 
+
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		finally 
+		{
+			this.freeConnection(context, db);
+		}
+
+		context.getRequest().setAttribute("jsonCampione", jsonCampione);
+
+		return "ModifyParticellaOK";
+	}
+	
+	public String executeCommandUpdateParticella(ActionContext context) throws NumberFormatException, IllegalAccessException, InstantiationException
+	{
+
+		if (!hasPermission(context, "gestionenuovacu-add")) {
+			return ("PermissionError");
+		}
+	
+		JSONObject jsonCampione = new JSONObject();
+		
+		Connection db = null;
+
+		try 
+		{
+			db = this.getConnection(context);
+			
+			int idCampione = -1;
+			try {idCampione = Integer.parseInt(context.getRequest().getParameter("idCampione"));} catch (Exception e) {}
+	
+			JSONObject jsonCampiServizio = new JSONObject();
+			jsonCampiServizio.put("idCampione",idCampione);
+			jsonCampione.put("CampiServizio", jsonCampiServizio);
+				
+			JSONObject jsonUtente = new JSONObject();
+			jsonUtente.put("userId", getUserId(context));
+			jsonCampione.put("Utente", jsonUtente);
+
+			int id = -1;
+			String descrizione = null;
+			
+			try {id = Integer.parseInt(context.getRequest().getParameter("motivoId"));} catch (Exception e) {}
+			try {descrizione = context.getRequest().getParameter("motivoDescrizione_"+id);} catch (Exception e) {}
+			
+			JSONObject jsonMotivo = new JSONObject();
+			jsonMotivo.put("id", id);
+			jsonMotivo.put("descrizione", descrizione);
+			jsonCampione.put("Motivo", jsonMotivo);
+
+			id = -1;
+			String nome = null;
+
+			try {id = Integer.parseInt(context.getRequest().getParameter("matriceId"));} catch (Exception e) {}
+			try {nome = context.getRequest().getParameter("matriceNome_"+id);} catch (Exception e) {}
+
+			JSONArray jsonMatrici= new JSONArray();
+			JSONObject jsonMatrice = new JSONObject();
+			jsonMatrice.put("id", id);
+			jsonMatrice.put("nome", nome);
+			jsonMatrici.put(jsonMatrice);
+			jsonCampione.put("Matrici", jsonMatrici);
+
+			String data = null;
+			String ore = null;
+			String numeroVerbaleAutomatico = null;
+			String numeroVerbale = null;
+
+			try {data = context.getRequest().getParameter("dataPrelievo");} catch (Exception e) {}
+			try {ore = context.getRequest().getParameter("ore");} catch (Exception e) {}
+			try {numeroVerbaleAutomatico = context.getRequest().getParameter("numeroVerbaleAutomatico");} catch (Exception e) {}
+			try {numeroVerbale = context.getRequest().getParameter("numeroVerbale");} catch (Exception e) {}
+
+			JSONObject jsonDati = new JSONObject();
+			jsonDati.put("dataPrelievo", data);
+			jsonDati.put("ore", ore);
+			jsonDati.put("numeroVerbaleAutomatico", numeroVerbaleAutomatico);
+			jsonDati.put("numeroVerbale", numeroVerbale);
+			jsonCampione.put("Dati", jsonDati);
+
+			String[] componentiTecniciIds = null;
+
+			try {componentiTecniciIds = context.getRequest().getParameterValues("componenteTecnicoId");} catch (Exception e) {}
+
+			JSONArray jsonComponentiTecnici= new JSONArray();
+
+			if (componentiTecniciIds != null) {
+				for (int i = 0; i<componentiTecniciIds.length;i++){
+
+					JSONObject jsonComponenteTecnico = new JSONObject();
+					int idComponente = Integer.parseInt(componentiTecniciIds[i]);
+					jsonComponenteTecnico.put("id", idComponente);
+					jsonComponenteTecnico.put("nominativo", context.getRequest().getParameter("componenteTecnicoNome_"+componentiTecniciIds[i]).replaceAll("'", ""));
+					jsonComponenteTecnico.put("qualifica", context.getRequest().getParameter("componenteTecnicoQualifica_"+componentiTecniciIds[i]).replaceAll("'", ""));
+					jsonComponentiTecnici.put(jsonComponenteTecnico);
+				}
+			}
+			jsonCampione.put("GruppoTecnici", jsonComponentiTecnici);
+
+			JSONObject jsonComponentiAddetti = new JSONObject();
+			String componenteAddettoNome1 = "";
+			String componenteAddettoNome2 = "";
+			String componenteAddettoNome3 = "";
+			String componenteAddettoCognome1 = "";
+			String componenteAddettoCognome2 = "";
+			String componenteAddettoCognome3 = "";			
+
+			try {componenteAddettoNome1 = context.getRequest().getParameter("componenteAddettoNome1");} catch (Exception e) {}
+			try {componenteAddettoNome2 = context.getRequest().getParameter("componenteAddettoNome2");} catch (Exception e) {}
+			try {componenteAddettoNome3 = context.getRequest().getParameter("componenteAddettoNome3");} catch (Exception e) {}
+			try {componenteAddettoCognome1 = context.getRequest().getParameter("componenteAddettoCognome1");} catch (Exception e) {}
+			try {componenteAddettoCognome2 = context.getRequest().getParameter("componenteAddettoCognome2");} catch (Exception e) {}
+			try {componenteAddettoCognome3 = context.getRequest().getParameter("componenteAddettoCognome3");} catch (Exception e) {}
+
+			jsonComponentiAddetti.put("nome1", componenteAddettoNome1.replaceAll("'", ""));
+			jsonComponentiAddetti.put("cognome1", componenteAddettoCognome1.replaceAll("'", ""));
+			jsonComponentiAddetti.put("nome2", componenteAddettoNome2.replaceAll("'", ""));
+			jsonComponentiAddetti.put("cognome2", componenteAddettoCognome2.replaceAll("'", ""));
+			jsonComponentiAddetti.put("nome3", componenteAddettoNome3.replaceAll("'", ""));
+			jsonComponentiAddetti.put("cognome3", componenteAddettoCognome3.replaceAll("'", ""));
+			jsonCampione.put("GruppoAddetti", jsonComponentiAddetti);
+
+			JSONObject jsonDatiVerbaleCampione = new JSONObject();
+
+			String carabinieriForestali = null;
+			String altriPartecipanti1 = null;
+			String qualitaAltriPartecipanti1 = null;
+			String altriPartecipanti2 = null;
+			String qualitaAltriPartecipanti2 = null;
+			String altriPartecipanti3 = null;
+			String qualitaAltriPartecipanti3 = null;
+			boolean proprietarioPresente = false;
+			String datiProprietarioParticella = null;
+			String datiAltraPersonaPresente = null;
+			String qualitaAltraPersonaPresente = null;			
 			
 			try {carabinieriForestali = context.getRequest().getParameter("carabinieriForestali");} catch (Exception e) {}
 			try {altriPartecipanti1 = context.getRequest().getParameter("altriPartecipanti1");} catch (Exception e) {}
@@ -1101,78 +1625,13 @@ public class GestioneCampioni extends CFSModule{
 			jsonDatiVerbaleCampione.put("aliquotaN_ora", aliquotaN_ora);			
 			
 			jsonCampione.put("DatiVerbaleCampione", jsonDatiVerbaleCampione);
-		
-		}
-	
-		context.getRequest().setAttribute("jsonCampione", jsonCampione);
 
-		return "AddRiepilogoParticellaOK";	
-	
-	}
-	
-	public String executeCommandInsertParticella(ActionContext context) throws NumberFormatException, IllegalAccessException, InstantiationException
-	{
-
-		if (!hasPermission(context, "gestionenuovacu-add")) {
-			return ("PermissionError");
-		}
-
-		JSONObject jsonCampione = new JSONObject();
-
-		try {
-			jsonCampione = new JSONObject(context.getRequest().getParameter("jsonCampione"));
-		} catch (Exception e){}
-
-		Connection db = null;
-
-		try 
-		{
-			db = this.getConnection(context);
 			Campione ca = new Campione();
-			ca.insertParticella(db, jsonCampione);
+			ca.updateParticella(db, jsonCampione);
 			context.getRequest().setAttribute("Campione",  ca);
 
 		} 
 
-		catch (Exception e)  
-		{
-			e.printStackTrace();
-		}
-		finally 
-		{
-			this.freeConnection(context, db);
-		}
-		
-		context.getRequest().setAttribute("jsonCampione",  jsonCampione);
-		return "InsertParticellaOK";
-	}
-	
-	public String executeCommandViewParticella(ActionContext context) throws NumberFormatException, IllegalAccessException, InstantiationException
-	{
-
-		if (!hasPermission(context, "gestionenuovacu-add")) {
-			return ("PermissionError");
-		}
-	
-		JSONObject jsonCampione = new JSONObject();
-		
-		Connection db = null;
-
-		try 
-		{
-			db = this.getConnection(context);
-
-			
-				int idCampione = -1;
-				
-				try {idCampione = Integer.parseInt(context.getRequest().getParameter("idCampione"));} catch (Exception e) {}
-				if (idCampione == -1)
-					try {idCampione = Integer.parseInt((String) context.getRequest().getAttribute("idCampione"));} catch (Exception e) {}
-
-				jsonCampione = Campione.getJsonParticella(db, idCampione);
-
-		} 
-
 		catch (Exception e) 
 		{
 			e.printStackTrace();
@@ -1184,50 +1643,7 @@ public class GestioneCampioni extends CFSModule{
 
 		context.getRequest().setAttribute("jsonCampione", jsonCampione);
 
-		return "ViewParticellaOK";
-	}
-	
-	public String executeCommandListaParticella(ActionContext context) throws NumberFormatException, IllegalAccessException, InstantiationException
-	{ 
-
-		if (!hasPermission(context, "gestionenuovacu-add")) {
-			return ("PermissionError");
+		return "UpdateParticellaOK";	
 		}
-	
-		int idSubparticella = -1;
-
-		try {idSubparticella = Integer.parseInt(context.getRequest().getParameter("idSubparticella"));} catch (Exception e) {}
-		if (idSubparticella == -1)
-			try {idSubparticella = Integer.parseInt((String) context.getRequest().getAttribute("idSubparticella"));} catch (Exception e) {}
-
-		Subparticella sub = null;
-		JSONArray jsonCampioni = new JSONArray();
-
-		Connection db = null;
-
-		try 
-		{
-			db = this.getConnection(context);
-			
-			sub = new Subparticella(db, idSubparticella);
-			jsonCampioni = Campione.getJsonListaParticella(db, idSubparticella);
-	
-		} 
-
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-		}
-		finally 
-		{
-			this.freeConnection(context, db);
-		}
-
-		context.getRequest().setAttribute("Anagrafica", sub);
-		context.getRequest().setAttribute("jsonCampioni", jsonCampioni);
-
-		return "ListaParticellaOK";
-	}
-	
 	
 }

@@ -55,6 +55,7 @@ Modifica
 
 <br>
 <form action="Terreni.do?command=UpdateSubparticella" method="post">
+
 <table class="details" width="100%" cellpadding="5">
 <col width="10%">
 
@@ -77,10 +78,7 @@ Modifica
 	
 	<input type="hidden" id="codiceSito" name="codiceSito" value="<%=sub.getCodiceSito()%>"/> <div id="loadingCodice" style="display:none"><img src="images/loadingmw.gif" width="50px"/></div></td>
 </tr>
-<tr>
-	<td class="formLabel">SEZIONE</td>
-	<td><input type="text" id="sezione" name="sezione" value="<%=sub.getSezione()%>"/></td>
-</tr>
+
 </table>
 <input type="hidden" id="idArea" name="idArea" value="<%=sub.getArea().getId()%>"/>
 <input type="hidden" id="id" name="id" value="<%=sub.getId()%>"/>

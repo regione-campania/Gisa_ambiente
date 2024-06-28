@@ -8878,7 +8878,7 @@ function setTimestampStartRichiesta()
 
 		
 		
-		document.getElementById("dialogCustomerSatisfaction").appendChild(oInputIni);
+		
 	
 		var url_= location.href;
 
@@ -9107,7 +9107,7 @@ dwr.util.useLoadingImage = function useLoadingImage(imageSrc) {
             });
             function do_ajax(){
             $.ajax({
-				url : "templates/messaggio_home.jsp",
+				url : "messaggio_home.jsp",
                 dataType : 'json',
                 error : function() {
 
@@ -9156,31 +9156,37 @@ dwr.util.useLoadingImage = function useLoadingImage(imageSrc) {
 		<%@ include file="./avviso_messaggio_urgente.txt"%>
 	</div>
 
+<% String ambiente = org.aspcfs.modules.util.imports.ApplicationProperties.getProperty("ambiente"); 
+   String classColor = "";
+	if (!ambiente.equals("ufficiale")){
+		if (ambiente.equals("sviluppo"))
+			classColor ="colore_sviluppo";
+		else
+			classColor = "colore_demo";
+	
+	}
+%>
 
 
-	<div id="header"
-		<dhv:permission name="bannerimage-view">  style="background-image: url(images/header_apistica.jpg);height: 175px;width: 100%;background-repeat:no-repeat;" </dhv:permission>
-		<dhv:permission name="bannerimageacque-view">  style="background-image: url(images/header_acque.jpg);height: 175px;width: 100%;background-repeat:no-repeat;" </dhv:permission>
-
-  <%if ("demo".equals(org.aspcfs.modules.util.imports.ApplicationProperties.getProperty("ambiente"))){ %> class="colore_demo"<%}
-  else if ("sviluppo".equals(org.aspcfs.modules.util.imports.ApplicationProperties.getProperty("ambiente"))){ %> class="colore_sviluppo"<%}
-  %>>
-
+	<div id="header" class="<%=classColor %>" >
 		<p>
-
-			<%if("demo".equals(org.aspcfs.modules.util.imports.ApplicationProperties.getProperty("ambiente"))){ %>
+		
+		<% if (!ambiente.equals("ufficiale")) {%>
+		
 		<center>
-			<font size="5">AMBIENTE ARPAC DEMO!!!</font>
+			<font size="5">AMBIENTE <b><font color="red"><%=ambiente%></font></b>!!!</font>
 		</center>
 		
-		<% } %>
-		<%if("sviluppo".equals(org.aspcfs.modules.util.imports.ApplicationProperties.getProperty("ambiente"))){ %>
+		<% if (ambiente.equals("sviluppo")){ %>
+		
 		<h1>
 			<marquee>
-				<font color="red"><b>SQUASH SQUASH SQUASH</b></font>
+				<font color="red"><b>SQUASH SQUASH SQUASH...</b></font>
 			</marquee>
 		</h1>
-		<% } %>
+		
+		<%} }%>
+
 		</p>
 
 
@@ -9490,8 +9496,7 @@ $("a").each(function() {
  		oInput.setAttribute("id","endTime");
  		oInput.setAttribute("value",currDate);
  		oInput.setAttribute("class","exclude");
- 		document.getElementById("dialogCustomerSatisfaction").appendChild(oInput);
- 		calcolaTempoEsecuzione(document.getElementById('iniTime').value,document.getElementById('endTime').value,'<%=request.getAttribute("commandOld")%>','<%=request.getAttribute("ActionTime")%>');
+ 		
  });
  </script>
 

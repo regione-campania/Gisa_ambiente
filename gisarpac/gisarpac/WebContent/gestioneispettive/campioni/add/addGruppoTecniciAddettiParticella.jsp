@@ -4,8 +4,6 @@
 
 <jsp:useBean id="jsonCampione" class="org.json.JSONObject" scope="request"/>
 <jsp:useBean id="ListaComponentiTecnici" class="java.util.ArrayList" scope="request"/>
-<jsp:useBean id="ListaComponentiAddetti" class="java.util.ArrayList" scope="request"/>
-
 
 <%@ page import="org.aspcfs.modules.gestioneispettive.base.*"%>
 
@@ -51,15 +49,22 @@ function checkForm(form){
 
 	var almenoUnAddetto = false;
 	
-	var x = document.getElementsByName("componenteAddettoId");
-	for (var i = 0; i<x.length; i++) {
-		if (x[i].checked){
-			almenoUnAddetto = true;
-		}
-	}
+	var nomeAddetto1 = document.getElementById("componenteAddettoNome1").value.trim();
+	var nomeAddetto2 = document.getElementById("componenteAddettoNome2").value.trim();
+	var nomeAddetto3 = document.getElementById("componenteAddettoNome3").value.trim();
+	var cognomeAddetto1 = document.getElementById("componenteAddettoCognome1").value.trim();
+	var cognomeAddetto2 = document.getElementById("componenteAddettoCognome2").value.trim();
+	var cognomeAddetto3 = document.getElementById("componenteAddettoCognome3").value.trim();
+	
+	if (nomeAddetto1 != '' && cognomeAddetto1 != '')
+		almenoUnAddetto = true;
+	if (nomeAddetto2 != '' && cognomeAddetto2 != '')
+		almenoUnAddetto = true;
+	if (nomeAddetto3 != '' && cognomeAddetto3 != '')
+		almenoUnAddetto = true;
 	
 	if (!almenoUnAddetto){
-		msg +="Selezionare almeno un addetto al campionamento.\n"; 
+		msg +="Indicare nome e cognome di almeno un addetto al campionamento.\n"; 
 		esito = false;
 	}
 	
@@ -112,38 +117,7 @@ function filtraRigheTecnici() {
 	  }
 	}
 
-function filtraRigheAddetti() {
-	  // Declare variables
-	  var table = document.getElementById("tableGruppoIspettivoAddetti");
-	  var input1 = document.getElementById("myInputQualificaAddetti");
-	  var input2 = document.getElementById("myInputComponenteAddetti");
-	  
-	  var input, filter, table, tr, td, i, txtValue;
-	  
-	  filter1 = input1.value.toUpperCase();
-	  filter2 = input2.value.toUpperCase();
 
-	  tr = table.getElementsByTagName("tr");
-
-	  // Loop through all table rows, and hide those who don't match the search query
-	  for (i = 0; i < tr.length; i++) {
-	    td0 = tr[i].getElementsByTagName("td")[0];
-	    td1 = tr[i].getElementsByTagName("td")[1];
-	    td2 = tr[i].getElementsByTagName("td")[2];
-
-	    if (td0) {
-	      txtValue0 = td0.textContent || td0.innerText;
-	      txtValue1 = td1.textContent || td1.innerText;
-	      txtValue2 = td2.textContent || td2.innerText;
-
-	      if (txtValue1.toUpperCase().indexOf(filter1) > -1 && txtValue2.toUpperCase().indexOf(filter2) > -1 ) {
-	        tr[i].style.display = "";
-	      } else {
-	        tr[i].style.display = "none";
-	      }
-	    }
-	  }
-	}
 
 </script>
 
@@ -168,8 +142,8 @@ function filtraRigheAddetti() {
 
 <tr>
 <th></th>
-<th><input type="text" id="myInputQualificaTecnico" onkeyup="filtraRigheTecnico()" placeholder="FILTRA QUALIFICA" style="width: 100%"></th>
-<th><input type="text" id="myInputComponenteTecnico" onkeyup="filtraRigheTecnico()" placeholder="FILTRA COMPONENTE" style="width: 100%"></th>
+<th><input type="text" id="myInputQualificaTecnici" onkeyup="filtraRigheTecnici()" placeholder="FILTRA QUALIFICA" style="width: 100%"></th>
+<th><input type="text" id="myInputComponenteTecnici" onkeyup="filtraRigheTecnici()" placeholder="FILTRA COMPONENTE" style="width: 100%"></th>
 </tr>
 
 <% 
@@ -196,32 +170,9 @@ Componente comp = (Componente) ListaComponentiTecnici.get(i); %>
 <col width="5%"><col width="15%">
 <tr><th colspan="3"><center><b>ADDETTI AL CAMPIONAMENTO</b></center></th></tr>
 
-<tr>
-<th></th>
-<th>Qualifica</th>
-<th>Componente</th>
-</tr>
-
-<tr>
-<th></th>
-<th><input type="text" id="myInputQualificaAddetti" onkeyup="filtraRigheAddetti()" placeholder="FILTRA QUALIFICA" style="width: 100%"></th>
-<th><input type="text" id="myInputComponenteAddetti" onkeyup="filtraRigheAddetti()" placeholder="FILTRA COMPONENTE" style="width: 100%"></th>
-</tr>
-
-<% 
-for (int i = 0; i<ListaComponentiAddetti.size(); i++) {
-Componente comp = (Componente) ListaComponentiAddetti.get(i); %>
-
-<tr>
-<td>
-<input type="checkbox" id ="<%= comp.getId()%>" name="componenteAddettoId" value="<%= comp.getId()%>" />
-<input type="hidden" readonly id ="componenteAddettoNome_<%= comp.getId()%>" name ="componenteAddettoNome_<%= comp.getId()%>" value="<%= comp.getNominativo() %>"/>
-<input type="hidden" readonly id ="componenteAddettoQualifica_<%= comp.getId()%>" name ="componenteAddettoQualifica_<%= comp.getId()%>" value="<%= comp.getNomeQualifica() %>"/>
-</td>
-<td><%= comp.getNomeQualifica() %></td>
-<td><%= comp.getNominativo() %></td>
-</tr>
-<% } %>
+<tr><td></td><td>ARPAC MULTISERVIZI</td><td><input type="text" id="componenteAddettoNome1" name="componenteAddettoNome1" placeholder="Nome" size="30"/> <input type="text" id="componenteAddettoCognome1" name="componenteAddettoCognome1" placeholder="Cognome" size="30"/></td></tr>
+<tr><td></td><td>ARPAC MULTISERVIZI</td><td><input type="text" id="componenteAddettoNome2" name="componenteAddettoNome2" placeholder="Nome" size="30"/> <input type="text" id="componenteAddettoCognome2" name="componenteAddettoCognome2" placeholder="Cognome" size="30"/></td></tr>
+<tr><td></td><td>ARPAC MULTISERVIZI</td><td><input type="text" id="componenteAddettoNome3" name="componenteAddettoNome3" placeholder="Nome" size="30"/> <input type="text" id="componenteAddettoCognome3" name="componenteAddettoCognome3" placeholder="Cognome" size="30"/></td></tr>
 
 </table>
 

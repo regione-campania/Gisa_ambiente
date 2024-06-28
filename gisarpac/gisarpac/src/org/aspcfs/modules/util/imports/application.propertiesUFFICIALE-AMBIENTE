@@ -53,7 +53,7 @@ cleancache_time_interval_1=0 0/5 6-20 ? * 2,3,4,5,6
 cleancache_time_interval_2=0 0/20 0,1,2,3,4,5,21,22,23 ? * *
 cleancache_time_interval_3=0 0/10 6-20 ? * 1,7
 
-############################## PEC ##############################
+########################### INVIO MAIL ############################
 mail.smtp.starttls.enable = true
 mail.smtp.auth = true
 mail.smtp.host = sendm.cert.legalmail.it
@@ -61,6 +61,10 @@ mail.smtp.port = 465
 mail.smtp.ssl.enable = true
 username = M3023707
 password = US9560031.1a
+mail.smtp.ssl.protocols= tlsv1.2
+mail.smtp.socketFactory.class= javax.net.ssl.SSLSocketFactory
+mail.smtp.socketFactory.fallback= false
+mail.smtp.from= gisasuap@cert.izsmportici.it
 
 ###################### GESTIONE RICHIESTE #######################
 DEST_EMAIL_FLUSSO_SVILUPPO=gisa_arpac@usmail.it
@@ -69,6 +73,9 @@ DEST_EMAIL_FLUSSO_SVILUPPO=gisa_arpac@usmail.it
 PREACCETTAZIONE_PORT=:
 PREACCETTAZIONE_HOST=srvPREACCETTAZIONEL
 abilitazione_chiamata_microservices=true
+WS_ARPAC_HOST=arpacampania.eusoft.it
+WS_ARPAC_LOGIN_USERNAME=Gisa
+WS_ARPAC_LOGIN_PASSWORD=Gisa@2021
 
 ######################## GESTIONE LOCK ##########################
 threshold = 10
@@ -82,9 +89,11 @@ GESTIONE_CU_VEDI_JSON = no
 
 ##################### COOPERAZIONE SICRAWEB #####################
 END_POINT_SICRA = https://sicrawebapi.arpacampania.it/client/services/ProtocolloSoap?CID=gisa_test
+HOST_GISA_RISORSE = https://ambienteprod.gisacampania.it
 FIRMA_UPLOAD_PAGINA = https://ambienteprod.gisacampania.it/gisarpac/moduli/uploadAllegatiFirma.jsp
 FIRMA_UPLOAD_CARTELLA = /data/FirmaAllegati/
 TEMPLATE_CARTELLA = http://156.54.11.15/gisarpac/moduli
+SENDER_EMAIL_FIRMA = gisasuap@cert.izsmportici.it
 DEST_EMAIL_FIRMA = gisa_arpac@usmail.it
 OGGETTO_EMAIL_FIRMA = AMBIENTE: NUOVO DOCUMENTO FIRMATO
  

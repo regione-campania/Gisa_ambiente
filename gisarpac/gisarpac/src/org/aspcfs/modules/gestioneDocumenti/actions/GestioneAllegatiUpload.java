@@ -29,6 +29,8 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.aspcfs.modules.actions.CFSModule;
 import org.aspcfs.modules.aia.base.ImpresaAIA;
 import org.aspcfs.modules.aia.base.StabilimentoAIA;
+import org.aspcfs.modules.aua.base.ImpresaAUA;
+import org.aspcfs.modules.aua.base.StabilimentoAUA;
 import org.aspcfs.modules.base.Constants;
 import org.aspcfs.modules.gestioneDocumenti.base.DocumentaleAllegatoList;
 import org.aspcfs.modules.gestioneanagrafica.base.Stabilimento;
@@ -582,7 +584,13 @@ public class GestioneAllegatiUpload extends CFSModule {
 			else if (jsonEntita.has("idSubparticella") && Integer.parseInt((String) jsonEntita.get("idSubparticella")) > 0){ 
 				org.aspcfs.modules.terreni.base.Subparticella sub = new org.aspcfs.modules.terreni.base.Subparticella(db, Integer.parseInt((String) jsonEntita.get("idSubparticella")));
 				context.getRequest().setAttribute("SubparticellaDettaglio", sub);
-			}		
+			}else if (jsonEntita.has("idStabilimentoAUA") && Integer.parseInt((String) jsonEntita.get("idStabilimentoAUA")) > 0) {
+				StabilimentoAUA stab = new StabilimentoAUA (db, Integer.parseInt((String) jsonEntita.get("idStabilimentoAUA")));
+				context.getRequest().setAttribute("StabilimentoAUADettaglio", stab);
+				ImpresaAUA operatore = new ImpresaAUA() ; 
+				operatore.queryRecordImpresaAUA(db, stab.getIdImpresa());	
+				context.getRequest().setAttribute("ImpresaAUADettaglio", operatore);
+			} 	
 
 		} catch (SQLException e1) {
 			e1.printStackTrace();

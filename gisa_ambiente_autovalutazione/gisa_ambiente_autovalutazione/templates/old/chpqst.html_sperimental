@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>all cl questions</title>
+
+<link rel="stylesheet" type="text/css" href="/statics/css/blunt.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  <script src="/static/js/FileSaver.js"></script>
+
+<style>
+.chphdr{
+  color: #fff;
+  background-color: #926292;
+  border-color: #FF8888;
+}
+
+.active {
+    color: #37a0e6;
+    background-color: #f0e0a0;
+}
+
+div.sticky {
+
+  position: sticky;
+  top: 0;
+
+  padding: 5px;
+  background-color: #cae8cf;
+  border: 1px solid #4CAF50;
+}
+
+
+
+ </style>
+</head>
+<script>
+'use strict';
+var jsonContent=[
+ {{range $i, $qst :=   .Qsts_1 }} {{if gt $i 0}} , {{end}} {"Id_Domanda": "{{$qst.Q_id}}", "Capitolo": "{{$qst.C_desc}}", "Domanda":"{{$qst.Domanda}}", "SottoDomanda":"{{$qst.SottoDomanda}}","Punti_Risposta":""}
+ {{end}}
+];
+
+function exportjson() {
+
+	var j=JSON.stringify(jsonContent, null, 2);
+	var ar=[];
+	ar.push(j);
+	var blob = new Blob(ar, {type: "text/plain;charset=utf-8"});
+
+	if (confirm(ar)) {
+		saveAs(blob, "json.txt");
+	}
+}
+
+function switchSD(t) { //abilitazione sottodomande
+  
+  var myid=t.dataset.id;
+  var query = 'input[data-idparent="' + myid +'"]';
+  var sds = document.querySelectorAll(query);  //tutte le sottomande hanno "data-idparent"=="data-id" riga corrente 
+  console.log(query);
+  console.log(JSON.stringify(sds));
+    
+  var rbAr=document.getElementsByName(t.name);  //current radiobutton array  
+  if (rbAr[0].checked) {//SI
+	for (let i=0; i<sds.length; i++) {    //abilita sottodomande
+		//console.log("enabling: " + sds[i].name);
+		sds[i].disabled=false;
+	}
+  } else {
+	for (let i=0; i<sds.length; i++) {
+		sds[i].disabled=true;
+	}  
+  }
+}
+
+function updJsonContent(q_id, currpv) {
+	console.log("updating score for record: " + q_id);
+	for(let i=0; i<jsonContent.length; i++) {
+		console.log(jsonContent[i].Id_Domanda +"-"+q_id );
+		if (jsonContent[i].Id_Domanda==q_id) {
+			jsonContent[i].Punti_Risposta+=currpv;
+			return;
+		}
+	}
+}
+
+function updTot(t) {  //aggiorna punteggi
+
+  var rbAr=document.getElementsByName(t.name);  //current radiobutton array
+
+  var tot=parseInt(document.getElementById("tot").innerText);
+
+  var currpv=parseInt(t.value)  //current points
+  updJsonContent(t.dataset.q_id, currpv)
+  tot+=currpv; 
+
+  document.getElementById("tot").innerText=String(tot).padStart(3, '0')
+
+  for (let i=0; i<rbAr.length; i++) {  //radio button array (SI, NO)
+
+	if (rbAr[i].parentElement.classList.contains("active")) { // c'è uno dei due rb selezionato
+		if(rbAr[i]!=t) { //risulta selezionato il radiobutton duale di quello cliccato
+			//rbAr[i].parentElement.classList.remove("active"); //deseleziona il non cliccato 
+			let oldtxt=rbAr[i].value.trim()//sottrai... 
+			let oldv=parseInt(oldtxt);                               //il suo valore...   
+			tot -= oldv;                                                // al tot
+		} else {   //risulta già selezionato il rb corrente...
+			return;// niente altro da fare
+		}
+    }
+  }
+ // t.parentElement.classList.add("active");  // seleziona il radiob. corrente
+  
+  if (t.dataset.sottodomanda !== 'SI') { //non è una sottodomanda
+	console.log("going to enable sds" );
+	switchSD(t);
+  }
+}
+</script>
+<body>
+<div class="sticky text-center">
+ <button type="button" class="btn btn-outline-light btn-xs" onclick="exportjson()">Esporta checklist compilata</button> 
+<div class="text-right">Punteggio totale: &nbsp; <span id="tot" class=" badge badge-info">000</span>&nbsp;</div>
+
+</div>
+<div class="table-responsive" >
+
+  <table class="table table-striped table-bordered table-sm table-condensed">
+        
+    <thead>
+      <tr>
+
+        <th class="small font-weight-bold">Domanda</th>
+        <th class="small font-weight-bold">Sottodomanda</th>
+        <th class="small font-weight-bold">Punteggio</th>
+      </tr>
+    </thead>
+
+    <tbody>
+  {{$chp:=""}}
+  {{$dprec:=""}}
+  {{$idparent:=""}}
+ {{range $i, $qst := .Qsts_1 }}
+	{{ if ne $chp  $qst.C_desc }} {{$chp = $qst.C_desc}} <tr><td class="text-center chphdr" colspan="3">{{$qst.C_desc}}</td></tr>	{{end}}
+
+		<tr>
+			<td class="small {{ if eq $dprec $qst.Domanda }} font-weight-light font-italic{{end}}">{{ $qst.Domanda }}</td>
+			<td class="small">{{ $qst.SottoDomanda }}</td>
+			<td class="small text-center text-monospace" >  
+				
+					<input onclick="updTot(this)" type="radio" name="q{{$i}}" value="{{ $qst.Punti_si }}" data-q_id="{{$qst.Q_id}}"
+					{{ if eq $dprec $qst.Domanda }} {{/* una sottodomanda ha la caratteristica di avere la stessa domanda della riga prec. */}}
+						disabled data-idparent='{{ $idparent }}' data-sottodomanda='SI' 
+					{{else}} 
+						{{$idparent = $i}} data-id="{{$i}}" {{/* questa riga è una domanda: aggiornamento idparent solo sul "SI"  */}}
+					{{end}}
+					 id="si_{{$i}}"> <label for="si_{{$i}}"> SI:{{$qst.Punti_si|printf "%03d"}}</label>
+
+				
+					<input onclick="updTot(this);"type="radio" name="q{{$i}}" value="{{ $qst.Punti_no }}" data-q_id="{{$qst.Q_id}}"
+					{{ if eq $dprec $qst.Domanda }} {{/* una sottodomanda ha la caratteristica di avere la stessa domanda della riga prec. */}}
+						disabled data-idparent='{{ $idparent }}' data-sottodomanda='SI' 
+					{{else}} 
+						data-id="{{$i}}" 
+					{{end}}
+					id="no_{{$i}}"> <label for="no_{{$i}}"> NO:{{$qst.Punti_no|printf "%03d"}} </label>
+			</td>
+		</tr>
+	{{$dprec = $qst.Domanda}} 	
+
+ {{end}}
+	</tbody>
+	</table>
+</div>
+
+</body>
+</html>
+ 

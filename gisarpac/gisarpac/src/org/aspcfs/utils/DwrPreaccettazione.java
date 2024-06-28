@@ -166,173 +166,11 @@ public String ChiamaServizioConJSON(String urlService, JSONObject json) throws J
 	}
 	
 	
-	public String Preaccettazione_Ritorno_Da_Laboratorio(String codice_preaccettazione, int user_id, String id_laboratorio) throws ParseException, JSONException{
+	public String Preaccettazione_Ritorno_Da_Laboratorio(String codice_preaccettazione, int user_id, String id_laboratorio) throws ParseException, JSONException{ 
 		
-		if (id_laboratorio!=null && id_laboratorio.equals("2")) //sigla
-			return Preaccettazione_Ritorno_Da_Sigla(codice_preaccettazione, user_id);
-		else if (id_laboratorio!=null && id_laboratorio.equals("1")) //arpac
+		if (id_laboratorio!=null && id_laboratorio.equals("1")) //arpac 
 			return Preaccettazione_Ritorno_Da_Arpac(codice_preaccettazione, user_id);
 		return "";
-	}
-	
-	public String Preaccettazione_Ritorno_Da_Sigla(String codice_preaccettazione, int user_id) throws ParseException, JSONException{
-		
-		//ritorno della dwr contenente descrizione esito esame
-	 	String output_esito = "";
-	 	
-	 	//recupero note_esito_esame dal campione associato alla preaccettazione
-	 	String note_esito_esame_campione = recupera_note_esito_esame_da_campione(codice_preaccettazione);
-
-		//recupera stato preaccettazione
-		int stato_preaccettazione = 0;
-		stato_preaccettazione = recupera_stato_preaccettazione(codice_preaccettazione);
-		
-		//se stato = 5 recupera campo note_esito_esame dalla tabella ticket
-		if(stato_preaccettazione == 5){
-			output_esito = note_esito_esame_campione; 
-			System.out.println("recupero esito da ticket con preaccettazione gia ricevuta da ws sigla: " + output_esito);
-			
-		}
-		
-		if(!note_esito_esame_campione.equalsIgnoreCase("")){
-	 		output_esito = note_esito_esame_campione;
-	 		System.out.println("note recupero esito da ticket: " + output_esito);
-	 	}
-		
-		//se stato diverso da 5 chiama WS sigla e salvare chiamata nel log
-		if(stato_preaccettazione != 5) 
-		{
-			String host_sigla = "vuoto";
-			try {host_sigla = org.aspcfs.modules.util.imports.ApplicationProperties.getProperty("WS_SIGLA_HOST");} catch (Exception e){}
-			String url_login_rit_sigla = "http://" + host_sigla + "/api/v1/rest/login";
-			String output_login_sigla = "";
-			//String username = "GISA_WS";
-			//String password = "g1s4t0SiG4!2020";
-			
-			String username = "";
-			try {username = org.aspcfs.modules.util.imports.ApplicationProperties.getProperty("WS_SIGLA_LOGIN_USERNAME");} catch (Exception e){}
-			if(username == null){
-				username = "";
-			}
-			String password = "";
-			try {password = org.aspcfs.modules.util.imports.ApplicationProperties.getProperty("WS_SIGLA_LOGIN_PASSWORD");} catch (Exception e){}
-			if(password == null){
-				password = "";
-			}
-			
-			//chiamata per il ws sigla che restituisce il token
-	        output_login_sigla = ChiamaServizioPostRitornoSiglaLogin(url_login_rit_sigla, username, password, user_id);
-	        System.out.println("login servizio sigla: " + output_login_sigla);
-	        
-	        JSONObject json_login = new JSONObject("{}");
-	        json_login = new JSONObject(output_login_sigla.toString());
-			
-	        String token = "";
-	        try {token = json_login.getJSONObject("utente").getString("token");} catch (Exception e){}
-
-	        if(!token.equalsIgnoreCase("")){
-	        	String url_servizio_esito = "";
-	        	url_servizio_esito = "http://" + host_sigla + "/api/v1/rest/esito?";
-	            output_esito = ChiamaServizioPostRitornoSiglaEsito(url_servizio_esito, codice_preaccettazione, token, user_id);
-	        } 
-	        
-	        System.out.println("recupero esito da ws sigla: " + output_esito);
-		}
-		
-		System.out.println("esito chiamata dwr: " + output_esito);
-
-		return output_esito;
-	}
-	
- 	private String ChiamaServizioPostRitornoSiglaLogin(String urlService, String username, String password, int user_id){
-		
-		String output = "{}";
-		String parameters = "{\"username\": \"" + username + "\",\"password\": \"" + password + "\"}";
-		System.out.println("[PREACCETTAZIONE] login ws sigla parameters JSON: " + parameters);
-		try {
-			System.out.println("[PREACCETTAZIONE] url ws sigla login: " + urlService);
-			
-			OkHttpClient client = new OkHttpClient().newBuilder().build();
-			RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
-			  .addFormDataPart("username", username)
-			  .addFormDataPart("password", password)
-			  .build();
-			Request request = new Request.Builder().url(urlService).method("POST", body).build();
-			salvaStorico(user_id, urlService, parameters, "### TENTATIVO DI CHIAMATA AI SERVIZI ### ");
-			Response response = client.newCall(request).execute();
-			output = response.body().string();
-			System.out.println("[PREACCETTAZIONE] login ws sigla OUTPUT JSON: " + output);
-			salvaStorico(user_id, urlService, parameters, output);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			output = "{}";
-			e.printStackTrace();
-			salvaStorico(user_id, urlService, parameters, "### TENTATIVO DI CHIAMATA AI SERVIZI FALLITO ###: "+e.getStackTrace().toString());
-		}
-		finally{
-			if(output == null || output.equalsIgnoreCase("")){
-				output = "{}";
-			}
-			System.out.println("[PREACCETTAZIONE] finally login ws sigla OUTPUT JSON: " + output);
-		}
-		
-		return output;
-	}
-	
-	private String ChiamaServizioPostRitornoSiglaEsito(String url, String codice_preaccettazione, String token, int user_id) throws JSONException{
-		
-		String output = "";
-		String parametri_chiamata = "codice_preaccettazione_gisa=" + codice_preaccettazione + "&token=" + token;
-		System.out.println("[PREACCETTAZIONE] esito ws sigla url + parametri: " + url + parametri_chiamata);
-		OkHttpClient client = new OkHttpClient().newBuilder().build();
-		Request request = new Request.Builder().url(url+parametri_chiamata).method("GET", null).build();
-		
-		salvaStorico(user_id, url, parametri_chiamata, "### TENTATIVO DI CHIAMATA AI SERVIZI ### ");
-		
-		try {
-			
-			Response response = client.newCall(request).execute();
-			output = response.body().string();
-			System.out.println("[PREACCETTAZIONE] ws sigla http_status_code: " + response.networkResponse().code());
-			System.out.println("[PREACCETTAZIONE] esito ws sigla OUTPUT JSON: " + output);
-			salvaStorico(user_id, url, parametri_chiamata, output);
-			//se WS risponde pieno chiamare dbi dbi_ins_res_sigla e restituire la descrizione risultato esame alla jsp
-			if(!output.equalsIgnoreCase("[]") && !output.equalsIgnoreCase("")) {
-
-				//formatto la descrizione risultato esame da passare alla dbi e da restituire alla jsp
-				JSONArray jsonarray = new JSONArray(output);
-				String lista_esiti = "<div><table class='table details' width='100%' cellpadding='2' style='border-collapse: collapse' border='1'>";
-				for(int i = 0; i < jsonarray.length(); i++) {
-					JSONObject jsonobject = jsonarray.getJSONObject(i);
-					lista_esiti += "<tr>"
-							+ "<td align='center' style='width:25%; text-transform: none;'>"+jsonobject.getString("descrizione_esame").replace("<", "< ")+"</td>"
-							+ "<td align='center' style='width:60%; text-transform: none;'>"+jsonobject.getString("risultato").replace("<", "< ")+"</td>"
-							+ "<td align='center' style='width:10%; text-transform: none;'>"+jsonobject.getString("descrizione_esito").replace("<", "< ")+"</td>"
-							+ "<td align='center' style='width:5%; text-transform: none;'>"+jsonobject.getString("esito").replace("<", "< ")+"</td>"
-							+ "</tr>";
-				}
-				lista_esiti = lista_esiti + "</table></div>";
-				//chiama dbi dbi_ins_res_sigla
-				chiama_dbi_ins_res_sigla(codice_preaccettazione, lista_esiti, user_id);
-				output = lista_esiti;
-				
-			} else {
-				output = "";
-			}
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			output = "";
-			e.printStackTrace();
-			salvaStorico(user_id, url, parametri_chiamata, "### TENTATIVO DI CHIAMATA AI SERVIZI FALLITO ###: "+e.getStackTrace().toString());
-		} finally {
-			if(output == null){
-				output = "";
-			}
-			System.out.println("[PREACCETTAZIONE] finally esito ws sigla OUTPUT: " + output);
-		}
-		
-		return output;
 	}
 	
 	
@@ -342,7 +180,7 @@ public String ChiamaServizioConJSON(String urlService, JSONObject json) throws J
 	 	String output_esito = "";
 	 	
 	 	//recupero note_esito_esame dal campione associato alla preaccettazione
-	 	String note_esito_esame_campione = recupera_note_esito_esame_da_campione(codice_preaccettazione);
+	 	String esito_preaccettazione = recupera_esito_preaccettazione_da_campione(codice_preaccettazione);
 
 		//recupera stato preaccettazione
 		int stato_preaccettazione = 0;
@@ -350,14 +188,14 @@ public String ChiamaServizioConJSON(String urlService, JSONObject json) throws J
 		
 		//se stato = 5 recupera campo note_esito_esame dalla tabella ticket
 		if(stato_preaccettazione == 5){
-			output_esito = note_esito_esame_campione; 
-			System.out.println("recupero esito da ticket con preaccettazione gia ricevuta da ws arpac: " + output_esito);
+			output_esito = esito_preaccettazione; 
+			System.out.println("recupero esito da campione con preaccettazione gia ricevuta da ws arpac: " + output_esito);
 			
 		}
 		
-		if(!note_esito_esame_campione.equalsIgnoreCase("")){
-	 		output_esito = note_esito_esame_campione;
-	 		System.out.println("note recupero esito da ticket: " + output_esito);
+		if(!esito_preaccettazione.equalsIgnoreCase("")){
+	 		output_esito = esito_preaccettazione;
+	 		System.out.println("note recupero esito da campione: " + output_esito);
 	 	}
 		
 		//se stato diverso da 5 chiama WS arpac e salvare chiamata nel log
@@ -385,34 +223,43 @@ public String ChiamaServizioConJSON(String urlService, JSONObject json) throws J
 	        System.out.println("login servizio arpac: " + output_login_arpac); 
 	        
 	        JSONObject json_login = new JSONObject("{}");
-	        json_login = new JSONObject(output_login_arpac.toString());
-			
-	        String idUser = "";
-	        String idSession = "";
-	        String anno = "2021";
-	        String alreadyLogged = "";
 	        
-	        try {alreadyLogged = json_login.getString("AlreadyLogged");} catch (Exception e){}
-	        try {idUser = json_login.getString("IdUser");} catch (Exception e){}
-	        try {idSession = json_login.getString("IdSession");} catch (Exception e){}
-	        
-	        if("true".equalsIgnoreCase(alreadyLogged)){
-				String url_logout_rit_arpac = "https://" + host_arpac + "/MobileService.svc/Logoff";
-		        String output_logout_arpac = ChiamaServizioPostRitornoArpacLogout(url_logout_rit_arpac, idSession, idTenant, user_id);
-		        output_login_arpac = ChiamaServizioPostRitornoArpacLogin(url_login_rit_arpac, username, password, idTenant, user_id);
+	        try {
 		        json_login = new JSONObject(output_login_arpac.toString());
+				
+		        String idUser = "";
+		        String idSession = "";
+		        String anno = "2021";
+		        
+		        //recupero anno campione. NON SI SA SE E' CORRETTO
+		        anno = recupera_anno_da_campione(codice_preaccettazione); 
+		        
+		        String alreadyLogged = "";
+		        
+		        try {alreadyLogged = json_login.getString("AlreadyLogged");} catch (Exception e){}
 		        try {idUser = json_login.getString("IdUser");} catch (Exception e){}
 		        try {idSession = json_login.getString("IdSession");} catch (Exception e){}
+		        
+		        if("true".equalsIgnoreCase(alreadyLogged)){
+					String url_logout_rit_arpac = "https://" + host_arpac + "/MobileService.svc/Logoff";
+			        String output_logout_arpac = ChiamaServizioPostRitornoArpacLogout(url_logout_rit_arpac, idSession, idTenant, user_id);
+			        output_login_arpac = ChiamaServizioPostRitornoArpacLogin(url_login_rit_arpac, username, password, idTenant, user_id);
+			        json_login = new JSONObject(output_login_arpac.toString());
+			        try {idUser = json_login.getString("IdUser");} catch (Exception e){}
+			        try {idSession = json_login.getString("IdSession");} catch (Exception e){}
+		        }
+	
+		        if(!idSession.equalsIgnoreCase("")){
+		        	String url_servizio_esito = "";
+		        	url_servizio_esito = "https://" + host_arpac + "/MobileService.svc/GetSamplesTestResult";
+		            output_esito = ChiamaServizioPostRitornoArpacEsito(url_servizio_esito, codice_preaccettazione, idSession, idUser, anno, user_id);
+		            
+		            String url_logout_rit_arpac = "https://" + host_arpac + "/MobileService.svc/Logoff";
+			        String output_logout_arpac = ChiamaServizioPostRitornoArpacLogout(url_logout_rit_arpac, idSession, idTenant, user_id);
+		        } 
+	        } catch (Exception e){
+	        	e.printStackTrace();
 	        }
-
-	        if(!idSession.equalsIgnoreCase("")){
-	        	String url_servizio_esito = "";
-	        	url_servizio_esito = "https://" + host_arpac + "/MobileService.svc/GetSamplesTestResult";
-	            output_esito = ChiamaServizioPostRitornoArpacEsito(url_servizio_esito, codice_preaccettazione, idSession, idUser, anno, user_id);
-	            
-	            String url_logout_rit_arpac = "https://" + host_arpac + "/MobileService.svc/Logoff";
-		        String output_logout_arpac = ChiamaServizioPostRitornoArpacLogout(url_logout_rit_arpac, idSession, idTenant, user_id);
-	        } 
 	        
 	        System.out.println("recupero esito da ws arpac: " + output_esito);
 		}
@@ -600,7 +447,7 @@ public String ChiamaServizioConJSON(String urlService, JSONObject json) throws J
 		return ret;
 	}
 	
-	private String recupera_note_esito_esame_da_campione(String codice_preaccettazione){
+	private String recupera_esito_preaccettazione_da_campione(String codice_preaccettazione){
 		
 		String select = "";
 		String ret	= ""; 
@@ -622,15 +469,14 @@ public String ChiamaServizioConJSON(String urlService, JSONObject json) throws J
 				id_cmp = rs.getInt("id_cmp");
 			}
 			
-			//select note_esito_esame, * from ticket where ticketid =  1346069
-			select = "select coalesce(trim(note_esito_esame),'') as note_esito_esame from ticket where ticketid =  ?;";
+			select = "select coalesce(trim(esito_preaccettazione),'') as esito_preaccettazione from campioni where id =  ?;";
 			pst = db.prepareStatement(select);
 			pst.setInt(1, id_cmp);
 			rs = pst.executeQuery();
 
 			if ( rs.next() )
 			{
-				ret = rs.getString("note_esito_esame");
+				ret = rs.getString("esito_preaccettazione");
 			}
 
 		}catch(LoginRequiredException e)
@@ -648,43 +494,6 @@ public String ChiamaServizioConJSON(String urlService, JSONObject json) throws J
 		}
 
 		return ret;
-	}
-
-	private void chiama_dbi_ins_res_sigla(String codice_preaccettazione, String descr_ris_esame, int user_id){
-		String select = "";
-		int ret	= 0; 
-		Connection db = null;
-		PreparedStatement pst = null;
-		ResultSet rs = null;
-		try
-		{
-			db = GestoreConnessioni.getConnection()	;
-			
-			select = "select * from preaccettazione.dbi_ins_res_sigla(?,?,?)";
-			
-			pst = db.prepareStatement(select);
-			pst.setString(1, codice_preaccettazione);
-			pst.setString(2, descr_ris_esame);
-			pst.setInt(3, user_id);
-			System.out.println("chiamata dbi dbi_ins_res_sigla : " + pst);
-			rs = pst.executeQuery();
-			
-
-			if ( rs.next() )
-			{
-				ret = rs.getInt("_idout");
-			}
-
-		}
-		catch(SQLException e)
-		{
-			e.printStackTrace();
-		}
-		finally
-		{
-			GestoreConnessioni.freeConnection(db);
-		}
-
 	}
 	
 	private void chiama_dbi_ins_res_arpac(String codice_preaccettazione, String descr_ris_esame, int user_id){
@@ -781,6 +590,44 @@ public String ChiamaServizioConJSON(String urlService, JSONObject json) throws J
 				ret = rs.getString(1);
 			}
 
+		}catch(LoginRequiredException e)
+		{
+
+			throw e ;
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			GestoreConnessioni.freeConnection(db);
+		}
+
+		return ret;
+	}
+	
+private String recupera_anno_da_campione(String codice_preaccettazione){
+		
+		String select = "";
+		String ret	= ""; 
+		Connection db = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try
+		{
+			db = GestoreConnessioni.getConnection()	;
+			
+			select = "select date_part('year', data_prelievo) as anno from campioni where id in(select id_cmp::integer from preaccettazione.get_id_cmp_da_codice_preaccettazione(?));";
+			pst = db.prepareStatement(select);
+			pst.setString(1, codice_preaccettazione);
+			rs = pst.executeQuery();
+
+			if ( rs.next() )
+			{
+				ret = rs.getString("anno");
+			}
+			
 		}catch(LoginRequiredException e)
 		{
 

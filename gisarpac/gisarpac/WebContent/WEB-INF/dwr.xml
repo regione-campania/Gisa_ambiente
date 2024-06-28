@@ -15,12 +15,7 @@
             <filter class="org.aspcfs.utils.DwrSessionFilter"/>
       
    </create>
-   
-    <create creator="new" javascript="Dpat">
-      <param name="class" value="org.aspcfs.utils.Dpat"/>
-            <filter class="org.aspcfs.utils.DwrSessionFilter"/>
-      
-   </create>
+  
    
      <create creator="new" javascript="DWRnoscia">
       <param name="class" value="org.aspcfs.utils.DWRnoscia"/>
@@ -34,14 +29,6 @@
       
    </create>
    
- 
-        
-     <create creator="new" javascript="NucleoIspettivo">
-      <param name="class" value="org.aspcfs.utils.DwrNucleoIspettivo"/>
-                  <filter class="org.aspcfs.utils.DwrSessionFilter"/>      
-    </create>
-    
-    
     
    <convert converter="bean" match="org.aspcfs.utils.Cane"/>
    

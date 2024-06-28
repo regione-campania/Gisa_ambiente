@@ -51,6 +51,8 @@ Aggiungi Subparticella
 </table>
 <br/>
 
+<form action="Terreni.do?command=InsertSubparticella" method="post">
+
 <table class="details" width="100%" cellpadding="5">
 <col width="10%">
 
@@ -67,10 +69,11 @@ Aggiungi Subparticella
 	<td class="formLabel">AREA (mq)</td>
 	<td><%= area.getArea() %></td>
 </tr>
+
 </table>
 
 <br>
-<form action="Terreni.do?command=InsertSubparticella" method="post">
+
 <table class="details" width="100%" cellpadding="5">
 <col width="10%">
 
@@ -91,10 +94,7 @@ Aggiungi Subparticella
 	
 	<input type="hidden" id="codiceSito" name="codiceSito"/> <div id="loadingCodice" style="display:none"><img src="images/loadingmw.gif" width="50px"/></div></td>
 </tr>
-<tr>
-	<td class="formLabel">SEZIONE</td>
-	<td><input type="text" id="sezione" name="sezione"/></td>
-</tr>
+
 </table>
 <input type="hidden" id="idArea" name="idArea" value="<%=area.getId()%>"/>
 <br>

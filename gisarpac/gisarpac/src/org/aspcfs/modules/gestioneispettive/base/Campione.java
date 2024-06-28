@@ -134,4 +134,20 @@ public class Campione {
 		return jsonCampioni;
 	}
 
+
+	public void updateParticella(Connection db, JSONObject jsonCampione) throws SQLException {
+		String select = "select * from public.campionamento_particella_update_globale(to_json(?::json))";  
+		PreparedStatement pst = null ;
+		ResultSet rs = null;
+		pst = db.prepareStatement(select);
+		pst.setString(1, jsonCampione.toString());
+		
+		System.out.println("[GESTIONE CAMPIONI] [UPDATE PARTICELLA] "+pst.toString());
+		
+		rs = pst.executeQuery();
+		while (rs.next()){
+			this.idCampione = rs.getInt(1);
+			}
+	}
+
 }

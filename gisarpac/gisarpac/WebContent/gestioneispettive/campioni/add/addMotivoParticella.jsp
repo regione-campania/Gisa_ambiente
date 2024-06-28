@@ -42,7 +42,7 @@ function checkForm(form){
 }
 
 
-function filtraRighe() {
+function filtraRigheMotivi() {
 	
 	  // Declare variables
 	  var table = document.getElementById("tableMotivi");
@@ -92,7 +92,7 @@ function filtraRighe() {
 
 <tr>
 <th>Seleziona</th>
-<th><input type="text" id="myInputMotivo" onkeyup="filtraRighe()" placeholder="FILTRA MOTIVO" style="width: 100%"></th>
+<th><input type="text" id="myInputMotivo" onkeyup="filtraRigheMotivi()" placeholder="FILTRA MOTIVO" style="width: 100%"></th>
 </tr>
 
 <%for (int i = 0; i<ListaMotivi.size(); i++){

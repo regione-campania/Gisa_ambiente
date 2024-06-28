@@ -99,7 +99,7 @@ if (jsonTipiAnalisi.length()>0) {%>
 <% for (int i = 0; i<jsonTipiAnalisi.length(); i++) {
 JSONObject jsonTipoAnalisi = (JSONObject) jsonTipiAnalisi.get(i);
 %>
-<%=jsonTipoAnalisi.get("livello1") %> -> <%=jsonTipoAnalisi.get("livello2") %> -> <%=jsonTipoAnalisi.get("livello3") %><br/>
+<%=jsonTipoAnalisi.get("prodotto") %> -> <%=jsonTipoAnalisi.get("metodi") %> -> <%=jsonTipoAnalisi.get("prova") %><br/>
 <% } %>
 </td></tr>
 <%} } %>
@@ -117,7 +117,7 @@ if (jsonGruppoIspettivo.length()>0) {%>
 for (int i = 0; i<jsonGruppoIspettivo.length(); i++) {
 JSONObject jsonComponente = (JSONObject) jsonGruppoIspettivo.get(i);
 %>
-<%=jsonComponente.get("nominativo") %> (<b><%=jsonComponente.get("qualifica") %></b>) <%=jsonComponente.get("struttura") %><br/><br/>
+<%=jsonComponente.get("nominativo") %> (<b><%=jsonComponente.get("qualifica") %></b>) <%=jsonComponente.get("descrizioneAreaSemplice") %><br/><br/>
 <% } %>
 </td></tr>
 <%} }%>

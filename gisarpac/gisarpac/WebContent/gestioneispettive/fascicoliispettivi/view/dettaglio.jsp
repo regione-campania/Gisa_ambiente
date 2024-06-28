@@ -131,8 +131,10 @@ if (jsonDati.length()>0) {%>
 <% JSONObject jsonStato = (JSONObject) jsonFascicoloIspettivo.get("Stato");
 if (jsonStato.length()>0) {%>
 <tr><td class="formLabel">Stato</td><td><%=jsonStato.get("stato")%></td></tr>
-<%if (jsonStato.has("dataChiusura") && jsonStato.get("dataChiusura")!=null && !jsonStato.get("dataChiusura").toString().equals("")) %>
+<%if (jsonStato.has("dataChiusura") && jsonStato.get("dataChiusura")!=null && !jsonStato.get("dataChiusura").toString().equals("null")) %>
 <tr><td class="formLabel">Data chiusura </td><td><%=fixData(jsonStato.get("dataChiusura"))%></td></tr>
+<%if (jsonStato.has("oraChiusura") && jsonStato.get("oraChiusura")!=null && !jsonStato.get("oraChiusura").toString().equals("null")) %>
+<tr><td class="formLabel">Ora chiusura </td><td><%=jsonStato.get("oraChiusura").toString() != "null" ? jsonStato.get("oraChiusura") : ""%></td></tr>
 <%} } %>
 
 <% if ( ((JSONObject) jsonFascicoloIspettivo).has("CampiServizio")) { %>

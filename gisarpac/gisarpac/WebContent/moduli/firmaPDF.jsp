@@ -363,6 +363,16 @@ function getReturnName(){
 
 function uploadAjax()
 {
+	var b = getReturnName();
+
+	 if(b.includes("VerbaleCampionamentoSuolo") == true || b.includes("VerbaleMancatoCampionamentoSuolo") == true){
+		 let email = prompt("eventuali e-mail dei carabinieri forestali a cui verranno inviati i documenti firmati (nel caso le e-mail siano piu' di una, separarle con un punto e virgola [ ; ] )", "");
+		 let text;
+		 if (email == null || email == "") {
+		 } else {
+		   document.getElementById("mailDestinatari").value=email;
+		 }	 }
+	
 	if(document.getElementById('path').value == ''){
 		alert("Errore! Firmare il documento prima di confermare");
 		return;
@@ -517,7 +527,7 @@ function uploadSicra()
 		<tr><td>idGiornataIspettiva</td> <td><input type="text" name="idGiornataIspettiva" id="idGiornataIspettiva" value="<%=idGiornataIspettiva%>" />
 		<tr><td>idCampione</td> <td><input type="text" name="idCampione" id="idCampione" value="<%=idCampione%>" />
 		<tr><td>idArea</td> <td><input type="text" name="idArea" id="idArea" value="<%=idArea%>" />
-		<tr><td>mailDestinatari</td> <td><input type="text" name="mailDestinatari" id="mailDestinatari" value="g.marano@usmail.it;r.mele@usmail.it;b.sansone@usmail.it" />
+		<tr><td>mailDestinatari</td> <td><input type="text" name="mailDestinatari" id="mailDestinatari" value="" />
 		<tr><td>invioMail</td> <td><input type="text" name="invioMail" id="invioMail" value="si" />
 		
 		

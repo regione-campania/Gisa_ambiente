@@ -120,7 +120,7 @@ input[type=button], input[type=submit], input[type=reset] {
 
 			if (checkedVal.length == 0) {
 				formTest = false;
-				msg += "- Controllare di aver Spuntato almeno una linea \n";
+				msg += "- Controllare di aver Spuntato almeno un codice IPPC \n";
 			}
 
 			if (formTest == false)
@@ -247,7 +247,7 @@ input[type=button], input[type=submit], input[type=reset] {
 				autoOpen : false,
 				resizable : false,
 				closeOnEscape : false,
-				title : "RIATTIVAZIONE PER LINEE DI ATTIVITA",
+				title : "RIATTIVAZIONE PER CODICE IPPC",
 				width : 850,
 				height : 500,
 				draggable : false,
@@ -343,7 +343,7 @@ input[type=button], input[type=submit], input[type=reset] {
 														<td><input type="button"
 															title="GESTIONE DATI ACQUE REFLUE"
 															value="GESTIONE DATI ACQUE REFLUE"
-															 id="acque" hidden
+															 id="acque"
 															onclick="openPopupLarge('GestioneDatiAcqueReflue.do?command=View&riferimentoId=<%=StabilimentoDettaglio.getIdStabilimento()%>&riferimentoIdNomeTab=aia_stabilimento')">
 														</td>
 
@@ -385,8 +385,8 @@ input[type=button], input[type=submit], input[type=reset] {
 					
 					function acqueReflue(returnValue){
 						
-					if(returnValue)
-					document.getElementById("acque").removeAttribute("hidden");
+					//if(returnValue)
+					//document.getElementById("acque").removeAttribute("hidden");
 					}
 					
 					</script>	

@@ -16,6 +16,25 @@
 <script src="javascript/jquery/ui/1.9.1/jquery-ui.js"></script>
 <link rel="stylesheet" type="text/css" href="css/modalWindow.css"></link>
 
+<script src="javascript/proj4.js" ></script>
+
+<script>
+function UTMtoWGS(z, x, y){
+var utm_data = "+proj=utm +zone="+z;
+var wgs84_data = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
+var result = proj4(utm_data,wgs84_data,[x, y]).toString();
+const wgs84_temp = result.split(',');
+var wgs84_coords = wgs84_temp[1]+','+wgs84_temp[0];
+return wgs84_coords;
+}
+
+function visualizzaSuMappa(x, y){
+	var wgs = UTMtoWGS('33', x, y);
+	window.open('https://www.google.com/maps/search/?api=1&query='+wgs);
+}
+
+</script>
+
 <center>
 
 
@@ -34,6 +53,9 @@
   }%>
   
 <%@ include file="../verbali/elencoParticella.jsp" %> 
+
+<input type="button" value="MODIFICA" onClick="window.location.href='GestioneCampioni.do?command=ModifyParticella&idCampione=<%=((JSONObject) jsonCampione.get("CampiServizio")).get("idCampione")%>'"/>
+<br/><br/>
 
 <!-- RIEPILOGO -->
 <table class="details" cellpadding="10" cellspacing="10" width="100%">
@@ -97,17 +119,13 @@ JSONObject jsonComponente = (JSONObject) jsonGruppoTecnici.get(i);
 <%} }%>
 
 <% if ( ((JSONObject) jsonCampione).has("GruppoAddetti")) { 
-JSONArray jsonGruppoAddetti = (JSONArray) jsonCampione.get("GruppoAddetti");
-if (jsonGruppoAddetti.length()>0) {%>
+JSONObject jsonGruppoAddetti = (JSONObject) jsonCampione.get("GruppoAddetti");%>
 <tr><td class="formLabel">Addetti al campionamento</td><td>
-<% 
-for (int i = 0; i<jsonGruppoAddetti.length(); i++) {
-JSONObject jsonComponente = (JSONObject) jsonGruppoAddetti.get(i);
-%>
-<%=jsonComponente.get("nominativo") %> (<b><%=jsonComponente.get("qualifica") %></b>) <br/><br/>
-<% } %>
+<%=jsonGruppoAddetti.get("nome1") %> <%=jsonGruppoAddetti.get("cognome1") %> <%= !"".equals(jsonGruppoAddetti.get("nome1")) ? " (<b>ARPAC MULTISERVIZI</b>)" : "" %><br/>
+<%=jsonGruppoAddetti.get("nome2") %> <%=jsonGruppoAddetti.get("cognome2") %> <%= !"".equals(jsonGruppoAddetti.get("nome2")) ? " (<b>ARPAC MULTISERVIZI</b>)" : "" %><br/>
+<%=jsonGruppoAddetti.get("nome3") %> <%=jsonGruppoAddetti.get("cognome3") %> <%= !"".equals(jsonGruppoAddetti.get("nome3")) ? " (<b>ARPAC MULTISERVIZI</b>)" : "" %> 
 </td></tr>
-<%} }%>
+<%}%>
 
 <% if ( ((JSONObject) jsonCampione).has("DatiVerbaleCampione")) { %>
 <% JSONObject jsonDatiVerbaleCampione = (JSONObject) jsonCampione.get("DatiVerbaleCampione"); %>
@@ -119,19 +137,18 @@ JSONObject jsonComponente = (JSONObject) jsonGruppoAddetti.get(i);
 <%=jsonDatiVerbaleCampione.get("altriPartecipanti3") %> in qualita' di <%=jsonDatiVerbaleCampione.get("qualitaAltriPartecipanti3") %> 
 </td></tr>
 <tr><td class="formLabel">Dati del proprietario particella</td><td>
-<% if (Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("proprietarioPresente"))){ %>
-<b>PROPRIETARIO PRESENTE</b> <%=jsonDatiVerbaleCampione.get("datiProprietarioParticella") %>
-<%} else { %>
+<%=jsonDatiVerbaleCampione.get("datiProprietarioParticella") %> 
+<% if (!Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("proprietarioPresente"))){ %>
 <b>ALTRA PERSONA PRESENTE</b> <%=jsonDatiVerbaleCampione.get("datiAltraPersonaPresente") %> in qualita' di <%=jsonDatiVerbaleCampione.get("qualitaAltraPersonaPresente") %>
 <%} %>
 </td></tr>
 
 <tr><td class="formLabel">Numero campioni elementari</td><td><%=jsonDatiVerbaleCampione.get("numCampioniElementari") %> </td></tr>
 <tr><td class="formLabel">Campioni</td><td>
-Campione per VOC - <%=jsonDatiVerbaleCampione.get("codiceIdentificativoVoc") %> - <%=jsonDatiVerbaleCampione.get("coordinataXVoc") %> - <%=jsonDatiVerbaleCampione.get("coordinataYVoc") %> <a href="#" onClick="window.open('https://www.google.com/maps/search/?api=1&query=<%=jsonDatiVerbaleCampione.get("coordinataYVoc") %>,<%=jsonDatiVerbaleCampione.get("coordinataXVoc") %>'); return false;">Visualizza su mappa</a><br/>
+Campione per VOC - <%=jsonDatiVerbaleCampione.get("codiceIdentificativoVoc") %> - <%=jsonDatiVerbaleCampione.get("coordinataXVoc") %> - <%=jsonDatiVerbaleCampione.get("coordinataYVoc") %> <a href="#" onClick="visualizzaSuMappa(<%=jsonDatiVerbaleCampione.get("coordinataXVoc") %>,<%=jsonDatiVerbaleCampione.get("coordinataYVoc") %>); return false;">Visualizza su mappa</a><br/>
 
-<%for (int i = 1; i<=5; i++){ %>
-Campione elementare - <%=jsonDatiVerbaleCampione.get("codiceIdentificativo"+i) %> - <%=jsonDatiVerbaleCampione.get("coordinataX"+i) %> - <%=jsonDatiVerbaleCampione.get("coordinataY"+i) %> <a href="#" onClick="window.open('https://www.google.com/maps/search/?api=1&query=<%=jsonDatiVerbaleCampione.get("coordinataY"+i) %>,<%=jsonDatiVerbaleCampione.get("coordinataX"+i) %>'); return false;">Visualizza su mappa</a><br/>
+<%for (int i = 1; i<= Integer.parseInt((String) jsonDatiVerbaleCampione.get("numCampioniElementari")); i++){ %>
+Campione elementare - <%=jsonDatiVerbaleCampione.get("codiceIdentificativo"+i) %> - <%=jsonDatiVerbaleCampione.get("coordinataX"+i) %> - <%=jsonDatiVerbaleCampione.get("coordinataY"+i) %> <a href="#" onClick="visualizzaSuMappa(<%=jsonDatiVerbaleCampione.get("coordinataX"+i) %>,<%=jsonDatiVerbaleCampione.get("coordinataY"+i) %>); return false;">Visualizza su mappa</a><br/>
 <% } %>
 
 Campione medio composito - <%=jsonDatiVerbaleCampione.get("codiceIdentificativoMedioComposito") %>
@@ -139,26 +156,26 @@ Campione medio composito - <%=jsonDatiVerbaleCampione.get("codiceIdentificativoM
 </td></tr>
 
 <tr><td class="formLabel">Aliquote</td><td style="text-transform:none">
-<%=Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("aliquotaA")) ? ("<b>a</b>" + " Data e ora: "+jsonDatiVerbaleCampione.get("aliquotaA_data")+ " "+jsonDatiVerbaleCampione.get("aliquotaA_ora") + "<br/>") : "" %>
-<%=Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("aliquotaBG")) ? ("<b>b</b>-<b>g</b>" + " Data e ora: "+jsonDatiVerbaleCampione.get("aliquotaBG_data")+ " "+jsonDatiVerbaleCampione.get("aliquotaBG_ora") + "<br/>") : "" %>
-<%=Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("aliquotaC")) ? ("<b>c</b>" + " Data e ora: "+jsonDatiVerbaleCampione.get("aliquotaC_data")+ " "+jsonDatiVerbaleCampione.get("aliquotaC_ora") + "<br/>") : "" %>
-<%=Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("aliquotaD")) ? ("<b>d</b>" + " Data e ora: "+jsonDatiVerbaleCampione.get("aliquotaD_data")+ " "+jsonDatiVerbaleCampione.get("aliquotaD_ora") + "<br/>") : "" %>
+<%=Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("aliquotaA")) ? ("<b>a</b>" + " Data apertura e ora: "+jsonDatiVerbaleCampione.get("aliquotaA_data")+ " "+jsonDatiVerbaleCampione.get("aliquotaA_ora")+ " - Laboratorio di destinazione: ARPAC" + "<br/>") : "" %>
+<%=Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("aliquotaBG")) ? ("<b>b</b>-<b>g</b>" + " - Laboratorio di destinazione: ARPAC" + "<br/>") : "" %>
+<%=Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("aliquotaC")) ? ("<b>c</b>" + " Data apertura e ora: "+jsonDatiVerbaleCampione.get("aliquotaC_data")+ " "+jsonDatiVerbaleCampione.get("aliquotaC_ora")+ " - Laboratorio di destinazione: ARPAC" + "<br/>") : "" %>
+<%=Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("aliquotaD")) ? ("<b>d</b>" + " Data apertura e ora: "+jsonDatiVerbaleCampione.get("aliquotaD_data")+ " "+jsonDatiVerbaleCampione.get("aliquotaD_ora")+ " - Laboratorio di destinazione: ARPAC" + "<br/>") : "" %>
 <%=Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("aliquotaCD_fitofarmaci")) ? (" (con ricerca fitofarmaci)" + "<br/>") : "" %>
-<%=Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("aliquotaE")) ? ("<b>e</b>" + " Data e ora: "+jsonDatiVerbaleCampione.get("aliquotaE_data")+ " "+jsonDatiVerbaleCampione.get("aliquotaE_ora") + "<br/>") : "" %>
-<%=Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("aliquotaF")) ? ("<b>f</b>" + " Data e ora: "+jsonDatiVerbaleCampione.get("aliquotaF_data")+ " "+jsonDatiVerbaleCampione.get("aliquotaF_ora") + "<br/>") : "" %>
-<%=Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("aliquotaH")) ? ("<b>h</b>" + " Data e ora: "+jsonDatiVerbaleCampione.get("aliquotaH_data")+ " "+jsonDatiVerbaleCampione.get("aliquotaH_ora") + "<br/>") : "" %>
-<%=Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("aliquotaI")) ? ("<b>i</b>" + " Data e ora: "+jsonDatiVerbaleCampione.get("aliquotaI_data")+ " "+jsonDatiVerbaleCampione.get("aliquotaI_ora") + "<br/>") : "" %>
-<%=Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("aliquotaLM")) ? ("<b>l</b>-<b>m</b>" + " Data e ora: "+jsonDatiVerbaleCampione.get("aliquotaLM_data")+ " "+jsonDatiVerbaleCampione.get("aliquotaLM_ora") + "<br/>") : "" %>
-<%=Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("aliquotaN")) ? ("<b>n</b>" + " Data e ora: "+jsonDatiVerbaleCampione.get("aliquotaN_data")+ " "+jsonDatiVerbaleCampione.get("aliquotaN_ora")) : "" %>
+<%=Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("aliquotaE")) ? ("<b>e</b>" + " - Laboratorio di destinazione: Universita' Federico II di Napoli"  + "<br/>") : "" %>
+<%=Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("aliquotaF")) ? ("<b>f</b>" + " - Laboratorio di destinazione: ARPAC" + "<br/>") : "" %>
+<%=Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("aliquotaH")) ? ("<b>h</b>" + " - Laboratorio di destinazione: ARPAC" + "<br/>") : "" %>
+<%=Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("aliquotaI")) ? ("<b>i</b>" + " Data apertura e ora: "+jsonDatiVerbaleCampione.get("aliquotaI_data")+ " "+jsonDatiVerbaleCampione.get("aliquotaI_ora")+ " - Laboratorio di destinazione: ARPAC" + "<br/>") : "" %>
+<%=Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("aliquotaLM")) ? ("<b>l</b>-<b>m</b>" + " Data apertura e ora: "+jsonDatiVerbaleCampione.get("aliquotaLM_data")+ " "+jsonDatiVerbaleCampione.get("aliquotaLM_ora")+ " - Laboratorio di destinazione: Universita' Federico II di Napoli" + "<br/>") : "" %>
+<%=Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("aliquotaN")) ? ("<b>n</b>" + " - Laboratorio di destinazione: Controparte") : "" %>
 </td></tr>
 
 <tr><td class="formLabel">La particella campionata risulta</td><td><%=jsonDatiVerbaleCampione.get("tipoColturaDescrizione") %> <%=jsonDatiVerbaleCampione.get("tipoColturaNote") %> </td></tr>
 <tr><td class="formLabel">Presenza rifiuti</td><td><%="S".equals(jsonDatiVerbaleCampione.get("presenzaRifiuti")) ? "SI"+ " "+jsonDatiVerbaleCampione.get("presenzaRifiutiNote") : "N".equals(jsonDatiVerbaleCampione.get("presenzaRifiuti")) ? "NO" : "P".equals(jsonDatiVerbaleCampione.get("presenzaRifiuti")) ? "PARZIALMENTE" : "" %> <%=jsonDatiVerbaleCampione.get("presenzaRifiutiDescrizione") %></td></tr>
 
-<tr><td class="formLabel">Irrigazione</td><td><%=Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("irrigazioneInLoco")) ? "Informazioni acquisite in loco" : "Informazioni acquisite dal sig "+jsonDatiVerbaleCampione.get("irrigazioneInformazioni")  %> - Derivazione acqua: <%=jsonDatiVerbaleCampione.get("irrigazioneDerivazione") %></td></tr>
+<tr><td class="formLabel">Irrigazione</td><td>Informazioni acquisite in loco: <%=Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("irrigazioneInLoco")) ? "SI" : "NO" %> - Informazioni acquisite dal sig <%=jsonDatiVerbaleCampione.get("irrigazioneInformazioni")  %> - Derivazione acqua: <%=jsonDatiVerbaleCampione.get("irrigazioneDerivazione") %></td></tr>
 <tr><td class="formLabel">Campionamento acque sotterranee</td><td><%=Boolean.TRUE.equals(jsonDatiVerbaleCampione.get("pozzoCampionamento")) ? "SI num. verbale "+jsonDatiVerbaleCampione.get("pozzoCampionamentoVerbaleNumero")+ " del "+jsonDatiVerbaleCampione.get("pozzoCampionamentoVerbaleData") : "NO" %></td></tr>
 
-<tr><td class="formLabel">Dichiarazioni</td><td><%=jsonDatiVerbaleCampione.get("dichiarazioni") %> </td></tr>
+<tr><td class="formLabel">Dichiarazioni Controparte</td><td><%=jsonDatiVerbaleCampione.get("dichiarazioni") %> </td></tr>
 <tr><td class="formLabel">Strumentazione utilizzata</td><td><%=jsonDatiVerbaleCampione.get("strumentazione") %></td></tr>
 <tr><td class="formLabel">Note aggiuntive</td><td><%=jsonDatiVerbaleCampione.get("noteAggiuntive") %> </td></tr>
 

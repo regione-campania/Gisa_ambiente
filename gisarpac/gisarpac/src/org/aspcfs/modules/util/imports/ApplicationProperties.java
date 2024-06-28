@@ -157,7 +157,38 @@ public class ApplicationProperties {
         return json;
     }
 
+
+    public static String getUrlFromMon(String target){ 
+
+		String url = null;
+		
+		try {
+			configurazione.centralizzata.nuova.gestione.ClientServizioCentralizzato client = new configurazione.centralizzata.nuova.gestione.ClientServizioCentralizzato();
+			JSONObject mappaEndPoints = client.getMappaEndpointsSca();
+			url = mappaEndPoints.getString(target);
+		} catch (Exception e) { 			
+			}
+		
+		return url;
+	}
 	
+	public static String getAmbienteFromMon(){ 
+
+		String ambiente = null;
+		
+		try {
+			configurazione.centralizzata.nuova.gestione.ClientServizioCentralizzato client = new configurazione.centralizzata.nuova.gestione.ClientServizioCentralizzato();
+			JSONObject mappaAmbiente = client.getAmbiente();
+			ambiente = mappaAmbiente.getString("ambiente");
+		} catch (Exception e) { 			
+			}
+		
+		return ambiente;
+	}
+
+	public static String getFileProperties() {
+		return fileProperties;
+	}
 	
 	
 }
