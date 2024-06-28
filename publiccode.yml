@@ -186,18 +186,10 @@ localisation:
   availableLanguages:
     - it
   localisationReady: false
-  it:
-    conforme:
-        misureMinimeSicurezza: true
-  usedBy:
-  - ARPAC
-  - ASL NA1 Centro
-  - ASL NA2 Nord
-  - ASL NA3 Sud
-  - ASL AV
-  - ASL BN
-  - ASL CE
-  - ASL SA
+
+it:
+  conforme:
+      misureMinimeSicurezza: true
   countryExtensionVersion: '0.2'
   riuso:
     codiceIPA: 'r_campan'
@@ -213,3 +205,13 @@ legal:
   license: AGPL-3.0-only
   mainCopyrightOwner: Regione Campania
   repoOwner: Regione Campania
+  
+ usedBy:
+  - ARPAC
+  - ASL NA1 Centro
+  - ASL NA2 Nord
+  - ASL NA3 Sud
+  - ASL AV
+  - ASL BN
+  - ASL CE
+  - ASL SA
