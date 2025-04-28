@@ -54,9 +54,10 @@ ma con ancora diverse funzionalità in fase di progettazione e realizzazione.
 
 
 Il sistema GISA AMBIENTE, release 1, gestisce le anagrafiche degli impianti AIA e AUA e le visite ispettive fatte dal personale
-tecnico sulle anagrafiche degli impianti AIA. Vengono gestite le tre tipologie di AIA:
+tecnico sulle anagrafiche degli impianti AIA. Vengono gestite le tipologie di AIA:
 - Ordinaria;
 - Non ordinaria.
+
 Al sistema possono accedere tutti i tecnici GISA AMBIENTE (oltre ai Dirigenti Apicali come
 il Direttore Tecnico o Generale), ciascuno per le proprie competenze, utilizzando il proprio
 SPID.
@@ -64,13 +65,10 @@ Il sistema permette all'utente di ricercare un impianto con sede operativa sul t
 regionale e di associare ad esso un fascicolo ispettivo. Ovviamente se trattasi di nuovo
 impianto (non già anagrafato) sarà possibile inserirlo con tutti i dettagli relativi a:
 
-Dati impresa (ragione sociale, partita IVA, sede legale, rappresentante legale, ecc);
-
-Dati sede operativa (indirizzo, coordinate, ecc);
-
-Dati IPPC;
-
-Dati autorizzativi.
+- Dati impresa (ragione sociale, partita IVA, sede legale, rappresentante legale, ecc);
+- Dati sede operativa (indirizzo, coordinate, ecc);
+- Dati IPPC;
+- Dati autorizzativi.
 
 Ad ogni impianto ricercabile è possibile associare un fascicolo ispettivo ovvero una intera
 visita ispettiva AIA composta da più giornate ispettive (giornate di controllo).
