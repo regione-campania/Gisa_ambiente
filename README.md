@@ -53,8 +53,8 @@ ma con ancora diverse funzionalità in fase di progettazione e realizzazione.
 
 
 
-Il sistema GISA AMBIENTE, release 1, gestisce le visite ispettive fatte dal personale
-tecnico sulle anagrafiche degli impianti AIA e AUA. Vengono gestite le tre tipologie di AIA:
+Il sistema GISA AMBIENTE, release 1, gestisce le anagrafiche degli impianti AIA e AUA e le visite ispettive fatte dal personale
+tecnico sulle anagrafiche degli impianti AIA. Vengono gestite le tre tipologie di AIA:
 - Ordinaria;
 - Non ordinaria.
 Al sistema possono accedere tutti i tecnici GISA AMBIENTE (oltre ai Dirigenti Apicali come
