@@ -37,10 +37,11 @@ description:
     longDescription: |2+
        
 
-      Il sistema GISA AMBIENTE, release 1, gestisce le visite ispettive fatte
-      dal personale
+Il sistema GISA AMBIENTE, release 1, gestisce le anagrafiche degli impianti AIA
+e AUA e le visite ispettive fatte dal personale
+tecnico sulle anagrafiche degli impianti AIA.
 
-      tecnico sulle anagrafiche degli impianti AIA e AUA. Vengono gestite le tre
+ Vengono gestite le tre
       tipologie di AIA
 
       - Ordinaria;
