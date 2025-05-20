@@ -1,4 +1,4 @@
-# This repository adheres to the publiccode.yml standard by including this 
+# This repository adheres to the publiccode.yml standard by including this
 # metadata file that makes public software easily discoverable.
 # More info at https://github.com/italia/publiccode.yml
 
@@ -29,136 +29,54 @@ dependsOn:
       version: '15.x'
     - name: OpenJDK
       optional: false
-      version: 1.8.0_372
+      version: '1.8.0_372'
 
 description:
   it:
     genericName: Gestionale
-    longDescription: |2+
-       
+    longDescription: |
+      Il sistema GISA AMBIENTE, release 1, gestisce le anagrafiche degli impianti AIA e AUA e le visite ispettive fatte dal personale tecnico sulle anagrafiche degli impianti AIA.
 
-Il sistema GISA AMBIENTE, release 1, gestisce le anagrafiche degli impianti AIA
-e AUA e le visite ispettive fatte dal personale
-tecnico sulle anagrafiche degli impianti AIA.
+      Vengono gestite le tre tipologie di AIA:
+      - Ordinaria
+      - Straordinaria
+      - Non ordinaria
 
- Vengono gestite le tre
-      tipologie di AIA
+      Al sistema possono accedere tutti i tecnici GISA AMBIENTE (oltre ai Dirigenti Apicali come il Direttore Tecnico o Generale), ciascuno per le proprie competenze, utilizzando il proprio SPID.
 
-      - Ordinaria;
+      Il sistema permette all'utente di ricercare un impianto con sede operativa sul territorio regionale e di associare ad esso un fascicolo ispettivo. Ovviamente, se trattasi di nuovo impianto (non già anagrafato), sarà possibile inserirlo con tutti i dettagli relativi a:
+      - Dati impresa (ragione sociale, partita IVA, sede legale, rappresentante legale, ecc.)
+      - Dati sede operativa (indirizzo, coordinate, ecc.)
+      - Dati linea di attività (descrizione attività, ecc.)
+      - Dati autorizzativi
 
-      - Straordinaria;
+      Ad ogni impianto ricercabile è possibile associare un fascicolo ispettivo, ovvero una intera visita ispettiva AIA composta da più giornate ispettive (giornate di controllo).
 
-      - Non ordinaria.
+      In ogni giornata ispettiva è possibile specificare, tra l'altro, le seguenti informazioni:
+      - "Per conto di": la struttura per la quale la giornata ispettiva viene eseguita
+      - Il nucleo ispettivo: il gruppo ispettivo che ha seguito la specifica giornata di controllo
+      - Le tematiche controllate in quella giornata ispettiva:
+        - Altre componenti ambientali
+        - Emissioni in acqua
+        - Emissioni in aria
+        - Gestione degli incidenti e anomalie
+        - Materie prime e utilizzo delle risorse
+        - Rifiuti
+        - Rumore
+        - Sistema di gestione ambientale
+        - Suolo e sottosuolo
 
-      Al sistema possono accedere tutti i tecnici GISA AMBIENTE (oltre ai
-      Dirigenti Apicali come
+      Completato l'inserimento, dal dettaglio è possibile:
+      - Inserire i dati relativi ad eventuali campioni fisici prelevati (con redazione del Verbale di Campionamento, firmato digitalmente)
+      - Inserire eventuali non conformità
 
-      il Direttore Tecnico o Generale), ciascuno per le proprie competenze,
-      utilizzando il proprio
+      Sempre dal dettaglio della giornata ispettiva è possibile generare il Verbale Ispettivo precompilato. Una volta generato e firmato digitalmente, viene inviato al documentale Sicr@web per la protocollazione.
 
-      SPID.
+      Completato il fascicolo ispettivo è possibile chiuderlo. Alla chiusura, specificando il numero di protocollo della relazione finale associata, questa verrà automaticamente recuperata dal protocollo Sicr@web mediante cooperazione applicativa.
 
-      Il sistema permette all'utente di ricercare un impianto con sede operativa
-      sul territorio
-
-      regionale e di associare ad esso un fascicolo ispettivo. Ovviamente se
-      trattasi di nuovo
-
-      impianto (non già anagrafato) sarà possibile inserirlo con tutti i
-      dettagli relativi a
-
-      - Dati impresa (ragione sociale, partita IVA, sede legale, rappresentante
-      legale, ecc);
-
-      - Dati sede operativa (indirizzo, coordinate, ecc);
-
-      - Dati linea di attività(descrizione attività, ecc);
-
-      - Dati autorizzativi.
-
-      Ad ogni impianto ricercabile è possibile associare un fascicolo ispettivo
-      ovvero una intera
-
-      visita ispettiva AIA composta da più giornate ispettive (giornate di
-      controllo).
-
-      In ogni giornata ispettiva è possibile specificare, tra l'altro le
-      seguenti informazioni
-
-      - Il campo "per conto di" → ovvero la struttura per la quale la giornata
-      ispettiva viene
-
-      eseguita;
-
-      - Il nucleo ispettivo → ovvero il gruppo ispettivo che ha seguito la
-      specifica giornata
-
-      di controllo;
-
-      - Le tematiche controllate in quella giornata ispettiva →
-
-      - Altre componenti ambientali
-
-      - Emissioni in acqua
-
-      - Emissioni in aria
-
-      - Gestione degli incidenti e anomalie
-
-      - Materie prime e utilizzo delle risorse
-
-      - Rifiuti
-
-      - Rumore
-
-      - Sistema di gestione Ambientale
-
-      - Suolo e sottosuolo.
-
-      Completato l'inserimento, dal dettaglio è possibile
-
-      - Inserire i dati relativi ad eventuali campioni fisici prelevati (è
-      prevista la redazione
-
-      del Verbale di Campionamento, anche esso firmato con firma grafometrica)
-
-      - Inserire eventuali non conformità.
-
-      Sempre dal dettaglio della giornata ispettiva è possibile generare il
-      Verbale Ispettivo
-
-      precompilato. Una volta generato e firmato con firma grafometrica (sia per
-      il responsabile
-
-      impianto che per il gruppo ispettivo), viene inviato al documentale
-      sicr@web per la
-
-      protocollazione.
-
-      Completato il fascicolo ispettivo è possibile chiuderlo
-
-      - Contestualmente alla chiusura, specificando il numero di protocollo
-      della relazione
-
-      finale associata, questa verrà automaticamente recuperata dal protocollo
-
-      sicr@web, mediante cooperazione applicativa.
-
-      In GISA AMBIENTE release 1 è disponibile anche un modulo di integrazione
-      con alcune
-
-      delle cartografie rese disponibili dal sistema di Regione Campania “i.Ter”
-      (risorse rese
-
-      disponibili dalla versione 2.0 in produzione alla data di redazione del
-      presente documento
-
-       è ancora in fase di rilascio la ver.3.0 che ne amplierà e potenzierà le
-      funzionalità e con
-
-      cui ci si integrerà in futuro).
-    shortDescription: |-
+    shortDescription: |
       Ecosistema software per gestione controlli ambientali
+
     features:
       - Gestione unificata ruoli e utenti
       - Anagrafica impianti
@@ -196,15 +114,16 @@ it:
     cie: true
     pagopa: false
     spid: true
+
 logo: 'https://raw.githubusercontent.com/regione-campania/Gisa_ambiente/master/GisaLOGO.png'
+
 legal:
-  authorsFile: |-
-    https://github.com/regione-campania/Gisa_ambiente/blob/main/Copyrights.txt
+  authorsFile: 'https://github.com/regione-campania/Gisa_ambiente/blob/main/Copyrights.txt'
   license: AGPL-3.0-only
   mainCopyrightOwner: Regione Campania
   repoOwner: Regione Campania
   
- usedBy:
+usedBy:
   - ARPAC
   - ASL NA1 Centro
   - ASL NA2 Nord
